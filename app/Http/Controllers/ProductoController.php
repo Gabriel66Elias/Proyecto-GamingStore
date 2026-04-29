@@ -35,7 +35,6 @@ class ProductoController extends Controller
                 'specs' => ['12 Teraflops de potencia', 'SSD NVMe de 1TB', 'Juego en 4K y hasta 120 FPS'],
                 'categoria' => 'Consolas'
             ],
-            // Nuevas Consolas
             16 => [
                 'nombre' => 'Nintendo Switch OLED',
                 'descripcion' => 'La versión mejorada con una pantalla OLED vibrante, soporte ajustable y audio mejorado.',
@@ -119,7 +118,6 @@ class ProductoController extends Controller
                 'specs' => ['750 Watts', 'Certificación 80 Plus Gold', 'Totalmente Modular'],
                 'categoria' => 'Hardware'
             ],
-            // Nuevo Hardware
             19 => [
                 'nombre' => 'Procesador Intel Core i9-14900K',
                 'descripcion' => 'Rendimiento extremo de 14va generación para gaming competitivo y creación de contenido.',
@@ -185,7 +183,6 @@ class ProductoController extends Controller
                 'specs' => ['Sonido Envolvente Virtual 7.1', 'Micrófono con cancelación de ruido', 'Almohadillas de memory foam'],
                 'categoria' => 'Periféricos'
             ],
-            // Nuevos Periféricos
             22 => [
                 'nombre' => 'Teclado Magnetico Attack Shark X68 HE',
                 'descripcion' => 'teclado mecánico magnético de 65% diseñado para gaming competitivo, destacando por su Rapid Trigger (RT) con precisión de 0,01mm  , polling rate de 8000 hz y switches magnéticos.',
@@ -233,7 +230,6 @@ class ProductoController extends Controller
                 'specs' => ['55 Pulgadas OLED 4K', 'Tasa de refresco 120Hz', 'HDMI 2.1 con VRR', 'Dolby Vision Gaming'],
                 'categoria' => 'TVs y Monitores'
             ],
-            // Nuevos TVs y Monitores
             25 => [
                 'nombre' => 'Monitor Curvo Samsung Odyssey G7 32"',
                 'descripcion' => 'Inmersión total y rendimiento extremo gracias a su espectacular curvatura y panel veloz.',
@@ -263,9 +259,14 @@ class ProductoController extends Controller
             ]
         ];
     }
-
+    /**
+     * MÉTODO: index()
+     * DESCRIPCIÓN: Se ejecuta al entrar a la ruta '/catalogo'. Prepara y organiza
+     * los datos antes de enviarlos a la vista.
+     */
     public function index()
     {
+        // 1. Obtenemos todos los productos brutos
         $productosRaw = $this->getProductos();
         
         // Guardamos el ID dentro del array para no perderlo al agrupar
@@ -273,20 +274,27 @@ class ProductoController extends Controller
             $productosRaw[$id]['id'] = $id;
         }
 
-        // Agrupamos por la nueva llave 'categoria'
+        // Agrupamos por la llave 'categoria'
         $productosAgrupados = collect($productosRaw)->groupBy('categoria');
         
         return view('catalogo', compact('productosAgrupados'));
     }
-
+    /**
+     * MÉTODO: show($id)
+     * DESCRIPCIÓN: Se ejecuta al entrar al detalle de un producto específico (ej: '/consulta/6').
+     * Recibe dinámicamente el $id a través de la URL.
+     */
     public function show($id)
     {
         $productos = $this->getProductos();
-
+        // VALIDACIÓN DE SEGURIDAD: 
+        // Si el usuario manipula la URL y pone un ID que no existe (ej: /consulta/999),
+        // isset() devuelve falso y lo redirigimos forzosamente al catálogo para evitar un error 404/500.
         if (!isset($productos[$id])) {
             return redirect('/catalogo');
         }
 
+        // Si existe, aislamos ese único producto y se lo enviamos a la vista 'consultas'.
         $producto = $productos[$id];
         return view('consultas', compact('producto'));
     }

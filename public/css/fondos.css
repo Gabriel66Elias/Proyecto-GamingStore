@@ -2,70 +2,81 @@
    ARCHIVO: fondos.css - LUCES Y GRILLAS
    ========================================================================== */
 
-   .fondo-minimalista-grid {
-    position: fixed;
+/* --- FONDO DE CUADRÍCULA (GRID) --- */
+.fondo-minimalista-grid {
+    position: fixed; /* Fija el fondo a la pantalla para que no se mueva al hacer scroll */
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -1; /* Se mantiene detrás del contenido */
-    pointer-events: none;
-    background-color: #0b0c10;
+    width: 100vw; /* Ocupa el 100% del ancho visual de la pantalla */
+    height: 100vh; /* Ocupa el 100% del alto visual de la pantalla */
+    z-index: -1; /* Lo envía al fondo de todo (detrás de los elementos HTML) */
+    pointer-events: none; /* Evita que el fondo bloquee los clics del usuario */
+    background-color: #0b0c10; /* Color base ultra oscuro */
+    
+    /* Dibuja las líneas de la cuadrícula usando gradientes transparentes */
     background-image:
         linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
+    background-size: 40px 40px; /* Tamaño de cada cuadrado de la grilla */
 }
 
+/* --- BRILLO SUPERIOR CENTRAL --- */
 .brillo-rojo-cenital {
-    position: absolute;
-    top: -20%;
+    position: absolute; /* Se posiciona respecto a su contenedor padre */
+    top: -20%; /* Sube un poco para que el centro del brillo quede fuera de la pantalla */
     left: 50%;
-    transform: translateX(-50%);
-    width: 70vw;
+    transform: translateX(-50%); /* Centra el elemento horizontalmente de forma exacta */
+    width: 70vw; /* Ancho basado en el 70% de la pantalla */
     height: 60vh;
+    /* Crea un gradiente circular que va de rojo con poca opacidad a transparente */
     background: radial-gradient(ellipse at center, rgba(255, 59, 59, 0.08) 0%, transparent 70%);
-    filter: blur(60px);
+    filter: blur(60px); /* Aplica un desenfoque (blur) extremo para que parezca luz */
 }
 
+/* --- MÁSCARA INFERIOR --- */
 .mascara-difuminada {
     position: absolute;
-    bottom: 0;
+    bottom: 0; /* Se pega al fondo de la pantalla */
     left: 0;
     width: 100%;
-    height: 40vh;
+    height: 40vh; /* Ocupa el 40% inferior de la pantalla */
+    /* Crea un degradado que funde la cuadrícula con el negro sólido al final de la página */
     background: linear-gradient(to top, #0b0c10 10%, transparent 100%);
 }
 
-/* Luces para Catálogo y Consultas */
+/* --- FONDOS DE LUCES NEÓN (Catálogo y Consultas) --- */
 .fondo-luces-catalogo {
-    position: fixed;
+    position: fixed; /* Mismo principio que el grid: se queda fijo de fondo */
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
     z-index: -1;
-    pointer-events: none;
-    overflow: hidden;
+    pointer-events: none; /* Permite hacer clic en los productos a través de la luz */
+    overflow: hidden; /* Oculta cualquier luz que se salga de los bordes de la pantalla */
 }
 
+/* Luz en la esquina superior derecha */
 .luz-roja-top {
     position: absolute;
     top: -15%;
     right: -10%;
     width: 600px;
     height: 600px;
+    /* Gradiente radial rojo (Mars Red) */
     background: radial-gradient(circle, rgba(255, 59, 59, 0.15) 0%, rgba(255, 59, 59, 0) 70%);
-    border-radius: 50%;
-    filter: blur(80px);
+    border-radius: 50%; /* Hace que el div sea un círculo perfecto */
+    filter: blur(80px); /* Desenfoque gaussiano para simular luz volumétrica */
 }
 
+/* Luz en la esquina inferior izquierda (más oscura) */
 .luz-roja-bottom {
     position: absolute;
     bottom: -10%;
     left: -10%;
     width: 700px;
     height: 700px;
+    /* Gradiente radial con un rojo más apagado */
     background: radial-gradient(circle, rgba(200, 30, 30, 0.1) 0%, rgba(20, 20, 30, 0) 70%);
     border-radius: 50%;
     filter: blur(100px);

@@ -1,12 +1,20 @@
 <?php
 
+// Importación de clases (Namespaces). 
+// Le decimos a este archivo dónde encontrar la clase Route y nuestros Controladores.
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactoController;
-use App\Http\Controllers\ProductoController; // <-- Importamos tu nuevo controlador
+use App\Http\Controllers\ProductoController; 
 
-// --- Rutas estáticas ---
+/* --------------------------------------------------------------------------
+   RUTAS ESTÁTICAS (GET)
+   Se usa el método GET porque el usuario solo está "pidiendo" ver una página.
+   Como no hay lógica compleja de base de datos en estas páginas, usamos 
+   funciones anónimas (closures) que directamente retornan la vista Blade.
+   -------------------------------------------------------------------------- */
+
 Route::get('/', function () {
-    return view('principal');
+    return view('principal'); // Retorna resources/views/principal.blade.php
 });
 
 Route::get('/quienes-somos', function () {
@@ -14,7 +22,7 @@ Route::get('/quienes-somos', function () {
 });
 
 Route::get('/comercializacion', function () {
-    return view('comercializacion');
+    return view('comercializacion'); // Pantalla de Checkout
 });
 
 Route::get('/terminos', function () {
@@ -22,20 +30,37 @@ Route::get('/terminos', function () {
 });
 
 Route::get('/contacto', function () {
-    return view('contacto');
+    return view('contacto'); // Pantalla con el formulario vacío
 });
 
+Route::get('/confirmacion-pedido', function () {
+    return view('confirmacionpedido'); // Pantalla de éxito tras el checkout
+});
+
+
+/* --------------------------------------------------------------------------
+   RUTAS DE ACCIÓN (POST)
+   Se usa el método POST porque el usuario está "enviando" información confidencial 
+   (los datos del formulario de contacto) hacia el servidor.
+   -------------------------------------------------------------------------- */
+
+// Cuando el formulario en /contacto hace "submit", viaja hacia aquí.
+// En lugar de una función anónima, delegamos el trabajo al ContactoController,
+// diciéndole que ejecute su método llamado 'procesar'.
 Route::post('/contacto', [ContactoController::class, 'procesar']);
 
 
-// --- Rutas dinámicas manejadas por el Controlador ---
+/* --------------------------------------------------------------------------
+   RUTAS DINÁMICAS (Manejadas por Controlador)
+   Aquí la lógica requiere pedir productos, agruparlos y formatearlos, 
+   por eso se delegan a un Controlador especializado (ProductoController).
+   -------------------------------------------------------------------------- */
 
-// Ruta para ver el catálogo entero (apunta al método 'index')
+// Ruta para ver el catálogo entero. Delega al método 'index'.
 Route::get('/catalogo', [ProductoController::class, 'index']);
 
-// Ruta para ver el detalle de un producto (apunta al método 'show')
+// RUTA CON PARÁMETRO DINÁMICO {id}
+// El {id} es una variable comodín en la URL (ej: /consulta/5 o /consulta/10).
+// Laravel captura automáticamente ese número y se lo inyecta como 
+// parámetro al método 'show' del ProductoController.
 Route::get('/consulta/{id}', [ProductoController::class, 'show']);
-
-Route::get('/confirmacion-pedido', function () {
-    return view('confirmacionpedido');
-});

@@ -1,46 +1,49 @@
-/**
- * ARCHIVO: carrito.js
- * DESCRIPCIÓN: Gestión del estado del carrito, persistencia en LocalStorage 
- * y manipulación dinámica del DOM para GamingStation.
- */
 
-// 1. ESTADO GLOBAL: Se inicializa recuperando datos del navegador o como un array vacío.
+// 1. ESTADO GLOBAL (Variables de la sesión actual)
+// JSON.parse() transforma la cadena de texto guardada en el navegador en un Array de objetos reales.
+// El "|| []" asegura que si no hay nada guardado (null), el carrito inicie como un array vacío.
 let carrito = JSON.parse(localStorage.getItem('gaming_station_cart')) || [];
 
 /**
- * AÑADIR PRODUCTOS: Gestiona la lógica de inserción y control de stock.
+ * FUNCIÓN: agregarAlCarrito
+ * DESCRIPCIÓN: Recibe los datos de un producto, valida el stock y lo inserta en el array.
  */
 function agregarAlCarrito(id, nombre, precio, stock, imagen) {
-    id = String(id);
-    // Captura la cantidad del input de la vista de detalles (si existe)
+    id = String(id); // Estandarizamos el ID a formato texto para evitar errores de búsqueda
+    
+    // Captura el cuadro numérico si el usuario está en la vista de detalle
     const inputCant = document.getElementById('input-cantidad');
+    // Si el cuadro existe, tomamos su valor numérico (parseInt). Si no existe (ej. estamos en catálogo), agregamos 1.
     const cantidadSeleccionada = inputCant ? parseInt(inputCant.value) : 1;
 
-    // Busca si el producto ya está en el carrito para no duplicar filas
+    // Método .find(): Recorre el array buscando si el ID del producto nuevo ya existe adentro.
     const itemExistente = carrito.find(item => item.id === id);
 
     if (itemExistente) {
-        // Validación crítica: No permitir agregar más de lo que hay en stock
+        // Lógica de control de Stock: Evita que el usuario agregue más de lo que hay en inventario
         if (itemExistente.cantidad + cantidadSeleccionada > stock) {
             alert(`Stock insuficiente. Solo quedan ${stock} unidades.`);
-            return;
+            return; // Corta la ejecución de la función
         }
-        itemExistente.cantidad += cantidadSeleccionada;
+        itemExistente.cantidad += cantidadSeleccionada; // Suma a la cantidad existente
     } else {
-        // Si es nuevo, se crea el objeto y se empuja al array
+        // Si el método .find() devolvió undefined, significa que es nuevo. Lo insertamos (push) al array.
         carrito.push({ id, nombre, precio, stock, imagen, cantidad: cantidadSeleccionada });
     }
 
-    actualizarInterfaz();
+    actualizarInterfaz(); // Guardamos cambios y dibujamos la vista
 
-    // Feedback visual: Abre el panel lateral automáticamente al agregar
+    // Feedback UI: Al agregar, le damos una orden a Bootstrap para que despliegue el menú lateral automáticamente
     const cartEl = document.getElementById('carritoLateral');
-    const bsOffcanvas = bootstrap.Offcanvas.getOrCreateInstance(cartEl);
-    bsOffcanvas.show();
+    if (cartEl) {
+        const bsOffcanvas = bootstrap.Offcanvas.getOrCreateInstance(cartEl);
+        bsOffcanvas.show();
+    }
 }
 
 /**
- * MODIFICAR CANTIDADES: Permite al usuario cambiar unidades desde el carrito.
+ * FUNCIÓN: actualizarCantidad
+ * DESCRIPCIÓN: Se activa cuando el usuario tipea un número nuevo dentro del input en el panel del carrito.
  */
 function actualizarCantidad(id, nuevaCantidad) {
     const item = carrito.find(item => item.id === id);
@@ -48,60 +51,69 @@ function actualizarCantidad(id, nuevaCantidad) {
 
     nuevaCantidad = parseInt(nuevaCantidad);
 
-    // Validación de límites (Stock máximo y mínimo de 1)
+    // Validación: Si el usuario escribe un número mayor al stock, lo bloquea.
     if (nuevaCantidad > item.stock) {
         alert(`Límite de stock alcanzado: ${item.stock} unidades.`);
-        renderizarCarrito(); // Revierte el input al valor anterior
+        renderizarCarrito(); // Redibuja la vista para borrar el número excedido que tipeó el usuario
         return;
     }
 
+    // Validación: Si baja a 0 o números negativos, interpreta que lo quiere borrar.
     if (nuevaCantidad <= 0) {
         eliminarItem(id);
     } else {
-        item.cantidad = nuevaCantidad;
-        actualizarInterfaz();
+        item.cantidad = nuevaCantidad; // Actualiza el objeto
+        actualizarInterfaz(); // Guarda y redibuja
     }
 }
 
 /**
- * ELIMINAR ESTRUCTURADO: Filtra el array para quitar el producto seleccionado.
+ * FUNCIÓN: eliminarItem
+ * DESCRIPCIÓN: Quita un producto entero del array.
  */
 function eliminarItem(id) {
+    // El método .filter() crea un array NUEVO, quedándose solo con los ítems que NO coincidan con el ID seleccionado.
     carrito = carrito.filter(item => item.id !== id);
     actualizarInterfaz();
 }
 
 /**
- * VACIAR TODO: Limpia el estado y la memoria local.
+ * FUNCIÓN: vaciarCarrito
+ * DESCRIPCIÓN: Borra todos los elementos de una sola vez.
  */
 function vaciarCarrito() {
+    // Muestra ventana nativa de confirmación
     if (confirm('¿Deseas eliminar todos los productos del carrito?')) {
-        carrito = [];
+        carrito = []; // Sobrescribe el array a vacío
         actualizarInterfaz();
     }
 }
 
 /**
- * PERSISTENCIA Y RENDER: Orquesta el guardado y la actualización visual.
+ * FUNCIÓN: actualizarInterfaz
+ * DESCRIPCIÓN: Funciona como un "Guardar". Sincroniza la RAM temporal con el disco duro del navegador.
  */
 function actualizarInterfaz() {
-    // Sincroniza con el disco duro del navegador (JSON String)
+    // JSON.stringify() convierte el array de objetos a un formato de texto plano (String) que el navegador sabe almacenar.
     localStorage.setItem('gaming_station_cart', JSON.stringify(carrito));
-    renderizarCarrito();
+    renderizarCarrito(); // Tras guardar, actualiza el HTML
 }
 
 /**
- * RENDERIZADO DINÁMICO: Construye el HTML inyectando los datos del array.
+ * FUNCIÓN: renderizarCarrito
+ * DESCRIPCIÓN: Toma el array y construye dinámicamente todo el código HTML necesario para mostrar los productos.
  */
 function renderizarCarrito() {
     const contenedor = document.getElementById('contenedor-items-carrito');
     const totalTxt = document.getElementById('total-carrito');
     const badge = document.getElementById('cart-count-badge');
 
-    if (!contenedor) return;
+    if (!contenedor) return; // Si la página actual no tiene carrito lateral, corta aquí.
 
-    // Actualiza el contador (Badge) en la Navbar
+    // Método .reduce(): Acumula valores de un array. Aquí suma todas las "cantidades" para saber el volumen de productos.
     const totalProductos = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+    
+    // Si hay productos, muestra la burbuja roja en la Navbar, si no, le pone display:none (d-none).
     if (totalProductos > 0) {
         badge.innerText = totalProductos;
         badge.classList.remove('d-none');
@@ -109,7 +121,7 @@ function renderizarCarrito() {
         badge.classList.add('d-none');
     }
 
-    // Caso: Carrito Vacío
+    // Dibujado: Estado Vacío
     if (carrito.length === 0) {
         contenedor.innerHTML = `
             <div class="text-center mt-5 opacity-50">
@@ -120,10 +132,12 @@ function renderizarCarrito() {
         return;
     }
 
-    // Caso: Con Productos (Generación de tarjetas flexibles con el nuevo diseño)
+    // Dibujado: Estado Lleno
     let totalGeneral = 0;
+    // Método .map(): Transforma cada objeto del array en un bloque grande de texto HTML (Template Literals ``)
+    // El método .join('') une todos esos bloques de texto generados en un solo String gigante.
     contenedor.innerHTML = carrito.map(item => {
-        totalGeneral += item.precio * item.cantidad;
+        totalGeneral += item.precio * item.cantidad; // Va acumulando precio en cada ciclo
         return `
             <div class="cart-item-modern d-flex align-items-center">
                 
@@ -142,18 +156,20 @@ function renderizarCarrito() {
                            onchange="actualizarCantidad('${item.id}', this.value)">
                 </div>
             </div>`;
-    }).join('');
+    }).join(''); // Reemplaza el innerHTML completo del contenedor con este String de tarjetas.
 
+    // Aplica el formato de moneda Argentina (Puntos en miles) al total.
     totalTxt.innerText = '$' + totalGeneral.toLocaleString('es-AR');
 }
 
 /**
- * FINALIZAR COMPRA: Redirección al Checkout (comercializacion.blade.php).
+ * FUNCIÓN: finalizarCompra
+ * DESCRIPCIÓN: Redirige a la página de pago.
  */
 function finalizarCompra() {
     if (carrito.length === 0) return alert('El carrito está vacío.');
-    window.location.href = '/comercializacion';
+    window.location.href = '/comercializacion'; // Redirección vía JavaScript
 }
 
-// Escuchador global: Se ejecuta cuando el DOM está listo
+// EventListener: Cuando el archivo HTML termine de cargar todo su esqueleto, dispara la función de renderizado.
 document.addEventListener('DOMContentLoaded', renderizarCarrito);
