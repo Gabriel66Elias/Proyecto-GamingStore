@@ -1,4 +1,3 @@
-
      <!DOCTYPE html>
      <html lang="es">
      
@@ -14,7 +13,7 @@
               insertará su propio nombre aquí usando @section('titulo', 'Nombre') --}}
          <title>GamingStation | @yield('titulo')</title>
      
-         {{-- IMPORTACIÓN DE HOJAS DE ESTILO (CSS)
+         {{-- IMPORTACIÓN DE ESTILO (CSS)
               asset(): Es un helper de Laravel que genera la URL absoluta hacia la carpeta 'public'.
               Esto evita errores de rutas rotas cuando subís la web a un servidor real. --}}
          <link rel="stylesheet" href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}">
@@ -41,7 +40,7 @@
          {{-- INCLUSIÓN DEL FOOTER --}}
          @include('partials.footer')
      
-         {{-- COMPONENTE DEL CARRITO (Offcanvas)
+         {{-- COMPONENTE DEL CARRITO
               Usar <x-nombre /> es la sintaxis moderna de Blade Components.
               Llama al archivo resources/views/components/carrito.blade.php. 
               Se pone al final del body para que no bloquee la carga visual de la página. --}}
@@ -54,4 +53,5 @@
          <script src="{{ asset('js/carrito.js') }}"></script>
      
      </body>
-     </html>
+
+</html>

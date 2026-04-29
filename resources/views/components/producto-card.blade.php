@@ -1,8 +1,3 @@
-{{-- ==========================================================================
-     ARCHIVO: producto-card.blade.php
-     DESCRIPCIÓN: Componente de Blade reutilizable. Define cómo se dibuja 
-     una sola tarjeta de producto en la grilla del catálogo.
-     ========================================================================== --}}
 
 {{-- @props: Declara las variables dinámicas que este componente DEBE recibir 
      desde el Backend (el controlador). En este caso recibe todo el array de datos 
@@ -16,17 +11,14 @@
      
           DATOS OCULTOS PARA JS (data-attributes): 
           Inyectamos la categoría y el precio directo en el código HTML de la tarjeta.
-          Esto es magia del Frontend: JavaScript lee estos atributos 'data-' para poder 
-          filtrar y ordenar sin tener que volver a consultar a la base de datos (Backend). --}}
+          JavaScript lee estos atributos 'data-' para poder filtrar y ordenar --}}
      <div class="col-12 col-sm-6 col-lg-4 producto-item" 
           data-id="{{ $id }}"
           data-categoria="{{ $producto['categoria'] }}" 
           data-precio="{{ $producto['precio'] }}">
          
          {{-- ETIQUETA ENLACE <a>: 
-              Envolvemos TODA LA TARJETA en una etiqueta <a>.
-              Esto genera una excelente experiencia de usuario (UX) porque el cliente 
-              puede hacer clic en la foto, título o cualquier espacio vacío para ir al detalle. --}}
+          el cliente puede hacer clic en la foto, título o cualquier espacio vacío para ir al detalle. --}}
          <a href="/consulta/{{ $id }}" class="card h-100 border-0 bg-transparent hover-elevate text-decoration-none" style="display: block; cursor: pointer;">
              
              {{-- CONTENEDOR DE LA IMAGEN

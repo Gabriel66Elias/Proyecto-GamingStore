@@ -1,6 +1,5 @@
 
-{{-- ESTILOS ENCAPSULADOS PARA EL FOOTER
-     Se dejaron aquí para hacer el componente independiente (Portable). --}}
+{{-- ESTILOS ENCAPSULADOS PARA EL FOOTER --}}
      <style>
         .footer-modern { background-color: #11131A; border-top: 1px solid #1f222e !important; }
         .footer-link { color: #94a3b8; text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: all 0.3s ease; display: inline-block; width: fit-content; }

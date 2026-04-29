@@ -1,8 +1,8 @@
 
 {{-- NAVBAR DE BOOTSTRAP:
      navbar-expand-lg: Indica que en pantallas grandes (lg) se vean los links, 
-                       pero en celulares se colapse en el menú hamburguesa.
-     sticky-top: ¡Muy importante! Hace que el menú se quede pegado arriba al hacer scroll.
+     pero en celulares se colapse en el menú hamburguesa.
+     sticky-top: Hace que el menú se quede pegado arriba al hacer scroll.
      z-index: 1040: Asegura que el menú siempre esté por encima de cualquier foto o producto. --}}
      <nav class="navbar navbar-expand-lg navbar-dark border-bottom py-3 sticky-top" style="z-index: 1040; background-color: #11131A; border-bottom-color: #1f222e !important;">
         <div class="container">

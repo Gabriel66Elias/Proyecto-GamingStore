@@ -6,18 +6,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const bloquesCategoria = document.querySelectorAll('.categoria-bloque');
     const btnLimpiar = document.getElementById('btn-limpiar-filtros');
     
-    // Referencias al menú desplegable falso (Custom Dropdown)
     const inputOrdenOculto = document.getElementById('orden-precio'); // Aquí se guarda el valor real
     const btnTextoOrden = document.getElementById('texto-orden'); // Texto visible para el usuario
     const itemsDesplegable = document.querySelectorAll('.custom-dropdown-item'); // Las opciones del menú
 
     /**
      * FUNCIÓN: procesarCatalogo
-     * DESCRIPCIÓN: Es el "cerebro" del archivo. Lee los inputs actuales y oculta/muestra
+     * Lee los inputs actuales y oculta/muestra
      * las tarjetas HTML dependiendo de las decisiones del usuario.
      */
     function procesarCatalogo() {
-        // Averigua qué categoría está seleccionada actualmente y qué orden se pidió
+        // Averigua que categoria esta seleccionada actualmente y que orden se pidio
         const catElegida = document.querySelector('input[name="filtro_categoria"]:checked').value;
         const ordenElegido = inputOrdenOculto.value; 
 
@@ -33,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             productos.forEach(p => {
                 const pCat = p.getAttribute('data-categoria'); // Lee la categoría inyectada en el HTML
                 
-                // Evalúa booleano: ¿Pidió "todas" o pidió la categoría exacta de esta tarjeta?
+                // booleano: Pidió "todas" o pidio una categoría exacta
                 const coincide = (catElegida === 'todas' || catElegida === pCat);
                 
                 // Modifica CSS: Si coincide la muestra (block), si no, la desaparece de pantalla (none)
@@ -53,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     if (ordenElegido === 'barato') return precioA - precioB; // Positivo manda A atrás
                     if (ordenElegido === 'caro') return precioB - precioA;   // Positivo manda B atrás
-                    return idA - idB; // Opción predeterminada: Ordena por el ID original de la base de datos
+                    return idA - idB; // Opción predeterminada: Ordena por el ID original
                 });
 
                 // Truco del DOM: Al hacer "appendChild" de un elemento que ya existe, no se clona,

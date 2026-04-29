@@ -1,15 +1,8 @@
-{{-- ==========================================================================
-     ARCHIVO: filtro-catalogo.blade.php
-     DESCRIPCIÓN: Interfaz gráfica (UI) para el sistema de filtrado. 
-     Contiene botones de categorías y un dropdown simulado para ordenar precios.
-     ========================================================================== --}}
 
-{{-- ESTILOS ESPECÍFICOS DEL COMPONENTE 
-     Están encapsulados aquí para darle estilo personalizado a los checkboxes. --}}
+{{-- ESTILOS ESPECÍFICOS DEL COMPONENTE --}}
      <style>
-        /* ... Las propiedades CSS dan colores a los botones. Explicación clave: 
-           La regla '.btn-check:checked + .btn-filtro' aplica un estilo iluminado 
-           solo cuando el input oculto está activado ... */
+        /* ... Las propiedades CSS dan colores a los botones 
+           '.btn-check:checked + .btn-filtro' aplica un estilo iluminado solo cuando el input oculto está activado ... */
         .filtro-container { background-color: #11131A !important; border: 1px solid #1f222e !important; border-radius: 1rem; }
         .btn-filtro { background-color: #1a1d27; border: 1px solid #2d313f; color: #94a3b8; border-radius: 0.5rem; padding: 0.5rem 0.9rem; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .btn-filtro:hover { border-color: #FF3B3B; color: #fff; background-color: rgba(255, 59, 59, 0.05); }
@@ -33,9 +26,7 @@
                 <label class="text-secondary small fw-bold mb-2 d-block text-uppercase" style="letter-spacing: 1px;">Filtrar por Categoría</label>
                 <div class="d-flex flex-wrap gap-2">
                     
-                    {{-- TRUCO DE UI (Botones Radio Ocultos):
-                         Bootstrap oculta el input 'radio' (btn-check) y solo muestra el 'label' (btn-filtro). 
-                         Todos comparten el name="filtro_categoria" para que solo puedas elegir uno a la vez. 
+                    {{-- Todos comparten el name="filtro_categoria" para que solo puedas elegir uno a la vez. 
                          JavaScript escucha cuándo cambian estos inputs para ocultar las tarjetas en el catálogo. --}}
                     <input type="radio" class="btn-check" name="filtro_categoria" id="cat-todas" value="todas" checked autocomplete="off">
                     <label class="btn-filtro" for="cat-todas">Todos</label>
@@ -54,12 +45,11 @@
                 </div>
             </div>
     
-            {{-- SECCIÓN 2: ORDENAMIENTO DE PRECIOS (Ocupa 3 columnas) --}}
+            {{-- SECCIÓN 2: ORDENAMIENTO DE PRECIOS--}}
             <div class="col-xl-3 col-lg-10 col-md-10">
                 <label class="text-secondary small fw-bold mb-2 d-block text-uppercase" style="letter-spacing: 1px;">Ordenar por Precio</label>
                 
-                {{-- Desplegable personalizado para darle estética de tienda gaming. 
-                     Se usa un botón normal que despliega una lista <ul>. --}}
+                {{-- Desplegable personalizado  --}}
                 <div class="dropdown w-100">
                     <button class="btn w-100 text-start d-flex justify-content-between align-items-center custom-select-btn" type="button" id="dropdownOrden" data-bs-toggle="dropdown" aria-expanded="false">
                         <span id="texto-orden">Predeterminado</span>
@@ -71,12 +61,12 @@
                         <li><a class="dropdown-item custom-dropdown-item" href="#" data-value="caro">▼ Más caros primero</a></li>
                     </ul>
                 </div>
-                {{-- IMPORTANTE: Este input oculto guarda el valor que el usuario eligió ("barato" o "caro"). 
+                {{-- Este input oculto guarda el valor que el usuario eligió ("barato" o "caro"). 
                      JavaScript lee este input invisible para hacer los cálculos matemáticos del Array. --}}
                 <input type="hidden" id="orden-precio" value="predeterminado">
             </div>
     
-            {{-- SECCIÓN 3: BOTÓN DE RESETEO (Ocupa 1 columna) --}}
+            {{-- SECCIÓN 3: BOTÓN DE RESETEO  --}}
             <div class="col-xl-1 col-lg-2 col-md-2">
                 {{-- Botón con ID específico ('btn-limpiar-filtros') atrapado por JavaScript
                      para resetear la categoría a "Todas" y el precio a "Predeterminado". --}}

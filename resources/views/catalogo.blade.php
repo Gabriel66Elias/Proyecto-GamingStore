@@ -2,8 +2,7 @@
      @section('titulo', 'Catálogo')
      @section('contenido')
      
-         {{-- DIVS QUE DIBUJAN LAS LUCES (Efecto Visual Neón)
-              No tienen contenido, su diseño se controla enteramente vía CSS (fondos.css). --}}
+         {{-- DIVS QUE DIBUJAN LAS LUCES (Efecto Visual Neón) --}}
          <div class="fondo-luces-catalogo">
              <div class="luz-roja-top"></div>
              <div class="luz-roja-bottom"></div>
@@ -11,7 +10,7 @@
      
          <div class="container mt-5 mb-5">
      
-             {{-- BOTÓN VOLVER: Enlace minimalista estilizado con SVG invertido --}}
+             {{-- BOTON VOLVER--}}
              <div class="mb-4">
                  <a href="/" class="text-decoration-none text-secondary d-inline-flex align-items-center gap-2 hover-text-mars" style="transition: color 0.3s;" onmouseover="this.style.color='#FF3B3B'" onmouseout="this.style.color='#6c757d'">
                      <img src="{{ asset('assets/caret-left.svg') }}" alt="Volver" style="width: 18px; height: 18px; filter: invert(0.6);">
@@ -32,7 +31,7 @@
                       el archivo 'resources/views/components/filtro-catalogo.blade.php'. --}}
                  <x-filtro-catalogo />
      
-                 {{-- MOTOR DE RENDERIZADO BUCLE (Loop) PRINCIPAL --}}
+                 {{-- MOTOR DE RENDERIZADO BUCLE PRINCIPAL --}}
                  {{-- 1. Itera sobre cada grupo de categorías (ej: "Consolas", luego "Hardware") --}}
                  @foreach ($productosAgrupados as $categoria => $productos)
                      <div class="categoria-bloque mb-5">
@@ -58,7 +57,7 @@
                  @endforeach
              </div>
      
-             {{-- Lógica Front-end: Script que controla cómo funcionan los filtros sin recargar la página. --}}
+             {{-- Script que controla cómo funcionan los filtros sin recargar la página. --}}
              <script src="{{ asset('js/filtros.js') }}"></script>
          </div>
      @endsection
