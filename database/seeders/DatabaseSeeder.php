@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Database\Seeders\RolesSeeder;
+use Database\Seeders\UsuariosSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -11,9 +13,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Llamamos al seeder de roles definido anteriormente
         $this->call([
-            RolesSeeder::class,
+            RolesSeeder::class,   // primero roles (FK requerida por usuarios)
+            UsuariosSeeder::class,
         ]);
     }
 }
