@@ -10,16 +10,9 @@ class UsuariosSeeder extends Seeder
 {
     public function run(): void
     {
-        $rolAdmin   = Rol::where('nombre', 'admin')->first();
-        $rolCliente = Rol::where('nombre', 'cliente')->first();
-
-
-        foreach ($usuarios as $datos) {
-            // firstOrCreate evita duplicados si se ejecuta más de una vez
-            Usuario::firstOrCreate(
-                ['email' => $datos['email']],
-                $datos
-            );
-        }
+        $this->call([
+            RolesSeeder::class, // Este lo dejamos porque tu formulario necesita los roles
+            // UsuariosSeeder::class, <--- COMENTALO O BORRALO
+        ]);
     }
 }
