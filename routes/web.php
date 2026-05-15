@@ -7,6 +7,7 @@ use App\Http\Controllers\ContactoController;
 use App\Http\Controllers\ProductoController; 
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\RolController;
+use App\Http\Controllers\AuthController;
 /* --------------------------------------------------------------------------
    RUTAS ESTÁTICAS (GET)
    Se usa el método GET porque el usuario solo está "pidiendo" ver una página.
@@ -69,3 +70,12 @@ Route::get('/consulta/{id}', [ProductoController::class, 'show']);
 Route::resource('usuarios', UsuarioController::class);
 
 Route::resource('roles', RolController::class);
+
+/* --------------------------------------------------------------------------
+   RUTAS DE AUTENTICACIÓN
+   -------------------------------------------------------------------------- */
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
