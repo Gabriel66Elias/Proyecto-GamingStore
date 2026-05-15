@@ -5,7 +5,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactoController;
 use App\Http\Controllers\ProductoController; 
-
+use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\RolController;
 /* --------------------------------------------------------------------------
    RUTAS ESTÁTICAS (GET)
    Se usa el método GET porque el usuario solo está "pidiendo" ver una página.
@@ -64,3 +65,7 @@ Route::get('/catalogo', [ProductoController::class, 'index']);
 // Laravel captura automáticamente ese número y se lo inyecta como 
 // parámetro al método 'show' del ProductoController.
 Route::get('/consulta/{id}', [ProductoController::class, 'show']);
+
+Route::resource('usuarios', UsuarioController::class);
+
+Route::resource('roles', RolController::class);
