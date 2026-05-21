@@ -10,9 +10,17 @@ class UsuariosSeeder extends Seeder
 {
     public function run(): void
     {
-        $this->call([
-            RolesSeeder::class, // Este lo dejamos porque tu formulario necesita los roles
-            // UsuariosSeeder::class, <--- COMENTALO O BORRALO
-        ]);
+        $rolAdmin = Rol::where('nombre', 'admin')->first();
+
+        // Creamos SÓLO al admin por código. 
+        // Los clientes reales nacerán desde el formulario web.
+        Usuario::firstOrCreate(
+            ['email' => 'admin@gamingstation.com'],
+            [
+                'nombre' => 'Admin del Sistema',
+                'password' => '12345678',
+                'rol_id' => $rolAdmin->id,
+            ]
+        );
     }
 }

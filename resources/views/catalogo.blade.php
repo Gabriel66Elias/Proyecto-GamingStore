@@ -50,7 +50,7 @@
                                       Le pasamos dinámicamente las variables de PHP al componente Blade 
                                       usando los dos puntos (:producto y :id) para que la tarjeta se 
                                       dibuje con los datos correctos. --}}
-                                 <x-producto-card :producto="$producto" :id="$producto['id']" />
+                                 <x-producto-card :producto="$producto" :id="$producto->id" />
                              @endforeach
                          </div>
                      </div>
