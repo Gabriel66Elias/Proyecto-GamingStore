@@ -19,6 +19,7 @@
          <link rel="stylesheet" href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}">
          <link rel="stylesheet" href="{{ asset('css/estilos.css') }}">
          <link rel="stylesheet" href="{{ asset('css/fondos.css') }}">
+         @stack('styles')
      </head>
      
      {{-- bg-dark y text-light: Clases nativas de Bootstrap para dar un fondo negro 

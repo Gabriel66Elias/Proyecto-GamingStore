@@ -16,7 +16,8 @@ use App\Http\Controllers\AuthController;
    -------------------------------------------------------------------------- */
 
 Route::get('/', function () {
-    return view('principal'); // Retorna resources/views/principal.blade.php
+    $productosDestacados = \App\Models\Producto::inRandomOrder()->limit(4)->get();
+    return view('principal', compact('productosDestacados'));
 });
 
 Route::get('/quienes-somos', function () {

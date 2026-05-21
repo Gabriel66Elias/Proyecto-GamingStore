@@ -11,13 +11,7 @@
     height: 100vh; /* Ocupa el 100% del alto visual de la pantalla */
     z-index: -1; /* Lo envía al fondo de todo (detrás de los elementos HTML) */
     pointer-events: none; /* Evita que el fondo bloquee los clics del usuario */
-    background-color: #0b0c10; /* Color base ultra oscuro */
-    
-    /* Dibuja las líneas de la cuadrícula usando gradientes transparentes */
-    background-image:
-        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    background-size: 40px 40px; /* Tamaño de cada cuadrado de la grilla */
+    background-color: #0b0c10;
 }
 
 /* --- BRILLO SUPERIOR CENTRAL --- */
