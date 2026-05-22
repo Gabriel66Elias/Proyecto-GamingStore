@@ -4,10 +4,11 @@
 // Le decimos a este archivo dónde encontrar la clase Route y nuestros Controladores.
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactoController;
-use App\Http\Controllers\ProductoController; 
+use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminController;
 /* --------------------------------------------------------------------------
    RUTAS ESTÁTICAS (GET)
    Se usa el método GET porque el usuario solo está "pidiendo" ver una página.
@@ -80,3 +81,19 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/mi-perfil', [AuthController::class, 'perfil'])->middleware('auth')->name('perfil');
+
+Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard',               [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/stock',                   [AdminController::class, 'stock'])->name('stock');
+    Route::get('/consultas',               [AdminController::class, 'consultas'])->name('consultas');
+    Route::get('/pedidos',                 [AdminController::class, 'pedidos'])->name('pedidos');
+
+    // CRUD de productos
+    Route::get('/productos',               [AdminController::class, 'productos'])->name('productos');
+    Route::get('/productos/crear',         [AdminController::class, 'create'])->name('productos.crear');
+    Route::post('/productos',              [AdminController::class, 'store'])->name('productos.store');
+    Route::get('/productos/{id}/editar',   [AdminController::class, 'edit'])->name('productos.editar');
+    Route::put('/productos/{id}',          [AdminController::class, 'update'])->name('productos.update');
+    Route::delete('/productos/{id}',       [AdminController::class, 'destroy'])->name('productos.destroy');
+});

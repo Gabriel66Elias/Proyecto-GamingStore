@@ -1,0 +1,95 @@
+/* ==========================================================================
+   PROYECTO: GamingStation
+   ARCHIVO: estilos.perfil.css
+   ========================================================================== */
+
+/* ── Fondo base ── */
+.perfil-wrapper {
+    min-height: 80vh;
+    padding: 3rem 0 5rem;
+}
+
+/* ── Avatar inicial ── */
+.avatar-circle {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FF3B3B 0%, #c02020 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: -1px;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 4px rgba(255,59,59,0.15);
+}
+
+/* ── Cards ── */
+.perfil-card {
+    background-color: #11131A;
+    border: 1px solid #1f222e;
+    border-radius: 16px;
+    transition: border-color 0.3s ease;
+}
+.perfil-card:hover { border-color: rgba(255,59,59,0.3); }
+
+/* ── Separador de sección ── */
+.seccion-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #FF3B3B;
+    text-transform: uppercase;
+}
+
+/* ── Fila de dato ── */
+.dato-row {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 1rem 0;
+    border-bottom: 1px solid #1f222e;
+}
+.dato-row:last-child { border-bottom: none; }
+.dato-label { font-size: 0.78rem; color: #64748b; font-weight: 500; }
+.dato-valor { font-size: 0.97rem; color: #e2e8f0; font-weight: 600; }
+
+/* ── Badge de rol ── */
+.badge-rol {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+.badge-admin {
+    background: rgba(255,59,59,0.12);
+    color: #FF3B3B;
+    border: 1px solid rgba(255,59,59,0.25);
+}
+.badge-cliente {
+    background: rgba(148,163,184,0.08);
+    color: #94a3b8;
+    border: 1px solid rgba(148,163,184,0.2);
+}
+
+/* ── Estado vacío de pedidos ── */
+.empty-orders {
+    padding: 3rem 1.5rem;
+    text-align: center;
+}
+.empty-orders-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(255,59,59,0.06);
+    border: 1px solid rgba(255,59,59,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.25rem;
+}

@@ -43,7 +43,25 @@
                             <span class="text-light small fw-semibold text-nowrap">{{ Auth::user()->nombre }}</span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark border-0 shadow"
-                            style="background-color: #1a1d27; border: 1px solid #1f222e !important; min-width: 160px;">
+                            style="background-color: #1a1d27; border: 1px solid #1f222e !important; min-width: 190px;">
+                            <li>
+                                <a href="{{ route('perfil') }}" class="dropdown-item small py-2 d-flex align-items-center gap-2" style="color: #e2e8f0;">
+                                    <img src="{{ asset('assets/person-circle.svg') }}" style="width: 15px; filter: invert(0.7);">
+                                    Mi Perfil
+                                </a>
+                            </li>
+                            @if(Auth::user()->rol->nombre === 'admin')
+                            <li>
+                                <a href="{{ route('admin.dashboard') }}" class="dropdown-item small py-2 d-flex align-items-center gap-2" style="color: #FF3B3B;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="#FF3B3B" viewBox="0 0 16 16">
+                                        <path d="M8 4a.5.5 0 0 1 .5.5V6a.5.5 0 0 1-1 0V4.5A.5.5 0 0 1 8 4M3.732 5.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707M2 10a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 10m9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5m.754-4.246a.39.39 0 0 0-.527-.02L7.547 9.31a.91.91 0 1 0 1.302 1.258l3.434-4.297a.39.39 0 0 0-.029-.518z"/>
+                                        <path fill-rule="evenodd" d="M0 10a8 8 0 1 1 15.547 2.661c-.442 1.253-1.845 1.602-2.932 1.25C11.309 13.488 9.475 13 8 13c-1.474 0-3.31.488-4.615.911-1.087.352-2.49.003-2.932-1.25A8 8 0 0 1 0 10m8-7a7 7 0 0 0-6.603 9.329c.203.575.923.876 1.68.63C4.397 12.533 6.358 12 8 12s3.604.532 4.923.96c.757.245 1.477-.056 1.68-.631A7 7 0 0 0 8 3"/>
+                                    </svg>
+                                    Panel Admin
+                                </a>
+                            </li>
+                            @endif
+                            <li><hr class="dropdown-divider" style="border-color: #1f222e;"></li>
                             <li>
                                 <form action="{{ route('logout') }}" method="POST">
                                     @csrf

@@ -17,7 +17,7 @@ class UsuariosSeeder extends Seeder
         Usuario::firstOrCreate(
             ['email' => 'admin@gamingstation.com'],
             [
-                'nombre' => 'Admin del Sistema',
+                'nombre' => 'Admin',
                 'password' => '12345678',
                 'rol_id' => $rolAdmin->id,
             ]
