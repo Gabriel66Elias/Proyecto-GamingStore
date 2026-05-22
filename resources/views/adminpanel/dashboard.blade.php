@@ -107,7 +107,7 @@
                                 <span class="fw-semibold" style="color:#e2e8f0;">{{ $p->nombre }}</span>
                             </div>
                         </td>
-                        <td><span class="cat-badge">{{ $p->categoria }}</span></td>
+                        <td><span class="cat-badge">{{ $p->categoria?->nombre }}</span></td>
                         <td style="color:#4ade80; font-weight:700;">${{ number_format($p->precio_venta, 2) }}</td>
                         <td>
                             @if($p->stock == 0)

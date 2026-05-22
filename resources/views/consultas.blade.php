@@ -35,7 +35,7 @@
 
                              <div class="mb-2">
                                  <span class="text-mars fw-bold text-uppercase" style="font-size: 0.8rem; letter-spacing: 1.5px;">
-                                     {{ $producto->categoria }}
+                                     {{ $producto->categoria?->nombre }}
                                  </span>
                              </div>
                              <h1 class="fw-black text-white text-uppercase mb-2 tracking-tighter display-5">

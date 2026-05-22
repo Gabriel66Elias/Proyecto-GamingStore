@@ -62,7 +62,7 @@
                                 </div>
                             </div>
                         </td>
-                        <td><span class="cat-badge">{{ $p->categoria }}</span></td>
+                        <td><span class="cat-badge">{{ $p->categoria?->nombre }}</span></td>
                         <td style="color:#94a3b8;">${{ number_format($p->precio_compra, 2) }}</td>
                         <td style="color:#4ade80; font-weight:700;">${{ number_format($p->precio_venta, 2) }}</td>
                         <td>

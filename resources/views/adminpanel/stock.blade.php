@@ -63,7 +63,7 @@
                                 <span class="fw-semibold" style="color:#e2e8f0;">{{ $p->nombre }}</span>
                             </div>
                         </td>
-                        <td><span class="cat-badge">{{ $p->categoria }}</span></td>
+                        <td><span class="cat-badge">{{ $p->categoria?->nombre }}</span></td>
                         <td>
                             <span style="font-size: 1.1rem; font-weight: 800; color: {{ $color }};">
                                 {{ $p->stock }}

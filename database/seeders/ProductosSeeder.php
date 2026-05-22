@@ -3,17 +3,21 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\Categoria;
 use App\Models\Producto;
 
 class ProductosSeeder extends Seeder
 {
     public function run(): void
     {
+        $hardware  = Categoria::where('nombre', 'Hardware')->first();
+        $consolas  = Categoria::where('nombre', 'Consolas')->first();
+
         Producto::firstOrCreate(
             ['nombre' => 'NVIDIA RTX 4070 Super'],
             [
-                'categoria'     => 'Hardware',
-                'descripcion'   => 'La RTX 4070 Super ofrece un rendimiento excepcional en 1440p y es capaz de mover títulos exigentes en 4K con ray tracing activado. Incluye soporte para DLSS 3.5 y Frame Generation.',
+                'categoria_id'     => $hardware->id,
+                'descripcion'      => 'La RTX 4070 Super ofrece un rendimiento excepcional en 1440p y es capaz de mover títulos exigentes en 4K con ray tracing activado. Incluye soporte para DLSS 3.5 y Frame Generation.',
                 'especificaciones' => [
                     '12 GB GDDR6X',
                     'DLSS 3.5 con Frame Generation',
@@ -31,8 +35,8 @@ class ProductosSeeder extends Seeder
         Producto::firstOrCreate(
             ['nombre' => 'AMD Ryzen 7 7800X3D'],
             [
-                'categoria'     => 'Hardware',
-                'descripcion'   => 'El procesador gaming más rápido del mundo gracias a la tecnología 3D V-Cache. Domina en juegos a 1080p y 1440p superando a cualquier rival de Intel en títulos optimizados.',
+                'categoria_id'     => $hardware->id,
+                'descripcion'      => 'El procesador gaming más rápido del mundo gracias a la tecnología 3D V-Cache. Domina en juegos a 1080p y 1440p superando a cualquier rival de Intel en títulos optimizados.',
                 'especificaciones' => [
                     '8 núcleos / 16 hilos',
                     '3D V-Cache de 96 MB',

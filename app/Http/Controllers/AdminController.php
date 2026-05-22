@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categoria;
 use App\Models\Producto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,12 +23,12 @@ class AdminController extends Controller
 
         $stats = [
             'total_productos' => Producto::count(),
-            'categorias'      => Producto::distinct('categoria')->count('categoria'),
+            'categorias'      => Categoria::count(),
             'stock_total'     => Producto::sum('stock'),
             'sin_stock'       => Producto::where('stock', 0)->count(),
         ];
 
-        $ultimos = Producto::latest()->limit(5)->get();
+        $ultimos = Producto::with('categoria')->latest()->limit(5)->get();
 
         return view('adminpanel.dashboard', compact('stats', 'ultimos'));
     }
@@ -35,14 +36,15 @@ class AdminController extends Controller
     public function productos()
     {
         $this->soloAdmin();
-        $productos = Producto::orderBy('nombre')->paginate(15);
+        $productos = Producto::with('categoria')->orderBy('nombre')->paginate(15);
         return view('adminpanel.productos', compact('productos'));
     }
 
     public function create()
     {
         $this->soloAdmin();
-        return view('adminpanel.productos-crear');
+        $categorias = Categoria::all();
+        return view('adminpanel.productos-crear', compact('categorias'));
     }
 
     public function store(Request $request)
@@ -51,7 +53,7 @@ class AdminController extends Controller
 
         $data = $request->validate([
             'nombre'        => 'required|string|max:100|unique:productos,nombre',
-            'categoria'     => 'required|string|max:50',
+            'categoria_id'  => 'required|exists:categorias,id',
             'descripcion'   => 'nullable|string',
             'precio_compra' => 'required|numeric|min:0',
             'precio_venta'  => 'required|numeric|min:0',
@@ -78,8 +80,9 @@ class AdminController extends Controller
     public function edit($id)
     {
         $this->soloAdmin();
-        $producto = Producto::findOrFail($id);
-        return view('adminpanel.productos-editar', compact('producto'));
+        $producto   = Producto::findOrFail($id);
+        $categorias = Categoria::all();
+        return view('adminpanel.productos-editar', compact('producto', 'categorias'));
     }
 
     public function update(Request $request, $id)
@@ -90,7 +93,7 @@ class AdminController extends Controller
 
         $data = $request->validate([
             'nombre'        => "required|string|max:100|unique:productos,nombre,{$id}",
-            'categoria'     => 'required|string|max:50',
+            'categoria_id'  => 'required|exists:categorias,id',
             'descripcion'   => 'nullable|string',
             'precio_compra' => 'required|numeric|min:0',
             'precio_venta'  => 'required|numeric|min:0',
@@ -130,7 +133,7 @@ class AdminController extends Controller
     public function stock()
     {
         $this->soloAdmin();
-        $productos = Producto::orderBy('stock')->get();
+        $productos = Producto::with('categoria')->orderBy('stock')->get();
         return view('adminpanel.stock', compact('productos'));
     }
 

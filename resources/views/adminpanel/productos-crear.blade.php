@@ -56,13 +56,13 @@
 
                         <div class="mb-3">
                             <label class="admin-form-label">Categoría *</label>
-                            <select name="categoria" class="admin-form-select {{ $errors->has('categoria') ? 'is-invalid' : '' }}">
-                                <option value="" disabled {{ old('categoria') ? '' : 'selected' }}>Seleccioná una categoría</option>
-                                @foreach(['Hardware', 'Consolas', 'Periféricos', 'Accesorios', 'Juegos'] as $cat)
-                                    <option value="{{ $cat }}" {{ old('categoria') === $cat ? 'selected' : '' }}>{{ $cat }}</option>
+                            <select name="categoria_id" class="admin-form-select {{ $errors->has('categoria_id') ? 'is-invalid' : '' }}">
+                                <option value="" disabled {{ old('categoria_id') ? '' : 'selected' }}>Seleccioná una categoría</option>
+                                @foreach($categorias as $cat)
+                                    <option value="{{ $cat->id }}" {{ old('categoria_id') == $cat->id ? 'selected' : '' }}>{{ $cat->nombre }}</option>
                                 @endforeach
                             </select>
-                            @error('categoria')<p class="admin-field-error">{{ $message }}</p>@enderror
+                            @error('categoria_id')<p class="admin-field-error">{{ $message }}</p>@enderror
                         </div>
 
                         <div>

@@ -29,7 +29,7 @@
                  {{-- COMPONENTE DE FILTROS DE BLADE
                       Al usar la etiqueta <x-... /> le decimos a Laravel que importe 
                       el archivo 'resources/views/components/filtro-catalogo.blade.php'. --}}
-                 <x-filtro-catalogo />
+                 <x-filtro-catalogo :categorias="$categorias" />
      
                  {{-- MOTOR DE RENDERIZADO BUCLE PRINCIPAL --}}
                  {{-- 1. Itera sobre cada grupo de categorías (ej: "Consolas", luego "Hardware") --}}

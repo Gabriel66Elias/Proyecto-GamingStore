@@ -1,3 +1,4 @@
+@props(['categorias' => collect()])
 
 {{-- ESTILOS ESPECÍFICOS DEL COMPONENTE --}}
      <style>
@@ -31,17 +32,11 @@
                     <input type="radio" class="btn-check" name="filtro_categoria" id="cat-todas" value="todas" checked autocomplete="off">
                     <label class="btn-filtro" for="cat-todas">Todos</label>
     
-                    <input type="radio" class="btn-check" name="filtro_categoria" id="cat-consolas" value="Consolas" autocomplete="off">
-                    <label class="btn-filtro" for="cat-consolas">Consolas</label>
-    
-                    <input type="radio" class="btn-check" name="filtro_categoria" id="cat-hardware" value="Hardware" autocomplete="off">
-                    <label class="btn-filtro" for="cat-hardware">Hardware</label>
-    
-                    <input type="radio" class="btn-check" name="filtro_categoria" id="cat-perifericos" value="Periféricos" autocomplete="off">
-                    <label class="btn-filtro" for="cat-perifericos">Periféricos</label>
-    
-                    <input type="radio" class="btn-check" name="filtro_categoria" id="cat-tvs" value="TVs y Monitores" autocomplete="off">
-                    <label class="btn-filtro" for="cat-tvs">TVs & Monitores</label>
+                    @foreach($categorias as $cat)
+                    <input type="radio" class="btn-check" name="filtro_categoria"
+                           id="cat-{{ $loop->index }}" value="{{ $cat->nombre }}" autocomplete="off">
+                    <label class="btn-filtro" for="cat-{{ $loop->index }}">{{ $cat->nombre }}</label>
+                    @endforeach
                 </div>
             </div>
     

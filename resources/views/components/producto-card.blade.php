@@ -2,7 +2,7 @@
 
 <div class="col-12 col-sm-6 col-lg-4 producto-item"
      data-id="{{ $id }}"
-     data-categoria="{{ $producto->categoria }}"
+     data-categoria="{{ $producto->categoria?->nombre }}"
      data-precio="{{ $producto->precio_venta }}">
 
     <a href="/consulta/{{ $id }}" class="card h-100 border-0 bg-transparent hover-elevate text-decoration-none" style="display: block; cursor: pointer;">
@@ -15,7 +15,7 @@
         <div class="card-body p-0 d-flex flex-column">
 
             <span class="text-mars fw-bold text-uppercase mb-1" style="font-size: 0.7rem; letter-spacing: 1px;">
-                {{ $producto->categoria }}
+                {{ $producto->categoria?->nombre }}
             </span>
 
             <h5 class="text-white fw-bold mb-2 fs-5 lh-sm">{{ $producto->nombre }}</h5>

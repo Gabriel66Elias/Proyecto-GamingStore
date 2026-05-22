@@ -2,60 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categoria;
 use App\Models\Producto;
-use Illuminate\Http\Request;
 
 class ProductoController extends Controller
 {
     public function index()
     {
-        $productosAgrupados = Producto::all()->groupBy('categoria');
-        return view('catalogo', compact('productosAgrupados'));
-    }
+        $categorias = Categoria::all();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        $productosAgrupados = Producto::with('categoria')
+            ->get()
+            ->groupBy(fn($p) => $p->categoria?->nombre ?? 'Sin categoría');
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+        return view('catalogo', compact('productosAgrupados', 'categorias'));
     }
 
     public function show($id)
     {
-        $producto = Producto::findOrFail($id);
+        $producto = Producto::with('categoria')->findOrFail($id);
         return view('consultas', compact('producto'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Producto $producto)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Producto $producto)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Producto $producto)
-    {
-        //
     }
 }
