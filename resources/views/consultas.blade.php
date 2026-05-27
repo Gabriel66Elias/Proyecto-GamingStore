@@ -1,106 +1,165 @@
+@extends('layout.main')
+@section('titulo', $producto->nombre)
 
-     @extends('layout.main')
-     @section('titulo', $producto->nombre)
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/estilos.consultas.css') }}">
+@endpush
 
-     @section('contenido')
-         <div class="container mt-5 mb-5">
+@section('contenido')
 
-             <div class="mb-4">
-                 <a href="/catalogo" class="text-decoration-none text-secondary d-inline-flex align-items-center gap-2 hover-text-mars" style="transition: color 0.3s;">
-                     <img src="{{ asset('assets/caret-left.svg') }}" alt="Volver" style="width: 18px; height: 18px; filter: invert(0.6);">
-                     <span class="fw-semibold">Volver al catálogo</span>
-                 </a>
-             </div>
+@php
+    $imagenUrl = $producto->imagen
+        ? asset('storage/' . $producto->imagen)
+        : asset('assets/placeholder-producto.svg');
 
-             <div class="detalle-wrapper" style="background-color: #11131A; border-radius: 1rem; overflow: hidden; box-shadow: 0 1rem 3rem rgba(0,0,0,0.5);">
+    if ($producto->stock > 5) {
+        $stockDot   = 'ok';
+        $stockLabel = 'En stock';
+    } elseif ($producto->stock > 0) {
+        $stockDot   = 'low';
+        $stockLabel = 'Pocas unidades';
+    } else {
+        $stockDot   = 'out';
+        $stockLabel = 'Sin stock';
+    }
+@endphp
 
-                 <div class="row g-0">
+<div class="container mt-5 mb-5">
 
-                     {{-- COLUMNA IZQUIERDA: IMAGEN --}}
-                     <div class="col-md-6 border-end border-secondary border-opacity-10 d-flex align-items-center justify-content-center p-3 p-md-4" style="background: radial-gradient(circle, #1a1d27 0%, #0b0c10 100%); min-height: 400px;">
-                         @php
-                             $imagenUrl = $producto->imagen
-                                 ? asset('storage/' . $producto->imagen)
-                                 : asset('assets/placeholder-producto.svg');
-                         @endphp
-                         <img src="{{ $imagenUrl }}" alt="{{ $producto->nombre }}" class="img-fluid"
-                              style="width: 100%; height: 100%; max-height: 600px; object-fit: contain; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.5)); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);"
-                              onmouseover="this.style.transform='scale(1.05)'"
-                              onmouseout="this.style.transform='scale(1)'">
-                     </div>
+    {{-- Volver al catálogo --}}
+    <a href="/catalogo" class="cp-back">
+        <img src="{{ asset('assets/caret-left.svg') }}" alt="" width="16" height="16" style="filter: invert(0.5);">
+        Volver al catálogo
+    </a>
 
-                     {{-- COLUMNA DERECHA: INFO Y COMPRA --}}
-                     <div class="col-md-6 p-4 p-lg-5">
-                         <div class="detalle-info-container h-100 d-flex flex-column">
+    {{-- ====================================================
+         HERO: imagen sticky + panel de info
+         ==================================================== --}}
+    <div class="cp-grid">
 
-                             <div class="mb-2">
-                                 <span class="text-mars fw-bold text-uppercase" style="font-size: 0.8rem; letter-spacing: 1.5px;">
-                                     {{ $producto->categoria?->nombre }}
-                                 </span>
-                             </div>
-                             <h1 class="fw-black text-white text-uppercase mb-2 tracking-tighter display-5">
-                                 {{ $producto->nombre }}
-                             </h1>
+        {{-- ─── IMAGEN ─────────────────────────────────── --}}
+        <div class="cp-img-sticky">
+            <div class="cp-img-card">
+                <img src="{{ $imagenUrl }}" alt="{{ $producto->nombre }}">
+            </div>
+        </div>
 
-                             <div class="detalle-precio mb-4 text-success fw-black fs-2">
-                                 ${{ number_format($producto->precio_venta, 0, ',', '.') }}
-                             </div>
+        {{-- ─── INFO ───────────────────────────────────── --}}
+        <div class="cp-info-panel">
 
-                             <p class="text-secondary mb-5 lh-lg fs-5 fw-light">
-                                 {{ $producto->descripcion }}
-                             </p>
+            <div class="cp-info-header">
+                <span class="cp-badge-categoria">{{ $producto->categoria?->nombre ?? 'Producto' }}</span>
+            </div>
 
-                             {{-- ESPECIFICACIONES --}}
-                             @if($producto->especificaciones)
-                             <div class="mb-5 grow">
-                                 <h5 class="text-white fw-bold mb-4 fs-6 text-uppercase" style="letter-spacing: 1px;">Especificaciones Destacadas</h5>
-                                 <ul class="detalle-specs">
-                                     @foreach ($producto->especificaciones as $spec)
-                                         <li>{{ $spec }}</li>
-                                     @endforeach
-                                 </ul>
-                             </div>
-                             @endif
+            <div class="cp-info-body">
 
-                             {{-- ZONA DE ACCIÓN --}}
-                             <div class="mt-auto pt-4 border-top border-secondary border-opacity-25">
-                                 <div class="d-flex justify-content-between align-items-center mb-4">
-                                     <span class="d-flex align-items-center text-secondary gap-2">
-                                         <img src="{{ asset('assets/boxes.svg') }}" alt="Stock" style="width: 18px; height: 18px; filter: invert(0.5);">
-                                         Stock disponible:
-                                         <span class="fw-bold text-white fs-5 ms-1">{{ $producto->stock }}</span>
-                                     </span>
-                                 </div>
+                {{-- Nombre --}}
+                <h1 class="cp-nombre">{{ $producto->nombre }}</h1>
 
-                                 <div class="row g-3 align-items-center">
-                                     <div class="col-12 col-sm-4 col-md-3">
-                                         <input type="number" id="input-cantidad"
-                                                class="input-cantidad-moderno form-control bg-dark text-white border-secondary text-center fw-bold w-100"
-                                                value="1" min="1" max="{{ $producto->stock }}"
-                                                style="height: 55px; font-size: 1.2rem;">
-                                     </div>
+                {{-- Precio --}}
+                <div class="cp-precio-wrap">
+                    <div class="cp-precio">${{ number_format($producto->precio_venta, 0, ',', '.') }}</div>
+                    <p class="cp-cuotas">
+                        o <strong class="text-mars">12 cuotas sin interés</strong> de
+                        <strong class="text-white">${{ number_format($producto->precio_venta / 12, 0, ',', '.') }}</strong>
+                    </p>
+                </div>
 
-                                     <div class="col-12 col-sm-8 col-md-9">
-                                         <button
-                                             class="btn btn-mars w-100 fw-bold d-flex align-items-center justify-content-center gap-2 text-nowrap"
-                                             style="height: 55px; border-radius: 8px; font-size: 1.1rem;"
-                                             onclick="agregarAlCarrito(
-                                                 '{{ $producto->id }}',
-                                                 '{{ addslashes($producto->nombre) }}',
-                                                 {{ $producto->precio_venta }},
-                                                 {{ $producto->stock }},
-                                                 '{{ $imagenUrl }}'
-                                             )">
-                                             <img src="{{ asset('assets/cart-plus.svg') }}" alt="Agregar" style="width: 22px; height: 22px; filter: invert(1);">
-                                             <span>Agregar al Carrito</span>
-                                         </button>
-                                     </div>
-                                 </div>
-                             </div>
+                <div class="cp-sep"></div>
 
-                         </div>
-                     </div>
-                 </div>
-             </div>
-         </div>
-     @endsection
+                {{-- Stock --}}
+                <div class="cp-stock">
+                    <span class="cp-stock-dot {{ $stockDot }}"></span>
+                    <span class="cp-stock-label {{ $stockDot }}">{{ $stockLabel }}</span>
+                    @if($producto->stock > 0)
+                        <span class="cp-stock-count">&nbsp;— {{ $producto->stock }} disponibles</span>
+                    @endif
+                </div>
+
+                {{-- Cantidad + botón --}}
+                <div class="cp-action">
+                    <div class="cp-qty">
+                        <button type="button" class="cp-qty-btn" onclick="cpAdjustQty(-1)" aria-label="Restar">−</button>
+                        <input type="number" id="input-cantidad" class="cp-qty-input"
+                               value="1" min="1" max="{{ $producto->stock }}" readonly>
+                        <button type="button" class="cp-qty-btn" onclick="cpAdjustQty(1)" aria-label="Sumar">+</button>
+                    </div>
+
+                    <button class="cp-btn-add"
+                            {{ $producto->stock === 0 ? 'disabled' : '' }}
+                            onclick="agregarAlCarrito(
+                                '{{ $producto->id }}',
+                                '{{ addslashes($producto->nombre) }}',
+                                {{ $producto->precio_venta }},
+                                {{ $producto->stock }},
+                                '{{ $imagenUrl }}'
+                            )">
+                        <img src="{{ asset('assets/cart-plus.svg') }}" alt="" width="20" height="20" style="filter: invert(1);">
+                        Agregar al carrito
+                    </button>
+                </div>
+
+                <div class="cp-sep"></div>
+
+                {{-- Trust strip --}}
+                <div class="cp-trust">
+                    <div class="cp-trust-item">
+                        <img src="{{ asset('assets/truck.svg') }}" alt="Envío">
+                        <span class="cp-trust-name">Envío gratis</span>
+                        <span class="cp-trust-sub">24–72 hs hábiles</span>
+                    </div>
+                    <div class="cp-trust-item">
+                        <img src="{{ asset('assets/check2.svg') }}" alt="Garantía">
+                        <span class="cp-trust-name">Garantía oficial</span>
+                        <span class="cp-trust-sub">De fábrica</span>
+                    </div>
+                    <div class="cp-trust-item">
+                        <img src="{{ asset('assets/credit-card-fill.svg') }}" alt="Pago">
+                        <span class="cp-trust-name">Pago seguro</span>
+                        <span class="cp-trust-sub">Todas las tarjetas</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    {{-- ====================================================
+         SECCIONES: Descripción y Especificaciones siempre visibles
+         ==================================================== --}}
+    <div class="cp-sections">
+
+        <div class="cp-section-card">
+            <div class="cp-section-header">
+                <span class="cp-section-title">Descripción</span>
+            </div>
+            <div class="cp-section-body">
+                <p class="cp-desc-text">{{ $producto->descripcion }}</p>
+            </div>
+        </div>
+
+        @if($producto->especificaciones)
+        <div class="cp-section-card">
+            <div class="cp-section-header">
+                <span class="cp-section-title">Especificaciones Destacadas</span>
+            </div>
+            <div class="cp-section-body">
+                <ul class="cp-specs-grid">
+                    @foreach ($producto->especificaciones as $spec)
+                        <li>{{ $spec }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+        @endif
+
+    </div>
+
+</div>
+
+@push('scripts')
+<script src="{{ asset('js/consultas.js') }}"></script>
+@endpush
+
+@endsection

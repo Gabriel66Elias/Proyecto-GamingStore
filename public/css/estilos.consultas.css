@@ -1,0 +1,420 @@
+/* ============================================================
+   estilos.consultas.css — Detalle de producto
+   GamingStation · Mars Red #FF3B3B · Space Charcoal #11131A
+   ============================================================ */
+
+/* ── BACK LINK ──────────────────────────────────────────── */
+.cp-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: #64748b;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s;
+    margin-bottom: 2rem;
+}
+.cp-back:hover { color: #FF3B3B; }
+.cp-back img { transition: transform 0.2s; }
+.cp-back:hover img { transform: translateX(-3px); }
+
+/* ── HERO: CSS GRID DOS COLUMNAS ────────────────────────── */
+.cp-grid {
+    display: grid;
+    grid-template-columns: 1fr 500px;
+    gap: 1.75rem;
+    align-items: start;
+    margin-bottom: 1.75rem;
+}
+
+/* ── COLUMNA IMAGEN (sticky) ────────────────────────────── */
+.cp-img-sticky {
+    position: sticky;
+    top: 82px;
+}
+
+.cp-img-card {
+    position: relative;
+    background: linear-gradient(145deg, #13151f 0%, #0c0d13 100%);
+    border-radius: 1.5rem;
+    border: 1px solid #1f222e;
+    box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.7);
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3.5rem;
+}
+
+/* Glow ambiental rojo detrás del producto */
+.cp-img-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 55%, rgba(255, 59, 59, 0.1) 0%, transparent 65%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Brillo sutil en esquina superior */
+.cp-img-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 10%, rgba(255, 59, 59, 0.3) 50%, transparent 90%);
+    pointer-events: none;
+}
+
+.cp-img-card img {
+    position: relative;
+    z-index: 1;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.65));
+    transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.cp-img-card:hover img { transform: scale(1.06); }
+
+/* ── PANEL DE INFO ──────────────────────────────────────── */
+.cp-info-panel {
+    background: #11131A;
+    border-radius: 1.5rem;
+    border: 1px solid #1f222e;
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+}
+
+/* Franja de categoría arriba */
+.cp-info-header {
+    padding: 1.1rem 2rem;
+    border-bottom: 1px solid #1f222e;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(255, 59, 59, 0.03);
+}
+
+.cp-badge-categoria {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #FF3B3B;
+    background: rgba(255, 59, 59, 0.08);
+    border: 1px solid rgba(255, 59, 59, 0.2);
+    padding: 0.3rem 0.8rem;
+    border-radius: 99px;
+}
+
+.cp-info-body {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Nombre */
+.cp-nombre {
+    font-size: 1.65rem;
+    font-weight: 900;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+    margin: 0;
+}
+
+/* Bloque de precio */
+.cp-precio-wrap {
+    padding: 1.35rem 1.5rem;
+    background: rgba(74, 222, 128, 0.04);
+    border: 1px solid rgba(74, 222, 128, 0.1);
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.cp-precio {
+    font-size: 3rem;
+    font-weight: 900;
+    color: #4ade80;
+    letter-spacing: -2px;
+    line-height: 1;
+}
+
+.cp-cuotas {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin: 0;
+}
+
+/* Divisor */
+.cp-sep {
+    height: 1px;
+    background: #1f222e;
+    margin: 0;
+}
+
+/* Stock indicator */
+.cp-stock {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-size: 0.875rem;
+}
+
+.cp-stock-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+.cp-stock-dot.ok  { background: #4ade80; box-shadow: 0 0 8px rgba(74,222,128,0.6); }
+.cp-stock-dot.low { background: #fbbf24; box-shadow: 0 0 8px rgba(251,191,36,0.6); }
+.cp-stock-dot.out { background: #ef4444; box-shadow: 0 0 8px rgba(239,68,68,0.6); }
+
+.cp-stock-label { font-weight: 700; }
+.cp-stock-label.ok  { color: #4ade80; }
+.cp-stock-label.low { color: #fbbf24; }
+.cp-stock-label.out { color: #ef4444; }
+.cp-stock-count { color: #4a5568; font-size: 0.8rem; }
+
+/* ── CONTROL DE CANTIDAD + BOTÓN ────────────────────────── */
+.cp-action {
+    display: flex;
+    gap: 0.875rem;
+    align-items: stretch;
+}
+
+.cp-qty {
+    display: flex;
+    align-items: center;
+    background: #0b0c10;
+    border: 1px solid #1f222e;
+    border-radius: 10px;
+    overflow: hidden;
+    flex-shrink: 0;
+    transition: border-color 0.2s;
+}
+.cp-qty:focus-within { border-color: rgba(255,59,59,0.4); }
+
+.cp-qty-btn {
+    background: transparent;
+    border: none;
+    color: #64748b;
+    width: 44px;
+    height: 55px;
+    font-size: 1.4rem;
+    font-weight: 300;
+    cursor: pointer;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s, background 0.15s;
+    user-select: none;
+}
+.cp-qty-btn:hover { color: #fff; background: rgba(255,255,255,0.05); }
+.cp-qty-btn:active { background: rgba(255,255,255,0.08); }
+
+.cp-qty-input {
+    background: transparent;
+    border: none;
+    border-left: 1px solid #1f222e;
+    border-right: 1px solid #1f222e;
+    color: #fff;
+    text-align: center;
+    width: 52px;
+    height: 55px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    -moz-appearance: textfield;
+}
+.cp-qty-input::-webkit-outer-spin-button,
+.cp-qty-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.cp-qty-input:focus { outline: none; }
+
+.cp-btn-add {
+    flex: 1;
+    height: 55px;
+    background: #FF3B3B;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
+}
+.cp-btn-add::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 55%);
+    pointer-events: none;
+}
+.cp-btn-add:hover {
+    background: #e03333;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(255, 59, 59, 0.35);
+}
+.cp-btn-add:active { transform: translateY(0); box-shadow: none; }
+
+/* ── TRUST STRIP ────────────────────────────────────────── */
+.cp-trust {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.6rem;
+}
+
+.cp-trust-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.875rem 0.5rem 0.75rem;
+    background: #0d0f17;
+    border: 1px solid #1f222e;
+    border-radius: 10px;
+    text-align: center;
+    transition: border-color 0.2s;
+}
+.cp-trust-item:hover { border-color: #2a2d3a; }
+
+.cp-trust-item img {
+    width: 19px;
+    height: 19px;
+    filter: invert(0.45);
+}
+
+.cp-trust-name {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #e2e8f0;
+    line-height: 1.2;
+}
+
+.cp-trust-sub {
+    font-size: 0.71rem;
+    color: #64748b;
+    line-height: 1.3;
+}
+
+/* ── SECCIONES INFERIORES ───────────────────────────────── */
+.cp-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.cp-section-card {
+    background: #11131A;
+    border-radius: 1.5rem;
+    border: 1px solid #1f222e;
+    overflow: hidden;
+}
+
+.cp-section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.1rem 2rem;
+    border-bottom: 1px solid #1f222e;
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.cp-section-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #FF3B3B;
+    margin: 0;
+}
+
+.cp-section-body {
+    padding: 2.25rem;
+}
+
+.cp-desc-text {
+    font-size: 1rem;
+    color: #9ca3af;
+    line-height: 1.85;
+    max-width: 75ch;
+    margin: 0;
+}
+
+/* Especificaciones en grid de tarjetas */
+.cp-specs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 0.75rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.cp-specs-grid li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem 1.1rem;
+    background: #0d0f17;
+    border: 1px solid #1f222e;
+    border-radius: 10px;
+    color: #9ca3af;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    transition: border-color 0.2s;
+}
+.cp-specs-grid li:hover { border-color: #2a2d3a; }
+
+.cp-specs-grid li::before {
+    content: '';
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    margin-top: 1px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23FF3B3B'%3E%3Cpath d='M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z'/%3E%3C/svg%3E") no-repeat center;
+    background-size: 16px;
+}
+
+/* ── RESPONSIVE ─────────────────────────────────────────── */
+@media (max-width: 1199.98px) {
+    .cp-grid { grid-template-columns: 1fr 460px; }
+}
+
+@media (max-width: 991.98px) {
+    .cp-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+    .cp-img-sticky { position: static; }
+    .cp-img-card { aspect-ratio: 4 / 3; padding: 2.5rem; }
+    .cp-nombre { font-size: 1.4rem; }
+    .cp-precio { font-size: 2.5rem; }
+}
+
+@media (max-width: 575.98px) {
+    .cp-info-body { padding: 1.5rem; gap: 1.25rem; }
+    .cp-action { flex-wrap: wrap; }
+    .cp-qty { width: 100%; justify-content: center; }
+    .cp-btn-add { width: 100%; }
+    .cp-trust-name { font-size: 0.65rem; }
+    .cp-tab-btn { padding: 1rem 0.875rem; font-size: 0.8rem; }
+    .cp-tab-pane { padding: 1.5rem; }
+}

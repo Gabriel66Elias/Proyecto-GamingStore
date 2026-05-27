@@ -57,7 +57,8 @@
               Así, el HTML y CSS cargan primero y el usuario no se queda viendo una pantalla blanca. --}}
          <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
          <script src="{{ asset('js/carrito.js') }}"></script>
-     
+         @stack('scripts')
+
      </body>
 
 </html>
