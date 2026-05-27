@@ -12,7 +12,7 @@
 
     <div class="row g-4">
         @foreach($productos as $producto)
-            <x-producto-card :producto="$producto" :id="$producto->id" />
+            <x-producto-card :producto="$producto" :id="$producto->id" col-class="col-12 col-sm-6 col-lg-3" />
         @endforeach
     </div>
 </section>

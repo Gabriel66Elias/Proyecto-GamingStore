@@ -19,6 +19,11 @@
          <link rel="stylesheet" href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}">
          <link rel="stylesheet" href="{{ asset('css/estilos.css') }}">
          <link rel="stylesheet" href="{{ asset('css/fondos.css') }}">
+         @auth
+             @if(Auth::user()->rol && Auth::user()->rol->nombre === 'admin')
+             <link rel="stylesheet" href="{{ asset('css/estilos.header-admin.css') }}">
+             @endif
+         @endauth
          @stack('styles')
      </head>
      

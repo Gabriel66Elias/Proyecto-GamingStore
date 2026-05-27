@@ -1,0 +1,114 @@
+/* ==========================================================================
+   PROYECTO: GamingStation
+   ARCHIVO: estilos.header-admin.css
+   Estilos del navbar en modo administrador.
+   ========================================================================== */
+
+/* ── Borde inferior en rojo tenue para distinguir el modo admin ── */
+.admin-navbar {
+    border-bottom-color: rgba(255, 59, 59, 0.3) !important;
+}
+
+/* ── Badge "ADMIN" junto al logo ── */
+.admin-mode-badge {
+    font-size: 0.48rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #FF3B3B;
+    background: rgba(255, 59, 59, 0.1);
+    border: 1px solid rgba(255, 59, 59, 0.25);
+    border-radius: 4px;
+    padding: 2px 7px;
+    vertical-align: middle;
+    margin-left: 8px;
+    line-height: 1;
+    display: inline-block;
+    position: relative;
+    top: -2px;
+}
+
+/* ── Links de navegación del navbar admin (desktop) ── */
+.admin-header-link {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #94a3b8;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.45rem 0.8rem;
+    border-radius: 7px;
+    text-decoration: none;
+    transition: color 0.2s ease, background-color 0.2s ease;
+    white-space: nowrap;
+}
+.admin-header-link:hover {
+    color: #e2e8f0;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+.admin-header-link.active {
+    color: #FF3B3B;
+    background-color: rgba(255, 59, 59, 0.1);
+    font-weight: 600;
+}
+.admin-header-link svg {
+    opacity: 0.65;
+    flex-shrink: 0;
+}
+.admin-header-link.active svg {
+    opacity: 1;
+}
+
+/* ── Separador vertical entre links (solo desktop) ── */
+.admin-nav-divider {
+    width: 1px;
+    height: 16px;
+    background-color: #1f222e;
+    flex-shrink: 0;
+}
+
+/* ── Menú mobile colapsado ── */
+@media (max-width: 991px) {
+    /* El bloque colapsado ocupa todo el ancho */
+    #navbarAdmin .d-flex.flex-wrap {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        width: 100%;
+        gap: 2px !important;
+        border-top: 1px solid #1f222e;
+        padding-top: 0.75rem;
+        margin-top: 0.5rem !important;
+    }
+
+    .admin-header-link {
+        padding: 0.65rem 0.875rem;
+        border-radius: 8px;
+        font-size: 0.925rem;
+        justify-content: flex-start;
+        width: 100%;
+    }
+
+    /* Separador antes de la sección del usuario en mobile */
+    #navbarAdmin .d-flex.align-items-center.mt-3 {
+        border-top: 1px solid #1f222e;
+        padding-top: 0.75rem;
+        margin-top: 0.5rem !important;
+        width: 100%;
+    }
+
+    /* El dropdown del usuario en mobile ocupa todo el ancho */
+    #navbarAdmin .dropdown {
+        width: 100%;
+    }
+    #navbarAdmin .dropdown > button {
+        width: 100%;
+        justify-content: flex-start !important;
+        padding: 0.65rem 0.875rem !important;
+        border-radius: 8px;
+        background-color: rgba(255,255,255,0.03) !important;
+    }
+
+    .admin-nav-divider {
+        display: none;
+    }
+}

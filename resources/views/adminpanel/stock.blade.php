@@ -6,11 +6,7 @@
 @endpush
 
 @section('contenido')
-<div class="admin-wrapper">
-
-    @include('adminpanel.partials.sidebar')
-
-    <div class="admin-content">
+<div class="admin-content">
 
         <div class="admin-page-header d-flex align-items-center justify-content-between flex-wrap gap-3">
             <div>
@@ -36,10 +32,10 @@
                 <thead>
                     <tr>
                         <th>Producto</th>
-                        <th>Categoría</th>
+                        <th class="d-none d-md-table-cell">Categoría</th>
                         <th>Stock actual</th>
                         <th>Nivel</th>
-                        <th>Precio venta</th>
+                        <th class="d-none d-sm-table-cell">Precio venta</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -60,10 +56,10 @@
                                 @else
                                     <div class="prod-thumb-placeholder">?</div>
                                 @endif
-                                <span class="fw-semibold" style="color:#e2e8f0;">{{ $p->nombre }}</span>
+                                <span class="prod-cell-name fw-semibold" style="color:#e2e8f0;">{{ $p->nombre }}</span>
                             </div>
                         </td>
-                        <td><span class="cat-badge">{{ $p->categoria?->nombre }}</span></td>
+                        <td class="d-none d-md-table-cell"><span class="cat-badge">{{ $p->categoria?->nombre }}</span></td>
                         <td>
                             <span style="font-size: 1.1rem; font-weight: 800; color: {{ $color }};">
                                 {{ $p->stock }}
@@ -78,7 +74,7 @@
                                 <span class="stock-dot"></span>{{ $label }}
                             </span>
                         </td>
-                        <td style="color:#4ade80; font-weight:700;">${{ number_format($p->precio_venta, 2) }}</td>
+                        <td class="d-none d-sm-table-cell" style="color:#4ade80; font-weight:700;">${{ number_format($p->precio_venta, 2) }}</td>
                     </tr>
                     @empty
                     <tr>
@@ -100,5 +96,4 @@
         </div>
 
     </div>
-</div>
 @endsection

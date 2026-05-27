@@ -23,7 +23,7 @@ class ProductosSeeder extends Seeder
                 'categoria_id'  => $hw,
                 'descripcion'   => 'La RTX 4070 Super ofrece rendimiento excepcional en 1440p y es capaz de mover títulos exigentes en 4K con ray tracing. Incluye soporte para DLSS 3.5 y Frame Generation.',
                 'especificaciones' => ['12 GB GDDR6X','DLSS 3.5 con Frame Generation','Ray Tracing de 3ra generación','Boost Clock: 2475 MHz','Consumo: 220W TDP'],
-                'precio_compra' => 750000,  'precio_venta' => 1050000, 'stock' => 8,  'imagen' => null,
+                'precio_compra' => 750000,  'precio_venta' => 1050000, 'stock' => 8,  'imagen' => 'productos/rtx4070.webp',
             ],
             [
                 'nombre'        => 'NVIDIA RTX 5090',
@@ -44,7 +44,7 @@ class ProductosSeeder extends Seeder
                 'categoria_id'  => $hw,
                 'descripcion'   => 'El procesador gaming más rápido gracias a la tecnología 3D V-Cache. Domina en juegos a 1080p y 1440p superando a cualquier rival en títulos optimizados.',
                 'especificaciones' => ['8 núcleos / 16 hilos','3D V-Cache de 96 MB','Boost Clock: 5.0 GHz','TDP: 120W','Socket AM5'],
-                'precio_compra' => 420000,  'precio_venta' => 620000,  'stock' => 12, 'imagen' => null,
+                'precio_compra' => 420000,  'precio_venta' => 620000,  'stock' => 12, 'imagen' => 'proudctos/r7.webp',
             ],
             [
                 'nombre'        => 'AMD Ryzen 5 5600G',

@@ -6,11 +6,7 @@
 @endpush
 
 @section('contenido')
-<div class="admin-wrapper">
-
-    @include('adminpanel.partials.sidebar')
-
-    <div class="admin-content">
+<div class="admin-content">
 
         <div class="admin-page-header">
             <h1 class="admin-page-title">Gestión de Consultas</h1>
@@ -30,5 +26,4 @@
         </div>
 
     </div>
-</div>
 @endsection

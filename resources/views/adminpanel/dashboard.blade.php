@@ -6,11 +6,7 @@
 @endpush
 
 @section('contenido')
-<div class="admin-wrapper">
-
-    @include('adminpanel.partials.sidebar')
-
-    <div class="admin-content">
+<div class="admin-content">
 
         {{-- Encabezado --}}
         <div class="admin-page-header d-flex align-items-center justify-content-between flex-wrap gap-3">
@@ -18,7 +14,7 @@
                 <h1 class="admin-page-title">Dashboard</h1>
                 <p class="admin-page-subtitle">Resumen general de GamingStation</p>
             </div>
-            <span style="font-size: 0.78rem; color: #3d4659;">
+            <span style="font-size: 0.875rem; color: #3d4659;">
                 {{ now()->format('d/m/Y') }}
             </span>
         </div>
@@ -80,8 +76,8 @@
         <div class="admin-table-wrapper">
             <div class="d-flex align-items-center justify-content-between px-4 py-3" style="border-bottom: 1px solid #1f222e;">
                 <div>
-                    <p style="font-size: 0.65rem; font-weight:700; letter-spacing:2px; color:#FF3B3B; text-transform:uppercase; margin:0 0 2px;">Recientes</p>
-                    <h6 class="text-white fw-bold mb-0" style="font-size: 0.95rem;">Últimos productos agregados</h6>
+                    <p style="font-size: 0.75rem; font-weight:700; letter-spacing:1.5px; color:#FF3B3B; text-transform:uppercase; margin:0 0 2px;">Recientes</p>
+                    <h6 class="text-white fw-bold mb-0" style="font-size: 1rem;">Últimos productos agregados</h6>
                 </div>
                 <a href="{{ route('admin.productos') }}" class="btn btn-mars btn-sm px-3 py-2" style="font-size: 0.78rem;">Ver todos</a>
             </div>
@@ -89,8 +85,8 @@
                 <thead>
                     <tr>
                         <th>Producto</th>
-                        <th>Categoría</th>
-                        <th>Precio venta</th>
+                        <th class="d-none d-md-table-cell">Categoría</th>
+                        <th class="d-none d-sm-table-cell">Precio venta</th>
                         <th>Stock</th>
                     </tr>
                 </thead>
@@ -104,11 +100,11 @@
                                 @else
                                     <div class="prod-thumb-placeholder">?</div>
                                 @endif
-                                <span class="fw-semibold" style="color:#e2e8f0;">{{ $p->nombre }}</span>
+                                <span class="prod-cell-name fw-semibold" style="color:#e2e8f0;">{{ $p->nombre }}</span>
                             </div>
                         </td>
-                        <td><span class="cat-badge">{{ $p->categoria?->nombre }}</span></td>
-                        <td style="color:#4ade80; font-weight:700;">${{ number_format($p->precio_venta, 2) }}</td>
+                        <td class="d-none d-md-table-cell"><span class="cat-badge">{{ $p->categoria?->nombre }}</span></td>
+                        <td class="d-none d-sm-table-cell" style="color:#4ade80; font-weight:700;">${{ number_format($p->precio_venta, 2) }}</td>
                         <td>
                             @if($p->stock == 0)
                                 <span class="stock-badge stock-empty"><span class="stock-dot"></span>Sin stock</span>
@@ -129,5 +125,4 @@
         </div>
 
     </div>
-</div>
 @endsection

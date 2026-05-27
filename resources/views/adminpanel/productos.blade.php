@@ -6,11 +6,7 @@
 @endpush
 
 @section('contenido')
-<div class="admin-wrapper">
-
-    @include('adminpanel.partials.sidebar')
-
-    <div class="admin-content">
+<div class="admin-content">
 
         <div class="admin-page-header d-flex align-items-center justify-content-between flex-wrap gap-3">
             <div>
@@ -39,9 +35,9 @@
                 <thead>
                     <tr>
                         <th>Producto</th>
-                        <th>Categoría</th>
-                        <th>Precio compra</th>
-                        <th>Precio venta</th>
+                        <th class="d-none d-md-table-cell">Categoría</th>
+                        <th class="d-none d-lg-table-cell">Precio compra</th>
+                        <th class="d-none d-sm-table-cell">Precio venta</th>
                         <th>Stock</th>
                         <th>Acciones</th>
                     </tr>
@@ -56,15 +52,15 @@
                                 @else
                                     <div class="prod-thumb-placeholder">?</div>
                                 @endif
-                                <div>
-                                    <p class="fw-semibold mb-0" style="color:#e2e8f0; font-size: 0.875rem;">{{ $p->nombre }}</p>
+                                <div style="min-width:0;">
+                                    <p class="prod-cell-name fw-semibold mb-0" style="color:#e2e8f0; font-size: 0.875rem;">{{ $p->nombre }}</p>
                                     <span style="font-size: 0.72rem; color:#64748b;">ID #{{ $p->id }}</span>
                                 </div>
                             </div>
                         </td>
-                        <td><span class="cat-badge">{{ $p->categoria?->nombre }}</span></td>
-                        <td style="color:#94a3b8;">${{ number_format($p->precio_compra, 2) }}</td>
-                        <td style="color:#4ade80; font-weight:700;">${{ number_format($p->precio_venta, 2) }}</td>
+                        <td class="d-none d-md-table-cell"><span class="cat-badge">{{ $p->categoria?->nombre }}</span></td>
+                        <td class="d-none d-lg-table-cell" style="color:#94a3b8;">${{ number_format($p->precio_compra, 2) }}</td>
+                        <td class="d-none d-sm-table-cell" style="color:#4ade80; font-weight:700;">${{ number_format($p->precio_venta, 2) }}</td>
                         <td>
                             @if($p->stock == 0)
                                 <span class="stock-badge stock-empty"><span class="stock-dot"></span>Sin stock</span>
@@ -124,12 +120,11 @@
             </table>
 
             @if($productos->hasPages())
-            <div class="d-flex justify-content-center py-3" style="border-top: 1px solid #1f222e;">
+            <div class="admin-pagination-wrapper">
                 {{ $productos->links() }}
             </div>
             @endif
         </div>
 
     </div>
-</div>
 @endsection

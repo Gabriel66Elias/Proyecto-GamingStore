@@ -1,0 +1,124 @@
+/* ==========================================================================
+   PROYECTO: GamingStation
+   ARCHIVO: estilos.login.css
+   Estilos de las páginas de inicio de sesión y registro.
+   ========================================================================== */
+
+/* ── Contenedor de página ── */
+.login-page {
+    min-height: calc(100vh - 67px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.login-wrapper {
+    width: 100%;
+    max-width: 420px;
+}
+
+/* ── Logo en la parte superior ── */
+.login-logo {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+.login-logo a {
+    text-decoration: none;
+    font-size: 1.4rem;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    color: #ffffff;
+}
+
+/* ── Tarjeta del formulario ── */
+.login-card {
+    background-color: #11131A;
+    border: 1px solid #1f222e;
+    border-radius: 16px;
+    padding: 2.5rem 2.25rem;
+    /* Sin movimiento al hacer hover */
+    transform: none !important;
+    transition: none !important;
+}
+
+/* ── Cabecera ── */
+.login-card-title {
+    font-size: 1.45rem;
+    font-weight: 900;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+    text-align: center;
+    margin: 0 0 0.4rem;
+}
+.login-card-subtitle {
+    font-size: 0.82rem;
+    color: #64748b;
+    text-align: center;
+    margin: 0 0 2rem;
+}
+
+/* ── Alerta de errores ── */
+.login-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    background: rgba(255, 59, 59, 0.07);
+    border: 1px solid rgba(255, 59, 59, 0.2);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    color: #FF3B3B;
+    font-size: 0.82rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+.login-alert svg { flex-shrink: 0; margin-top: 1px; }
+
+/* ── Campos del formulario ── */
+.login-field {
+    margin-bottom: 1.1rem;
+}
+.login-label {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #94a3b8;
+    margin-bottom: 0.45rem;
+}
+.login-input {
+    width: 100%;
+    background-color: #0b0c10;
+    border: 1px solid #1f222e;
+    border-radius: 8px;
+    color: #e2e8f0;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.875rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.login-input:focus {
+    border-color: #FF3B3B;
+    box-shadow: 0 0 0 3px rgba(255, 59, 59, 0.1);
+}
+.login-input::placeholder { color: #3d4659; }
+.login-input.is-invalid {
+    border-color: #FF3B3B;
+}
+
+/* ── Divisor ── */
+.login-divider {
+    border: none;
+    border-top: 1px solid #1f222e;
+    margin: 1.5rem 0;
+}
+
+/* ── Texto del pie ── */
+.login-footer-text {
+    text-align: center;
+    font-size: 0.82rem;
+    color: #64748b;
+    margin: 0;
+}

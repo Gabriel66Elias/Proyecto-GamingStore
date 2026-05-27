@@ -6,11 +6,7 @@
 @endpush
 
 @section('contenido')
-<div class="admin-wrapper">
-
-    @include('adminpanel.partials.sidebar')
-
-    <div class="admin-content">
+<div class="admin-content">
 
         <div class="admin-page-header d-flex align-items-center justify-content-between flex-wrap gap-3">
             <div>
@@ -44,7 +40,7 @@
 
                     {{-- Información básica --}}
                     <div class="admin-card mb-4">
-                        <p style="font-size:0.65rem; font-weight:700; letter-spacing:2px; color:#FF3B3B; text-transform:uppercase; margin:0 0 1.25rem;">Información básica</p>
+                        <p style="font-size:0.75rem; font-weight:700; letter-spacing:1.5px; color:#FF3B3B; text-transform:uppercase; margin:0 0 1.25rem;">Información básica</p>
 
                         <div class="mb-3">
                             <label class="admin-form-label">Nombre del producto *</label>
@@ -56,12 +52,35 @@
 
                         <div class="mb-3">
                             <label class="admin-form-label">Categoría *</label>
-                            <select name="categoria_id" class="admin-form-select {{ $errors->has('categoria_id') ? 'is-invalid' : '' }}">
-                                <option value="" disabled {{ old('categoria_id') ? '' : 'selected' }}>Seleccioná una categoría</option>
-                                @foreach($categorias as $cat)
-                                    <option value="{{ $cat->id }}" {{ old('categoria_id') == $cat->id ? 'selected' : '' }}>{{ $cat->nombre }}</option>
-                                @endforeach
-                            </select>
+                            @php
+                                $oldCatId   = old('categoria_id');
+                                $oldCatNom  = $oldCatId ? ($categorias->firstWhere('id', (int)$oldCatId)?->nombre ?? null) : null;
+                            @endphp
+                            <input type="hidden" name="categoria_id" id="cat_id_input" value="{{ $oldCatId }}">
+                            <div class="dropdown w-100">
+                                <button type="button"
+                                        id="dropdownCategoria"
+                                        class="btn w-100 text-start d-flex justify-content-between align-items-center admin-cat-btn {{ $errors->has('categoria_id') ? 'is-invalid-custom' : '' }} {{ !$oldCatNom ? 'placeholder-active' : '' }}"
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                    <span id="cat_label">{{ $oldCatNom ?? 'Seleccioná una categoría' }}</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16" style="opacity:0.5; flex-shrink:0;">
+                                        <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                                    </svg>
+                                </button>
+                                <ul class="dropdown-menu w-100 admin-cat-menu" aria-labelledby="dropdownCategoria">
+                                    @foreach($categorias as $cat)
+                                    <li>
+                                        <a href="#"
+                                           class="dropdown-item admin-cat-item {{ $oldCatId == $cat->id ? 'active' : '' }}"
+                                           data-value="{{ $cat->id }}"
+                                           data-label="{{ $cat->nombre }}">
+                                            {{ $cat->nombre }}
+                                        </a>
+                                    </li>
+                                    @endforeach
+                                </ul>
+                            </div>
                             @error('categoria_id')<p class="admin-field-error">{{ $message }}</p>@enderror
                         </div>
 
@@ -75,8 +94,8 @@
 
                     {{-- Especificaciones --}}
                     <div class="admin-card">
-                        <p style="font-size:0.65rem; font-weight:700; letter-spacing:2px; color:#FF3B3B; text-transform:uppercase; margin:0 0 0.25rem;">Especificaciones</p>
-                        <p style="font-size:0.78rem; color:#64748b; margin:0 0 1.25rem;">Cada línea es un ítem de la lista de características del producto.</p>
+                        <p style="font-size:0.75rem; font-weight:700; letter-spacing:1.5px; color:#FF3B3B; text-transform:uppercase; margin:0 0 0.25rem;">Especificaciones</p>
+                        <p style="font-size:0.875rem; color:#64748b; margin:0 0 1.25rem;">Cada línea es un ítem de la lista de características del producto.</p>
 
                         <div id="specs-container">
                             @if(old('specs'))
@@ -119,7 +138,7 @@
 
                     {{-- Precios --}}
                     <div class="admin-card mb-4">
-                        <p style="font-size:0.65rem; font-weight:700; letter-spacing:2px; color:#FF3B3B; text-transform:uppercase; margin:0 0 1.25rem;">Precios y Stock</p>
+                        <p style="font-size:0.75rem; font-weight:700; letter-spacing:1.5px; color:#FF3B3B; text-transform:uppercase; margin:0 0 1.25rem;">Precios y Stock</p>
 
                         <div class="mb-3">
                             <label class="admin-form-label">Precio de compra ($) *</label>
@@ -148,7 +167,7 @@
 
                     {{-- Imagen --}}
                     <div class="admin-card mb-4">
-                        <p style="font-size:0.65rem; font-weight:700; letter-spacing:2px; color:#FF3B3B; text-transform:uppercase; margin:0 0 1.25rem;">Imagen del producto</p>
+                        <p style="font-size:0.75rem; font-weight:700; letter-spacing:1.5px; color:#FF3B3B; text-transform:uppercase; margin:0 0 1.25rem;">Imagen del producto</p>
 
                         <div class="img-upload-zone" id="upload-zone">
                             <input type="file" name="imagen" id="img-input" accept="image/jpg,image/jpeg,image/png,image/webp">
@@ -173,7 +192,6 @@
         </form>
 
     </div>
-</div>
 
 <script>
     // Preview de imagen
@@ -184,6 +202,21 @@
             reader.onload = e => { preview.src = e.target.result; preview.style.display = 'block'; };
             reader.readAsDataURL(this.files[0]);
         }
+    });
+
+    // Dropdown categoría
+    document.querySelectorAll('.admin-cat-item').forEach(function (item) {
+        item.addEventListener('click', function (e) {
+            e.preventDefault();
+            const val   = this.dataset.value;
+            const label = this.dataset.label;
+            document.getElementById('cat_id_input').value = val;
+            document.getElementById('cat_label').textContent = label;
+            const btn = document.getElementById('dropdownCategoria');
+            btn.classList.remove('placeholder-active');
+            document.querySelectorAll('.admin-cat-item').forEach(i => i.classList.remove('active'));
+            this.classList.add('active');
+        });
     });
 
     // Agregar spec

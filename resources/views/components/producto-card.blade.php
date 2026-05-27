@@ -1,6 +1,6 @@
-@props(['producto', 'id'])
+@props(['producto', 'id', 'colClass' => 'col-12 col-sm-6 col-lg-4'])
 
-<div class="col-12 col-sm-6 col-lg-4 producto-item"
+<div class="{{ $colClass }} producto-item"
      data-id="{{ $id }}"
      data-categoria="{{ $producto->categoria?->nombre }}"
      data-precio="{{ $producto->precio_venta }}">
