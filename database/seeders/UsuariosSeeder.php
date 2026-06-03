@@ -12,7 +12,7 @@ class UsuariosSeeder extends Seeder
     {
         $rolAdmin = Rol::where('nombre', 'admin')->first();
 
-        // Creamos SÓLO al admin por código. 
+        // Creamos SÓLO al admin por código.
         // Los clientes reales nacerán desde el formulario web.
         Usuario::firstOrCreate(
             ['email' => 'admin@gamingstation.com'],

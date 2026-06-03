@@ -592,3 +592,288 @@ h1, h2, h3, h4, h5, h6 {
     color: #ffffff !important; /* Fuerza a que la letra siga siendo blanca */
     transform: translateY(-2px);
 }
+
+/* --------------------------------------------------------------------------
+   ADMIN TOPBAR — barra fina visible cuando admin navega la tienda pública
+   -------------------------------------------------------------------------- */
+.admin-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 1050;
+    height: 40px;
+    background: #080910;
+    border-bottom: 1px solid rgba(255, 59, 59, 0.2);
+    display: flex;
+    align-items: center;
+}
+
+.admin-topbar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.admin-topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+}
+
+.admin-topbar-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #FF3B3B;
+    flex-shrink: 0;
+    animation: adminDotPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes adminDotPulse {
+    0%, 100% { box-shadow: 0 0 3px rgba(255, 59, 59, 0.4); }
+    50%       { box-shadow: 0 0 10px rgba(255, 59, 59, 0.85), 0 0 18px rgba(255, 59, 59, 0.3); }
+}
+
+.admin-topbar-label {
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 2.5px;
+    color: #FF3B3B;
+    text-transform: uppercase;
+}
+
+.admin-topbar-sep {
+    width: 1px;
+    height: 14px;
+    background: #1f222e;
+    margin: 0 0.1rem;
+}
+
+.admin-topbar-user {
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: #4a5568;
+}
+
+.admin-topbar-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #64748b;
+    text-decoration: none;
+    padding: 0.22rem 0.65rem;
+    border-radius: 6px;
+    border: 1px solid #1f222e;
+    background: #11131A;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+    white-space: nowrap;
+}
+.admin-topbar-btn:hover {
+    color: #e2e8f0;
+    border-color: rgba(255, 59, 59, 0.35);
+    background: rgba(255, 59, 59, 0.06);
+}
+
+.admin-topbar-btn--primary {
+    color: #FF3B3B;
+    border-color: rgba(255, 59, 59, 0.3);
+    background: rgba(255, 59, 59, 0.06);
+}
+.admin-topbar-btn--primary:hover {
+    color: #fff;
+    background: #FF3B3B;
+    border-color: #FF3B3B;
+}
+
+/* --------------------------------------------------------------------------
+   USER DROPDOWN — menú de perfil en el header normal
+   -------------------------------------------------------------------------- */
+
+/* Botón disparador */
+.ud-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    border: 1px solid #1f222e;
+    border-radius: 99px;
+    padding: 0.3rem 0.75rem 0.3rem 0.35rem;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    color: #e2e8f0;
+}
+.ud-trigger:hover {
+    border-color: #2a2d3a;
+    background: rgba(255,255,255,0.03);
+}
+
+.ud-trigger-avatar {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: rgba(255,59,59,0.1);
+    border: 1px solid rgba(255,59,59,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FF3B3B;
+    flex-shrink: 0;
+}
+
+.ud-trigger-name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    white-space: nowrap;
+}
+
+.ud-trigger-chevron {
+    color: #4a5568;
+    transition: transform 0.2s;
+}
+.ud-trigger[aria-expanded="true"] .ud-trigger-chevron {
+    transform: rotate(180deg);
+}
+
+/* Menú */
+.ud-menu {
+    background: #13151f !important;
+    border: 1px solid #1f222e !important;
+    border-radius: 14px !important;
+    box-shadow: 0 1.5rem 4rem rgba(0,0,0,0.6) !important;
+    min-width: 230px;
+    padding: 0;
+    overflow: hidden;
+    margin-top: 0.5rem !important;
+}
+
+/* Cabecera del menú */
+.ud-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.1rem;
+    background: #0d0f17;
+    border-bottom: 1px solid #1f222e;
+}
+
+.ud-header-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,59,59,0.08);
+    border: 1px solid rgba(255,59,59,0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FF3B3B;
+    flex-shrink: 0;
+}
+
+.ud-header-name {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.2;
+}
+
+.ud-header-role {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-top: 0.1rem;
+}
+.ud-header-role.admin { color: #FF3B3B; }
+.ud-header-role.user  { color: #4a5568; }
+
+/* Items */
+.ud-items { padding: 0.35rem 0; }
+
+.ud-item {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    width: 100%;
+    padding: 0.6rem 1.1rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #9ca3af;
+    text-decoration: none;
+    background: transparent;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    transition: color 0.15s, background 0.15s;
+    line-height: 1;
+}
+.ud-item:hover {
+    color: #e2e8f0;
+    background: rgba(255,255,255,0.04);
+}
+
+.ud-item--panel {
+    color: #FF3B3B;
+    font-weight: 600;
+}
+.ud-item--panel:hover {
+    color: #ff6b6b;
+    background: rgba(255,59,59,0.06);
+}
+
+.ud-item--logout { color: #64748b; }
+.ud-item--logout:hover {
+    color: #ef4444;
+    background: rgba(239,68,68,0.05);
+}
+
+.ud-divider {
+    height: 1px;
+    background: #1f222e;
+}
+
+/* Link de ingresar (no autenticado) */
+.ud-login-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #64748b;
+    text-decoration: none;
+    padding: 0.3rem 0.6rem;
+    border-radius: 8px;
+    transition: color 0.2s;
+}
+.ud-login-link:hover { color: #e2e8f0; }
+
+/* --------------------------------------------------------------------------
+   Chip "Vista previa" en el header normal cuando admin navega la tienda
+   -------------------------------------------------------------------------- */
+.admin-preview-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    color: #FF3B3B;
+    background: rgba(255, 59, 59, 0.07);
+    border: 1px solid rgba(255, 59, 59, 0.25);
+    padding: 0.3rem 0.8rem;
+    border-radius: 99px;
+    cursor: default;
+    user-select: none;
+}
+
+.admin-preview-chip-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #FF3B3B;
+    animation: adminDotPulse 2.5s ease-in-out infinite;
+    flex-shrink: 0;
+}

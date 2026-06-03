@@ -76,7 +76,22 @@
                     @endif
                 </div>
 
-                {{-- Cantidad + botón --}}
+                {{-- Cantidad + botón (deshabilitado en modo vista previa para admin) --}}
+                @php $esAdmin = Auth::check() && Auth::user()->rol?->nombre === 'admin'; @endphp
+
+                @if($esAdmin)
+                <div class="cp-preview-notice">
+                    <div class="cp-preview-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#FF3B3B" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="cp-preview-title">Modo vista previa activo</p>
+                        <p class="cp-preview-desc">Las compras están deshabilitadas para administradores. <a href="{{ route('admin.dashboard') }}">Volver al panel</a></p>
+                    </div>
+                </div>
+                @else
                 <div class="cp-action">
                     <div class="cp-qty">
                         <button type="button" class="cp-qty-btn" onclick="cpAdjustQty(-1)" aria-label="Restar">−</button>
@@ -98,6 +113,7 @@
                         Agregar al carrito
                     </button>
                 </div>
+                @endif
 
                 <div class="cp-sep"></div>
 

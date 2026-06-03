@@ -396,6 +396,52 @@
     background-size: 16px;
 }
 
+/* Ajuste de sticky cuando el admin bar está visible (40px extra) */
+.has-admin-bar .cp-img-sticky { top: 122px; }
+
+/* ── AVISO VISTA PREVIA (admin en página de producto) ───── */
+.cp-preview-notice {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: rgba(255, 59, 59, 0.05);
+    border: 1px solid rgba(255, 59, 59, 0.18);
+    border-radius: 10px;
+}
+
+.cp-preview-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 59, 59, 0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.cp-preview-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #FF3B3B;
+    margin: 0 0 0.2rem;
+}
+
+.cp-preview-desc {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin: 0;
+}
+
+.cp-preview-desc a {
+    color: #9ca3af;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.2s;
+}
+.cp-preview-desc a:hover { color: #fff; }
+
 /* ── RESPONSIVE ─────────────────────────────────────────── */
 @media (max-width: 1199.98px) {
     .cp-grid { grid-template-columns: 1fr 460px; }

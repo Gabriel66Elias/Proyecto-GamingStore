@@ -29,7 +29,10 @@
      
      {{-- bg-dark y text-light: Clases nativas de Bootstrap para dar un fondo negro 
           por defecto y que todo el texto herede el color blanco/claro. --}}
-     <body class="bg-dark text-light">
+     @php
+         $bodyIsAdmin = Auth::check() && Auth::user()->rol?->nombre === 'admin' && !request()->is('admin*');
+     @endphp
+     <body class="bg-dark text-light{{ $bodyIsAdmin ? ' has-admin-bar' : '' }}">
      
          {{-- INCLUSIÓN DEL HEADER
               @include inserta un fragmento de código (Partial) exactamente en este lugar.

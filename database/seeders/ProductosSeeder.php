@@ -44,7 +44,7 @@ class ProductosSeeder extends Seeder
                 'categoria_id'  => $hw,
                 'descripcion'   => 'El procesador gaming más rápido gracias a la tecnología 3D V-Cache. Domina en juegos a 1080p y 1440p superando a cualquier rival en títulos optimizados.',
                 'especificaciones' => ['8 núcleos / 16 hilos','3D V-Cache de 96 MB','Boost Clock: 5.0 GHz','TDP: 120W','Socket AM5'],
-                'precio_compra' => 420000,  'precio_venta' => 620000,  'stock' => 12, 'imagen' => 'proudctos/r7.webp',
+                'precio_compra' => 420000,  'precio_venta' => 620000,  'stock' => 12, 'imagen' => 'productos/r7.webp',
             ],
             [
                 'nombre'        => 'AMD Ryzen 5 5600G',
