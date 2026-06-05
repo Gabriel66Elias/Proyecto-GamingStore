@@ -93,10 +93,16 @@
                         </svg>
                     </a>
                     <form action="{{ route('admin.productos.destroy', $p->id) }}" method="POST"
-                          onsubmit="return confirm('¿Eliminar {{ addslashes($p->nombre) }}? Esta acción es reversible desde la base de datos.')">
+                          id="form-eliminar-{{ $p->id }}">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn-accion" title="Eliminar" style="border:none;">
+                        <button type="button"
+                                class="btn-accion"
+                                title="Eliminar"
+                                style="border:none;"
+                                data-confirmar-eliminar="form-eliminar-{{ $p->id }}"
+                                data-titulo="Eliminar {{ addslashes($p->nombre) }}"
+                                data-desc="Esta acción es reversible desde la base de datos.">
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
                                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
                                 <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
@@ -132,4 +138,67 @@
     @endif
 
 </div>
+
+{{-- ════════════════════════════════════════════════════════
+     MODAL DE CONFIRMACIÓN DE ELIMINACIÓN
+     ════════════════════════════════════════════════════════ --}}
+<div class="modal fade modal-eliminar" id="modalEliminar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-eliminar-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#FF3B3B" viewBox="0 0 16 16">
+                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                    </svg>
+                </div>
+                <p class="modal-eliminar-title" id="modal-eliminar-title">Eliminar producto</p>
+                <p class="modal-eliminar-desc" id="modal-eliminar-desc">Esta acción es reversible desde la base de datos.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel-delete" data-bs-dismiss="modal">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                    </svg>
+                    Cancelar
+                </button>
+                <button type="button" class="btn-confirm-delete" id="btn-confirm-eliminar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                    </svg>
+                    Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@push('scripts')
+<script>
+(function () {
+    let formPendiente = null;
+    const modalEliminarEl = document.getElementById('modalEliminar');
+    if (!modalEliminarEl) return;
+    const modalEliminar = new bootstrap.Modal(modalEliminarEl);
+
+    document.querySelectorAll('[data-confirmar-eliminar]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            formPendiente = document.getElementById(this.dataset.confirmarEliminar);
+            document.getElementById('modal-eliminar-title').textContent = this.dataset.titulo || 'Eliminar producto';
+            document.getElementById('modal-eliminar-desc').textContent  = this.dataset.desc   || 'Esta acción es reversible desde la base de datos.';
+            modalEliminar.show();
+        });
+    });
+
+    document.getElementById('btn-confirm-eliminar').addEventListener('click', function () {
+        if (formPendiente) { formPendiente.submit(); formPendiente = null; }
+    });
+})();
+</script>
+@endpush
+
 @endsection

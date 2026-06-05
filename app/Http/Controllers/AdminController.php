@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categoria;
+use App\Models\Consulta;
 use App\Models\Producto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -140,7 +141,22 @@ class AdminController extends Controller
     public function consultas()
     {
         $this->soloAdmin();
-        return view('adminpanel.consultas');
+        $consultas = Consulta::latest()->paginate(20);
+        return view('adminpanel.consultas', compact('consultas'));
+    }
+
+    public function marcarLeida($id)
+    {
+        $this->soloAdmin();
+        Consulta::findOrFail($id)->update(['leida' => true]);
+        return response()->json(['ok' => true]);
+    }
+
+    public function destroyConsulta($id)
+    {
+        $this->soloAdmin();
+        Consulta::findOrFail($id)->delete();
+        return redirect()->route('admin.consultas')->with('success', 'Consulta eliminada correctamente.');
     }
 
     public function pedidos()

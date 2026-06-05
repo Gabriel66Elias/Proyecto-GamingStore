@@ -86,8 +86,10 @@ Route::get('/mi-perfil', [AuthController::class, 'perfil'])->middleware('auth')-
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard',               [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/stock',                   [AdminController::class, 'stock'])->name('stock');
-    Route::get('/consultas',               [AdminController::class, 'consultas'])->name('consultas');
-    Route::get('/pedidos',                 [AdminController::class, 'pedidos'])->name('pedidos');
+    Route::get('/consultas',                    [AdminController::class, 'consultas'])->name('consultas');
+    Route::patch('/consultas/{id}/leida',       [AdminController::class, 'marcarLeida'])->name('consultas.leida');
+    Route::delete('/consultas/{id}',            [AdminController::class, 'destroyConsulta'])->name('consultas.destroy');
+    Route::get('/pedidos',                      [AdminController::class, 'pedidos'])->name('pedidos');
 
     // CRUD de productos
     Route::get('/productos',               [AdminController::class, 'productos'])->name('productos');

@@ -11,8 +11,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolesSeeder::class,
             UsuariosSeeder::class,
-            CategoriasSeeder::class,  // debe correr antes que ProductosSeeder
+            CategoriasSeeder::class,
             ProductosSeeder::class,
+            ConsultasSeeder::class,
         ]);
     }
 }
