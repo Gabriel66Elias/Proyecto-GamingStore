@@ -1,175 +1,152 @@
+// Token CSRF leído del meta tag que inyecta Laravel en el layout
+const CSRF = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
 
-// 1. ESTADO GLOBAL (Variables de la sesión actual)
-// JSON.parse() transforma la cadena de texto guardada en el navegador en un Array de objetos reales.
-// El "|| []" asegura que si no hay nada guardado (null), el carrito inicie como un array vacío.
-let carrito = JSON.parse(localStorage.getItem('gaming_station_cart')) || [];
+const headersJSON = {
+    'Content-Type': 'application/json',
+    'Accept':       'application/json',
+    'X-CSRF-TOKEN': CSRF,
+};
 
-/**
- * FUNCIÓN: agregarAlCarrito
- * DESCRIPCIÓN: Recibe los datos de un producto, valida el stock y lo inserta en el array.
- */
-function agregarAlCarrito(id, nombre, precio, stock, imagen) {
-    id = String(id); // Estandarizamos el ID a formato texto para evitar errores de búsqueda
-    
-    // Captura el cuadro numérico si el usuario está en la vista de detalle
-    const inputCant = document.getElementById('input-cantidad');
-    // Si el cuadro existe, tomamos su valor numérico (parseInt). Si no existe (ej. estamos en catálogo), agregamos 1.
-    const cantidadSeleccionada = inputCant ? parseInt(inputCant.value) : 1;
-
-    // Método .find(): Recorre el array buscando si el ID del producto nuevo ya existe adentro.
-    const itemExistente = carrito.find(item => item.id === id);
-
-    if (itemExistente) {
-        // Lógica de control de Stock: Evita que el usuario agregue más de lo que hay en inventario
-        if (itemExistente.cantidad + cantidadSeleccionada > stock) {
-            alert(`Stock insuficiente. Solo quedan ${stock} unidades.`);
-            return; // Corta la ejecución de la función
-        }
-        itemExistente.cantidad += cantidadSeleccionada; // Suma a la cantidad existente
-    } else {
-        // Si el método .find() devolvió undefined, significa que es nuevo. Lo insertamos (push) al array.
-        carrito.push({ id, nombre, precio, stock, imagen, cantidad: cantidadSeleccionada });
-    }
-
-    actualizarInterfaz(); // Guardamos cambios y dibujamos la vista
-
-    // Feedback UI: Al agregar, le damos una orden a Bootstrap para que despliegue el menú lateral automáticamente
-    const cartEl = document.getElementById('carritoLateral');
-    if (cartEl) {
-        const bsOffcanvas = bootstrap.Offcanvas.getOrCreateInstance(cartEl);
-        bsOffcanvas.show();
+// Carga el carrito desde el servidor y renderiza el panel lateral
+async function cargarCarrito() {
+    try {
+        const res  = await fetch('/carrito/datos', { headers: { 'Accept': 'application/json' } });
+        const data = await res.json();
+        renderizarCarrito(data.items ?? [], data.total ?? 0);
+    } catch {
+        renderizarCarrito([], 0);
     }
 }
 
-/**
- * FUNCIÓN: actualizarCantidad
- * DESCRIPCIÓN: Se activa cuando el usuario tipea un número nuevo dentro del input en el panel del carrito.
- */
-function actualizarCantidad(id, nuevaCantidad) {
-    const item = carrito.find(item => item.id === id);
-    if (!item) return;
+// Envía un producto al backend y actualiza el panel lateral
+async function agregarAlCarrito(productoId) {
+    const inputCant = document.getElementById('input-cantidad');
+    const cantidad  = inputCant ? parseInt(inputCant.value) || 1 : 1;
 
+    const res = await fetch('/carrito/agregar', {
+        method: 'POST',
+        headers: headersJSON,
+        body: JSON.stringify({ producto_id: productoId, cantidad }),
+    });
+
+    if (res.status === 401) { window.location.href = '/login'; return; }
+
+    const data = await res.json();
+    if (!res.ok) { alert(data.error ?? 'Error al agregar el producto'); return; }
+
+    renderizarCarrito(data.items, data.total);
+
+    const cartEl = document.getElementById('carritoLateral');
+    if (cartEl) bootstrap.Offcanvas.getOrCreateInstance(cartEl).show();
+}
+
+// Actualiza la cantidad de un ítem existente en el carrito
+async function actualizarCantidad(detalleId, nuevaCantidad, stock) {
     nuevaCantidad = parseInt(nuevaCantidad);
 
-    // Validación: Si el usuario escribe un número mayor al stock, lo bloquea.
-    if (nuevaCantidad > item.stock) {
-        alert(`Límite de stock alcanzado: ${item.stock} unidades.`);
-        renderizarCarrito(); // Redibuja la vista para borrar el número excedido que tipeó el usuario
+    if (nuevaCantidad <= 0) { eliminarItem(detalleId); return; }
+
+    if (nuevaCantidad > stock) {
+        alert(`Límite de stock alcanzado: ${stock} unidades.`);
+        cargarCarrito();
         return;
     }
 
-    // Validación: Si baja a 0 o números negativos, interpreta que lo quiere borrar.
-    if (nuevaCantidad <= 0) {
-        eliminarItem(id);
-    } else {
-        item.cantidad = nuevaCantidad; // Actualiza el objeto
-        actualizarInterfaz(); // Guarda y redibuja
+    const res = await fetch(`/carrito/${detalleId}`, {
+        method: 'PATCH',
+        headers: headersJSON,
+        body: JSON.stringify({ cantidad: nuevaCantidad }),
+    });
+
+    if (!res.ok) {
+        const data = await res.json();
+        alert(data.error ?? 'Error al actualizar la cantidad');
+        cargarCarrito();
+        return;
     }
+
+    const data = await res.json();
+    renderizarCarrito(data.items, data.total);
 }
 
-/**
- * FUNCIÓN: eliminarItem
- * DESCRIPCIÓN: Quita un producto entero del array.
- */
-function eliminarItem(id) {
-    // El método .filter() crea un array NUEVO, quedándose solo con los ítems que NO coincidan con el ID seleccionado.
-    carrito = carrito.filter(item => item.id !== id);
-    actualizarInterfaz();
+// Elimina un ítem del carrito por su ID de detalle
+async function eliminarItem(id) {
+    const res = await fetch(`/carrito/${id}`, { method: 'DELETE', headers: headersJSON });
+    if (!res.ok) return;
+    const data = await res.json();
+    renderizarCarrito(data.items, data.total);
 }
 
-/**
- * FUNCIÓN: vaciarCarrito
- * DESCRIPCIÓN: Borra todos los elementos de una sola vez.
- */
-function vaciarCarrito() {
-    // Muestra ventana nativa de confirmación
-    if (confirm('¿Deseas eliminar todos los productos del carrito?')) {
-        carrito = []; // Sobrescribe el array a vacío
-        actualizarInterfaz();
-    }
+// Elimina todos los ítems del carrito
+async function vaciarCarrito() {
+    if (!confirm('¿Deseas eliminar todos los productos del carrito?')) return;
+
+    const res = await fetch('/carrito/vaciar', { method: 'POST', headers: headersJSON });
+    if (res.status === 401) { window.location.href = '/login'; return; }
+    if (!res.ok) return;
+
+    const data = await res.json();
+    renderizarCarrito(data.items, data.total);
 }
 
-/**
- * FUNCIÓN: actualizarInterfaz
- * DESCRIPCIÓN: Funciona como un "Guardar". Sincroniza la RAM temporal con el disco duro del navegador.
- */
-function actualizarInterfaz() {
-    // JSON.stringify() convierte el array de objetos a un formato de texto plano (String) que el navegador sabe almacenar.
-    localStorage.setItem('gaming_station_cart', JSON.stringify(carrito));
-    renderizarCarrito(); // Tras guardar, actualiza el HTML
+// Confirma la compra y redirige a la página de confirmación
+async function finalizarCompra() {
+    const res = await fetch('/carrito/confirmar', { method: 'POST', headers: headersJSON });
+
+    if (res.status === 401) { window.location.href = '/login'; return; }
+
+    const data = await res.json();
+    if (!res.ok) { alert(data.error ?? 'Error al confirmar la compra'); return; }
+
+    window.location.href = data.redirect;
 }
 
-/**
- * FUNCIÓN: renderizarCarrito
- * DESCRIPCIÓN: Toma el array y construye dinámicamente todo el código HTML necesario para mostrar los productos.
- */
-function renderizarCarrito() {
+// Dibuja el contenido del panel lateral con los datos recibidos del servidor
+function renderizarCarrito(items, total) {
     const contenedor = document.getElementById('contenedor-items-carrito');
-    const totalTxt = document.getElementById('total-carrito');
-    const badge = document.getElementById('cart-count-badge');
+    const totalTxt   = document.getElementById('total-carrito');
+    const badge      = document.getElementById('cart-count-badge');
 
-    if (!contenedor) return; // Si la página actual no tiene carrito lateral, corta aquí.
+    if (!contenedor) return;
 
-    // Método .reduce(): Acumula valores de un array. Aquí suma todas las "cantidades" para saber el volumen de productos.
-    const totalProductos = carrito.reduce((sum, item) => sum + item.cantidad, 0);
-    
-    // Si hay productos, muestra la burbuja roja en la Navbar, si no, le pone display:none (d-none).
-    if (totalProductos > 0) {
+    const totalProductos = items.reduce((sum, item) => sum + item.cantidad, 0);
+
+    if (badge) {
         badge.innerText = totalProductos;
-        badge.classList.remove('d-none');
-    } else {
-        badge.classList.add('d-none');
+        badge.classList.toggle('d-none', totalProductos === 0);
     }
 
-    // Dibujado: Estado Vacío
-    if (carrito.length === 0) {
+    if (items.length === 0) {
         contenedor.innerHTML = `
             <div class="text-center mt-5 opacity-50">
                 <img src="/assets/cart3.svg" style="width: 48px; height: 48px; filter: invert(1); opacity: 0.5;">
                 <p class="mt-3 text-white fw-light">Tu carrito está vacío</p>
             </div>`;
-        totalTxt.innerText = '$0';
+        if (totalTxt) totalTxt.innerText = '$0';
         return;
     }
 
-    // Dibujado: Estado Lleno
-    let totalGeneral = 0;
-    // Método .map(): Transforma cada objeto del array en un bloque grande de texto HTML (Template Literals ``)
-    // El método .join('') une todos esos bloques de texto generados en un solo String gigante.
-    contenedor.innerHTML = carrito.map(item => {
-        totalGeneral += item.precio * item.cantidad; // Va acumulando precio en cada ciclo
+    contenedor.innerHTML = items.map(item => {
+        // Escapar nombre para evitar XSS al inyectar en innerHTML
+        const nombre   = item.nombre.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        const subtotal = (item.precio_unitario * item.cantidad).toLocaleString('es-AR');
         return `
             <div class="cart-item-modern d-flex align-items-center">
-                
-                <button class="btn-eliminar-carrito" onclick="eliminarItem('${item.id}')" title="Eliminar producto">&times;</button>
-                
+                <button class="btn-eliminar-carrito" onclick="eliminarItem(${item.id})" title="Eliminar producto">&times;</button>
                 <div class="cart-item-img me-3">
-                    <img src="${item.imagen}" alt="${item.nombre}" class="w-100 h-100 object-fit-contain">
+                    <img src="${item.imagen}" alt="${nombre}" class="w-100 h-100 object-fit-contain">
                 </div>
-                
                 <div class="grow">
-                    <h6 class="mb-1 text-white fw-bold pe-4" style="font-size: 0.95rem;">${item.nombre}</h6>
-                    <div class="text-success fw-bold mb-2">$${(item.precio * item.cantidad).toLocaleString('es-AR')}</div>
-                    
-                    <input type="number" class="input-dark text-center" value="${item.cantidad}" min="1" 
-                           style="width: 60px; height: 32px; border-radius: 6px; padding: 0;" 
-                           onchange="actualizarCantidad('${item.id}', this.value)">
+                    <h6 class="mb-1 text-white fw-bold pe-4" style="font-size: 0.95rem;">${nombre}</h6>
+                    <div class="text-success fw-bold mb-2">$${subtotal}</div>
+                    <input type="number" class="input-dark text-center" value="${item.cantidad}" min="1" max="${item.stock}"
+                           style="width: 60px; height: 32px; border-radius: 6px; padding: 0;"
+                           onchange="actualizarCantidad(${item.id}, this.value, ${item.stock})">
                 </div>
             </div>`;
-    }).join(''); // Reemplaza el innerHTML completo del contenedor con este String de tarjetas.
+    }).join('');
 
-    // Aplica el formato de moneda Argentina (Puntos en miles) al total.
-    totalTxt.innerText = '$' + totalGeneral.toLocaleString('es-AR');
+    if (totalTxt) totalTxt.innerText = '$' + Number(total).toLocaleString('es-AR');
 }
 
-/**
- * FUNCIÓN: finalizarCompra
- * DESCRIPCIÓN: Redirige a la página de pago.
- */
-function finalizarCompra() {
-    if (carrito.length === 0) return alert('El carrito está vacío.');
-    window.location.href = '/comercializacion'; // Redirección vía JavaScript
-}
-
-// EventListener: Cuando el archivo HTML termine de cargar todo su esqueleto, dispara la función de renderizado.
-document.addEventListener('DOMContentLoaded', renderizarCarrito);
+document.addEventListener('DOMContentLoaded', cargarCarrito);

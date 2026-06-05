@@ -9,6 +9,7 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CarritoController;
 /* --------------------------------------------------------------------------
    RUTAS ESTÁTICAS (GET)
    Se usa el método GET porque el usuario solo está "pidiendo" ver una página.
@@ -38,8 +39,8 @@ Route::get('/contacto', function () {
 });
 
 Route::get('/confirmacion-pedido', function () {
-    return view('confirmacionpedido'); // Pantalla de éxito tras el checkout
-});
+    return view('confirmacionpedido');
+})->name('compra.confirmada');
 
 
 /* --------------------------------------------------------------------------
@@ -82,6 +83,17 @@ Route::get('/register', [AuthController::class, 'showRegister'])->name('register
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/mi-perfil', [AuthController::class, 'perfil'])->middleware('auth')->name('perfil');
+
+// Carrito — datos es público (devuelve vacío para invitados), el resto requiere auth
+Route::get('/carrito/datos', [CarritoController::class, 'datos'])->name('carrito.datos');
+
+Route::middleware('auth')->group(function () {
+    Route::post('/carrito/agregar',      [CarritoController::class, 'agregar'])->name('carrito.agregar');
+    Route::post('/carrito/vaciar',       [CarritoController::class, 'vaciar'])->name('carrito.vaciar');
+    Route::post('/carrito/confirmar',    [CarritoController::class, 'confirmar'])->name('carrito.confirmar');
+    Route::patch('/carrito/{id}',        [CarritoController::class, 'actualizar'])->name('carrito.actualizar');
+    Route::delete('/carrito/{id}',       [CarritoController::class, 'eliminar'])->name('carrito.eliminar');
+});
 
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard',               [AdminController::class, 'dashboard'])->name('dashboard');

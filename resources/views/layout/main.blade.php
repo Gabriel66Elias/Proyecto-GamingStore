@@ -5,6 +5,8 @@
          <meta charset="UTF-8">
          {{-- Meta Viewport: CRÍTICO para que la web sea Responsive en celulares --}}
          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         {{-- CSRF token: lo lee carrito.js para los fetch() --}}
+         <meta name="csrf-token" content="{{ csrf_token() }}">
          
          {{-- Favicon: El ícono de la pestaña del navegador --}}
          <link rel="icon" href="{{ asset('favicon.png') }}" type="image/x-icon">

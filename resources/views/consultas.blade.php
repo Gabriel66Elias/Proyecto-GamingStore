@@ -102,13 +102,7 @@
 
                     <button class="cp-btn-add"
                             {{ $producto->stock === 0 ? 'disabled' : '' }}
-                            onclick="agregarAlCarrito(
-                                '{{ $producto->id }}',
-                                '{{ addslashes($producto->nombre) }}',
-                                {{ $producto->precio_venta }},
-                                {{ $producto->stock }},
-                                '{{ $imagenUrl }}'
-                            )">
+                            onclick="agregarAlCarrito({{ $producto->id }})">
                         <img src="{{ asset('assets/cart-plus.svg') }}" alt="" width="20" height="20" style="filter: invert(1);">
                         Agregar al carrito
                     </button>
