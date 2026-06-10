@@ -1,250 +1,9 @@
-@extends('layout.main')
+﻿@extends('layout.main')
 @section('titulo', 'Gestión de Consultas — Admin')
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/estilos.adminpanel.css') }}">
-<style>
-    /* ── Cards de consulta ── */
-    .consulta-card {
-        background-color: #11131A;
-        border: 1px solid #1f222e;
-        border-radius: 14px;
-        padding: 1.25rem 1.5rem;
-        transition: border-color 0.2s ease;
-    }
-    .consulta-card.no-leida {
-        border-left: 3px solid #FF3B3B;
-    }
-    .consulta-card.leida {
-        border-left: 3px solid #1f222e;
-        opacity: 0.75;
-    }
-
-    /* ── Badge NUEVO ── */
-    .badge-nuevo {
-        font-size: 0.68rem;
-        font-weight: 700;
-        letter-spacing: 0.5px;
-        background: rgba(255,59,59,0.12);
-        color: #FF3B3B;
-        border: 1px solid rgba(255,59,59,0.3);
-        border-radius: 6px;
-        padding: 2px 8px;
-        white-space: nowrap;
-        transition: opacity 0.3s ease;
-    }
-
-    /* ── Botones de acción en consulta ── */
-    .consulta-actions {
-        display: flex;
-        gap: 0.5rem;
-        flex-shrink: 0;
-    }
-    .btn-consulta {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        padding: 0.45rem 0.9rem;
-        border-radius: 8px;
-        border: 1px solid #1f222e;
-        background-color: #1a1d27;
-        color: #94a3b8;
-        font-size: 0.82rem;
-        font-weight: 600;
-        cursor: pointer;
-        text-decoration: none;
-        transition: all 0.2s ease;
-        white-space: nowrap;
-    }
-    .btn-consulta:hover {
-        border-color: rgba(255,59,59,0.4);
-        color: #FF3B3B;
-        background-color: rgba(255,59,59,0.07);
-    }
-    .btn-consulta-reply:hover {
-        border-color: rgba(96,165,250,0.4);
-        color: #60a5fa;
-        background-color: rgba(96,165,250,0.07);
-    }
-    .btn-consulta-delete:hover {
-        border-color: rgba(255,59,59,0.4);
-        color: #FF3B3B;
-        background-color: rgba(255,59,59,0.07);
-    }
-
-    /* ── Datos del remitente ── */
-    .consulta-meta {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-size: 0.82rem;
-        color: #64748b;
-        flex-wrap: wrap;
-    }
-    .consulta-nombre {
-        font-size: 0.95rem;
-        font-weight: 700;
-        color: #e2e8f0;
-    }
-    .consulta-mensaje {
-        font-size: 0.88rem;
-        color: #94a3b8;
-        line-height: 1.65;
-        white-space: pre-line;
-        margin: 0;
-    }
-    .consulta-fecha {
-        font-size: 0.75rem;
-        color: #3d4659;
-        white-space: nowrap;
-    }
-
-    /* ── Modal de respuesta ── */
-    .modal-consulta .modal-content {
-        background-color: #11131A;
-        border: 1px solid #1f222e;
-        border-radius: 16px;
-    }
-    .modal-consulta .modal-header {
-        border-bottom: 1px solid #1f222e;
-        padding: 1.25rem 1.5rem;
-    }
-    .modal-consulta .modal-title {
-        font-size: 1rem;
-        font-weight: 800;
-        color: #ffffff;
-        letter-spacing: -0.3px;
-    }
-    .modal-consulta .btn-close {
-        filter: invert(0.5);
-        opacity: 0.6;
-    }
-    .modal-consulta .btn-close:hover { opacity: 1; }
-    .modal-consulta .modal-body {
-        padding: 1.5rem;
-    }
-    .modal-consulta .modal-footer {
-        border-top: 1px solid #1f222e;
-        padding: 1rem 1.5rem;
-        gap: 0.5rem;
-    }
-
-    .modal-remitente-card {
-        background-color: #0b0c10;
-        border: 1px solid #1f222e;
-        border-radius: 10px;
-        padding: 1rem 1.25rem;
-        margin-bottom: 1.25rem;
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        flex-wrap: wrap;
-    }
-    .modal-avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: rgba(255,59,59,0.1);
-        border: 1px solid rgba(255,59,59,0.2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        font-size: 1rem;
-        font-weight: 800;
-        color: #FF3B3B;
-    }
-    .modal-remitente-info { min-width: 0; }
-    .modal-remitente-nombre {
-        font-size: 0.9rem;
-        font-weight: 700;
-        color: #e2e8f0;
-        margin: 0;
-    }
-    .modal-remitente-email {
-        font-size: 0.82rem;
-        color: #64748b;
-        margin: 0;
-        word-break: break-all;
-    }
-
-    .modal-mensaje-label {
-        font-size: 0.72rem;
-        font-weight: 700;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        color: #3d4659;
-        margin-bottom: 0.5rem;
-    }
-    .modal-mensaje-body {
-        background-color: #0b0c10;
-        border: 1px solid #1f222e;
-        border-radius: 10px;
-        padding: 1rem 1.25rem;
-        font-size: 0.9rem;
-        color: #c8cad4;
-        line-height: 1.65;
-        white-space: pre-line;
-        max-height: 220px;
-        overflow-y: auto;
-        scrollbar-width: thin;
-        scrollbar-color: #1f222e transparent;
-    }
-    .modal-mensaje-body::-webkit-scrollbar { width: 4px; }
-    .modal-mensaje-body::-webkit-scrollbar-thumb { background-color: #1f222e; border-radius: 4px; }
-
-    .btn-mailto {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        background-color: #FF3B3B;
-        color: #ffffff;
-        border: none;
-        border-radius: 8px;
-        padding: 0.6rem 1.25rem;
-        font-size: 0.875rem;
-        font-weight: 700;
-        text-decoration: none;
-        transition: background-color 0.2s ease, transform 0.15s ease;
-        white-space: nowrap;
-    }
-    .btn-mailto:hover {
-        background-color: #e02e2e;
-        color: #fff;
-        transform: translateY(-1px);
-    }
-    .btn-modal-close {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        background-color: transparent;
-        color: #64748b;
-        border: 1px solid #1f222e;
-        border-radius: 8px;
-        padding: 0.6rem 1.1rem;
-        font-size: 0.875rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
-    .btn-modal-close:hover {
-        border-color: #3d4659;
-        color: #94a3b8;
-    }
-
-    /* ── Responsive ── */
-    @media (max-width: 575px) {
-        .consulta-card { padding: 1rem; border-radius: 10px; }
-        .consulta-actions { width: 100%; margin-top: 0.75rem; }
-        .btn-consulta { flex: 1; justify-content: center; padding: 0.5rem 0.5rem; }
-        .modal-consulta .modal-body { padding: 1.1rem; }
-        .modal-consulta .modal-header,
-        .modal-consulta .modal-footer { padding: 1rem; }
-        .modal-remitente-card { padding: 0.85rem 1rem; }
-        .btn-mailto { width: 100%; justify-content: center; }
-        .btn-modal-close { width: 100%; justify-content: center; }
-    }
-</style>
+<link rel="stylesheet" href="{{ asset('css/estilos.consultas-admin.css') }}">
 @endpush
 
 @section('contenido')
@@ -258,6 +17,7 @@
             @if($sinLeer > 0)
                 &mdash; <span style="color:#FF3B3B; font-weight:600;">{{ $sinLeer }} sin leer</span>
             @endif
+            &mdash; {{ $resenas->total() }} reseña(s) de productos
         </p>
     </div>
 
@@ -270,6 +30,25 @@
         {{ session('success') }}
     </div>
     @endif
+
+    {{-- Tabs: Mensajes / Reseñas --}}
+    <ul class="nav admin-tabs mb-4" id="consultasTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="tab-mensajes" data-bs-toggle="tab" data-bs-target="#pane-mensajes" type="button" role="tab" aria-controls="pane-mensajes" aria-selected="true">
+                Mensajes
+                <span class="admin-tab-count">{{ $consultas->total() }}</span>
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-resenas" data-bs-toggle="tab" data-bs-target="#pane-resenas" type="button" role="tab" aria-controls="pane-resenas" aria-selected="false">
+                Reseñas
+                <span class="admin-tab-count">{{ $resenas->total() }}</span>
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+    <div class="tab-pane fade show active" id="pane-mensajes" role="tabpanel" aria-labelledby="tab-mensajes">
 
     {{-- Lista de consultas --}}
     <div class="d-flex flex-column gap-3">
@@ -377,6 +156,97 @@
     </div>
     @endif
 
+    </div>
+
+    {{-- ── Pestaña: Reseñas ──────────────────────────────── --}}
+    <div class="tab-pane fade" id="pane-resenas" role="tabpanel" aria-labelledby="tab-resenas">
+
+    <div class="d-flex flex-column gap-3">
+        @forelse($resenas as $r)
+        <div class="consulta-card resena-card" id="resena-{{ $r->id }}">
+            <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
+
+                {{-- Información principal --}}
+                <div style="min-width: 0; flex: 1;">
+
+                    {{-- Nombre + estrellas --}}
+                    <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
+                        <span class="consulta-nombre">{{ $r->usuario?->nombre ?? 'Usuario eliminado' }}</span>
+                        <x-estrellas :calificacion="$r->calificacion" :size="13" />
+                    </div>
+
+                    {{-- Producto + fecha --}}
+                    <div class="consulta-meta mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16" style="opacity:0.5; flex-shrink:0;">
+                            <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5 8 5.961 14.154 3.5zM15 4.239l-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.761V6.838L1 4.239v7.923zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.35a1.5 1.5 0 0 1-.857 1.355l-6.65 2.66a1.5 1.5 0 0 1-1.086 0l-6.65-2.66A1.5 1.5 0 0 1 0 11.85V3.5a.5.5 0 0 1 .314-.464z"/>
+                        </svg>
+                        <span>{{ $r->producto?->nombre ?? 'Producto eliminado' }}</span>
+                        <span style="color:#1f222e;">·</span>
+                        <span class="consulta-fecha">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" viewBox="0 0 16 16" style="margin-right:3px; opacity:0.4;">
+                                <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
+                                <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/>
+                            </svg>
+                            {{ $r->created_at->format('d/m/Y H:i') }}
+                        </span>
+                    </div>
+
+                    {{-- Comentario --}}
+                    @if($r->comentario)
+                        <p class="consulta-mensaje">{{ $r->comentario }}</p>
+                    @else
+                        <p class="consulta-mensaje fst-italic" style="opacity:.6;">Sin comentario, solo calificación.</p>
+                    @endif
+
+                </div>
+
+                {{-- Acciones --}}
+                <div class="consulta-actions">
+                    <form action="{{ route('admin.resenas.destroy', $r->id) }}" method="POST"
+                          id="form-eliminar-resena-{{ $r->id }}">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button"
+                                class="btn-consulta btn-consulta-delete"
+                                title="Eliminar reseña"
+                                data-confirmar-eliminar="form-eliminar-resena-{{ $r->id }}"
+                                data-titulo="Eliminar reseña de {{ addslashes($r->usuario?->nombre ?? 'usuario') }}"
+                                data-desc="Esta acción no se puede deshacer.">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                            </svg>
+                            Eliminar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        @empty
+        <div class="admin-table-wrapper">
+            <div class="admin-empty-state">
+                <div class="admin-empty-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="rgba(255,59,59,0.5)" viewBox="0 0 16 16">
+                        <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                    </svg>
+                </div>
+                <p class="text-white fw-semibold mb-1">Todavía no hay reseñas</p>
+                <p class="text-secondary small mb-0">Cuando un cliente complete un pedido, podrá calificar sus productos y aparecerán aquí.</p>
+            </div>
+        </div>
+        @endforelse
+    </div>
+
+    {{-- Paginación --}}
+    @if($resenas->hasPages())
+    <div class="admin-pagination-wrapper mt-4" style="background-color:#11131A; border:1px solid #1f222e; border-radius:14px;">
+        {{ $resenas->links() }}
+    </div>
+    @endif
+
+    </div>
+    </div>
+
 </div>
 
 {{-- ════════════════════════════════════════════════════════
@@ -471,100 +341,7 @@
 </div>
 
 @push('scripts')
-<script>
-(function () {
-    let formPendiente = null;
-    const modalEliminarEl = document.getElementById('modalEliminar');
-    if (modalEliminarEl) {
-        const modalEliminar = new bootstrap.Modal(modalEliminarEl);
-
-        document.querySelectorAll('[data-confirmar-eliminar]').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                formPendiente = document.getElementById(this.dataset.confirmarEliminar);
-                document.getElementById('modal-eliminar-title').textContent = this.dataset.titulo || 'Eliminar elemento';
-                document.getElementById('modal-eliminar-desc').textContent  = this.dataset.desc   || 'Esta acción no se puede deshacer.';
-                modalEliminar.show();
-            });
-        });
-
-        document.getElementById('btn-confirm-eliminar').addEventListener('click', function () {
-            if (formPendiente) { formPendiente.submit(); formPendiente = null; }
-        });
-    }
-})();
-
-(function () {
-    const modal = document.getElementById('modalResponder');
-    if (!modal) return;
-
-    modal.addEventListener('show.bs.modal', function (e) {
-        const btn     = e.relatedTarget;
-        const id      = btn.dataset.id;
-        const nombre  = btn.dataset.nombre;
-        const email   = btn.dataset.email;
-        const mensaje = btn.dataset.mensaje;
-        const leida   = btn.dataset.leida === '1';
-        const leidaUrl = btn.dataset.leidaUrl;
-
-        // Poblar modal
-        document.getElementById('modal-avatar').textContent  = nombre.charAt(0).toUpperCase();
-        document.getElementById('modal-nombre').textContent  = nombre;
-        document.getElementById('modal-email').textContent   = email;
-        document.getElementById('modal-mensaje').textContent = mensaje;
-
-        // Gmail compose URL (abre en el navegador)
-        const asunto = encodeURIComponent('Re: Tu consulta en GamingStation');
-        const cuerpo = encodeURIComponent(
-            'Hola ' + nombre + ',\n\nGracias por comunicarte con GamingStation.\n\n' +
-            '---\nTu mensaje original:\n' + mensaje + '\n---\n\n'
-        );
-        document.getElementById('btn-mailto').href =
-            'https://mail.google.com/mail/?view=cm&to=' + encodeURIComponent(email) +
-            '&su=' + asunto + '&body=' + cuerpo;
-
-        // Marcar como leída si todavía no lo está
-        if (!leida) {
-            fetch(leidaUrl, {
-                method: 'PATCH',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Accept': 'application/json',
-                }
-            }).then(function (res) {
-                if (res.ok) {
-                    // Quitar badge NUEVO
-                    const badge = document.getElementById('badge-' + id);
-                    if (badge) badge.remove();
-
-                    // Cambiar estilo de la card
-                    const card = document.getElementById('consulta-' + id);
-                    if (card) {
-                        card.classList.remove('no-leida');
-                        card.classList.add('leida');
-                    }
-
-                    // Actualizar data attr para que no vuelva a disparar
-                    btn.dataset.leida = '1';
-
-                    // Actualizar contador en el subtítulo
-                    const sinLeerSpan = document.querySelector('.admin-page-subtitle span[style*="FF3B3B"]');
-                    if (sinLeerSpan) {
-                        const actual = parseInt(sinLeerSpan.textContent) - 1;
-                        if (actual <= 0) {
-                            sinLeerSpan.parentElement
-                                .querySelector('span[style*="FF3B3B"]')
-                                ?.previousSibling?.remove();
-                            sinLeerSpan.remove();
-                        } else {
-                            sinLeerSpan.textContent = actual + ' sin leer';
-                        }
-                    }
-                }
-            });
-        }
-    });
-})();
-</script>
+<script src="{{ asset('js/consultas-admin.js') }}"></script>
 @endpush
 
 @endsection

@@ -1,0 +1,20 @@
+/* Icono de éxito dibujado con puro CSS (sin imágenes) para máxima velocidad.
+   Sobrescribe los tamaños/colores globales de .success-circle/.checkmark
+   para esta pantalla en particular (paleta verde Bootstrap, círculo más chico). */
+.success-circle {
+    width: 80px;
+    height: 80px;
+    background-color: rgba(25, 135, 84, 0.1);
+    border: 2px solid #198754;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.checkmark {
+    color: #198754;
+    font-size: 40px;
+    font-weight: bold;
+}

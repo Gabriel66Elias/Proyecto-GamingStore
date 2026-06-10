@@ -23,4 +23,9 @@ class Usuario extends Authenticatable{
     return $this->belongsTo(Rol::class, 'rol_id');
     }
 
+    // Relación: productos marcados como favoritos por el usuario
+    public function favoritos() {
+    return $this->belongsToMany(Producto::class, 'favoritos', 'usuario_id', 'producto_id')->withTimestamps();
+    }
+
 }

@@ -1,41 +1,12 @@
 
      @extends('layout.main')
      @section('titulo', '¡Envío Exitoso! | GamingStation')
+
+     @push('styles')
+     <link rel="stylesheet" href="{{ asset('css/estilos.exito.css') }}">
+     @endpush
+
      @section('contenido')
-         <style>
-             .card-estado {
-                 background: linear-gradient(145deg, #1a1d27 0%, #11131A 100%) !important;
-                 border: 2px solid transparent !important; 
-                 border-radius: 16px;
-                 transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
-             }
-     
-             .card-estado:hover {
-                 transform: none !important; 
-                 border-color: #FF3B3B !important; 
-                 box-shadow: 0 0 20px rgba(255, 59, 59, 0.15) !important;
-             }
-     
-             /* Icono de éxito dibujado con puro CSS (sin imágenes) para máxima velocidad */
-             .success-circle {
-                 width: 80px;
-                 height: 80px;
-                 background-color: rgba(25, 135, 84, 0.1); 
-                 border: 2px solid #198754; 
-                 border-radius: 50%;
-                 display: flex;
-                 align-items: center;
-                 justify-content: center;
-                 margin: 0 auto;
-             }
-     
-             .checkmark {
-                 color: #198754;
-                 font-size: 40px;
-                 font-weight: bold;
-             }
-         </style>
-     
          <div class="container mt-5 mb-5" style="min-height: 70vh;">
              
              <div class="mb-4">

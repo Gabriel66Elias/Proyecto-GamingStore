@@ -143,10 +143,11 @@ footer.footer-modern {
     justify-content: center;
     margin-bottom: 1rem;
 }
-.stat-icon-red   { background: rgba(255,59,59,0.12);  }
-.stat-icon-green { background: rgba(74,222,128,0.1);  }
-.stat-icon-blue  { background: rgba(96,165,250,0.1);  }
-.stat-icon-amber { background: rgba(251,191,36,0.1);  }
+.stat-icon-red    { background: rgba(255,59,59,0.12);  }
+.stat-icon-green  { background: rgba(74,222,128,0.1);  }
+.stat-icon-blue   { background: rgba(96,165,250,0.1);  }
+.stat-icon-amber  { background: rgba(251,191,36,0.1);  }
+.stat-icon-purple { background: rgba(167,139,250,0.1); }
 
 .stat-card-value {
     font-size: 2.2rem;
@@ -263,6 +264,26 @@ footer.footer-modern {
     border: 1px solid #1f222e;
     color: #94a3b8;
     white-space: nowrap;
+}
+
+/* ── Botón secundario para encabezados de página (ej: "Gestionar roles") ── */
+.btn-admin-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background-color: #1a1d27;
+    color: #94a3b8;
+    border: 1px solid #1f222e;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+.btn-admin-outline:hover {
+    border-color: #FF3B3B;
+    color: #FF3B3B;
+    background-color: rgba(255,59,59,0.07);
 }
 
 /* ── Botones de acción en tabla ── */
@@ -920,6 +941,137 @@ footer.footer-modern {
     text-align: center;
     color: #64748b;
     font-size: 0.9rem;
+}
+
+/* ── Gráficos donut del dashboard ── */
+.donut-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.donut-wrap {
+    display: flex;
+    align-items: center;
+    gap: 1.75rem;
+    flex-wrap: wrap;
+}
+
+.donut-chart-container {
+    position: relative;
+    width: 160px;
+    height: 160px;
+    flex-shrink: 0;
+}
+
+.donut-svg {
+    width: 100%;
+    height: 100%;
+}
+
+.donut-rotate {
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+}
+
+.donut-rotate circle {
+    transition: stroke-dasharray 0.6s ease, stroke-dashoffset 0.6s ease;
+}
+
+.donut-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    pointer-events: none;
+}
+
+.donut-center-value {
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: #ffffff;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+    white-space: nowrap;
+}
+
+.donut-center-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: #64748b;
+    margin-top: 3px;
+}
+
+.donut-legend {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    flex: 1;
+    min-width: 150px;
+}
+
+.donut-legend li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.85rem;
+}
+
+.donut-legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.donut-legend-label {
+    color: #94a3b8;
+    flex: 1;
+}
+
+.donut-legend-value {
+    font-weight: 700;
+    color: #e2e8f0;
+}
+
+.donut-summary {
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid #1f222e;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.donut-summary-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    color: #64748b;
+}
+
+.donut-summary-row strong {
+    color: #e2e8f0;
+    font-weight: 700;
+}
+
+@media (max-width: 480px) {
+    .donut-wrap {
+        flex-direction: column;
+        text-align: center;
+    }
+    .donut-legend {
+        width: 100%;
+    }
 }
 
 /* ── Tarjetas de stock ── */

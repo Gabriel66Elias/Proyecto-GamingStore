@@ -1,23 +1,5 @@
 @props(['categorias' => collect()])
 
-{{-- ESTILOS ESPECÍFICOS DEL COMPONENTE --}}
-     <style>
-        /* ... Las propiedades CSS dan colores a los botones 
-           '.btn-check:checked + .btn-filtro' aplica un estilo iluminado solo cuando el input oculto está activado ... */
-        .filtro-container { background-color: #11131A !important; border: 1px solid #1f222e !important; border-radius: 1rem; }
-        .btn-filtro { background-color: #1a1d27; border: 1px solid #2d313f; color: #94a3b8; border-radius: 0.5rem; padding: 0.5rem 0.9rem; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .btn-filtro:hover { border-color: #FF3B3B; color: #fff; background-color: rgba(255, 59, 59, 0.05); }
-        .btn-check:checked + .btn-filtro { background-color: rgba(255, 59, 59, 0.15) !important; border-color: #FF3B3B !important; color: #fff !important; box-shadow: 0 0 15px rgba(255, 59, 59, 0.1); }
-        .btn-limpiar-modern { background-color: transparent; border: 1px solid rgba(255, 255, 255, 0.1); color: #64748b; border-radius: 0.5rem; padding: 0.5rem; transition: all 0.3s ease; height: 42px; }
-        .btn-limpiar-modern:hover { border-color: #FF3B3B; color: #FF3B3B; background-color: rgba(255, 59, 59, 0.05); }
-        .custom-select-btn { background-color: #1a1d27 !important; border: 1px solid #2d313f !important; color: #ffffff !important; height: 42px; border-radius: 0.5rem; box-shadow: none !important; transition: all 0.3s ease; font-size: 0.9rem; }
-        .custom-select-btn:focus, .custom-select-btn:hover { border-color: #FF3B3B !important; }
-        .custom-dropdown-menu { background-color: #11131A; border: 1px solid #2d313f; border-radius: 0.5rem; padding: 0.5rem 0; box-shadow: 0 10px 25px rgba(0,0,0,0.8); margin-top: 5px !important; }
-        .custom-dropdown-item { color: #94a3b8; padding: 0.5rem 1rem; font-size: 0.9rem; transition: all 0.2s ease; }
-        .custom-dropdown-item:hover, .custom-dropdown-item:focus { background-color: rgba(255, 59, 59, 0.1); color: #ffffff; }
-        .custom-dropdown-item.active { background-color: rgba(255, 59, 59, 0.15); color: #FF3B3B; font-weight: bold; }
-    </style>
-    
     {{-- CAJA CONTENEDORA GLOBAL --}}
     <div class="filtro-container p-4 mb-5 shadow-lg">
         <div class="row g-3 align-items-end">

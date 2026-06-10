@@ -30,24 +30,17 @@
     font-style: normal;
 }
 
-/* 2. ESTILOS GLOBALES Y BASE */
-body {
-    font-family: 'Inter', sans-serif; /* Esto sigue funcionando igual, pero ahora usa la local */
-    background-color: #0b0c10;
-    color: #e2e8f0;
-    margin: 0;
-    padding: 0;
-    -webkit-font-smoothing: antialiased;
-}
-
-/* ... el resto de tu CSS sigue exactamente igual ... */
 /* --------------------------------------------------------------------------
    1. ESTILOS GLOBALES Y BASE
    -------------------------------------------------------------------------- */
-body {
+/* body.bg-dark.text-light (especificidad de 2 clases) para pisar la utilidad
+   .bg-dark de Bootstrap (1 clase, también !important): si no, queda el gris
+   #212529 de Bootstrap asomando entre secciones */
+body,
+body.bg-dark.text-light {
     font-family: 'Inter', sans-serif;
-    background-color: #0b0c10; /* Negro profundo base */
-    color: #e2e8f0; /* Texto claro de alta legibilidad */
+    background-color: #0b0c10 !important; /* Negro profundo base */
+    color: #e2e8f0 !important; /* Texto claro de alta legibilidad */
     margin: 0;
     padding: 0;
     -webkit-font-smoothing: antialiased; /* Suavizado moderno para fuentes */
@@ -188,6 +181,30 @@ h1, h2, h3, h4, h5, h6 {
     object-position: center;
 }
 
+/* Botón de favorito (corazón) sobre la imagen del producto */
+.btn-favorito {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(8, 10, 16, .55);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #e2e8f0;
+    cursor: pointer;
+    transition: background .25s, color .25s, transform .15s;
+}
+.btn-favorito:hover { background: rgba(8, 10, 16, .8); transform: scale(1.08); }
+.btn-favorito svg { fill: currentColor; transition: fill .2s; }
+.btn-favorito.is-favorito { color: #FF3B3B; }
+.btn-favorito.is-favorito svg { fill: #FF3B3B; }
+
 /* Etiqueta de precio */
 .precio-catalogo {
     font-size: 1.6rem;
@@ -202,95 +219,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* --------------------------------------------------------------------------
-   5. VISTA DE DETALLE DEL PRODUCTO (Consultas)
-   -------------------------------------------------------------------------- */
-.detalle-wrapper {
-    background-color: #11131A;
-    border: 1px solid #1f222e;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-}
-
-.detalle-img-container {
-    background: radial-gradient(circle at center, #1a1d27 0%, #11131A 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 4rem;
-    height: 100%;
-    min-height: 450px;
-}
-
-.detalle-img-container img {
-    max-width: 100%;
-    max-height: 400px;
-    object-fit: contain;
-    filter: drop-shadow(0 20px 25px rgba(0,0,0,0.6));
-    transition: transform 0.4s ease;
-}
-
-.detalle-img-container:hover img {
-    transform: scale(1.05);
-}
-
-.detalle-info-container {
-    padding: 4rem 3rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    background-color: #11131A;
-    height: 100%;
-}
-
-.detalle-precio {
-    font-size: 3rem;
-    font-weight: 900;
-    color: #4ade80;
-    letter-spacing: -1px;
-}
-
-.detalle-specs {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.detalle-specs li {
-    position: relative;
-    padding-left: 2rem;
-    margin-bottom: 1rem;
-    color: #9ca3af;
-    font-size: 1.05rem;
-}
-
-.detalle-specs li::before {
-    content: "✓";
-    position: absolute;
-    left: 0;
-    color: #FF3B3B; /* Tilde ahora es Mars Red */
-    font-weight: bold;
-    font-size: 1.2rem;
-}
-
-.input-cantidad-moderno {
-    background-color: #0b0c10;
-    border: 1px solid #1f222e;
-    color: #ffffff;
-    text-align: center;
-    border-radius: 8px;
-    height: 55px;
-    font-size: 1.2rem;
-    width: 80px;
-    transition: border-color 0.3s ease;
-}
-
-.input-cantidad-moderno:focus {
-    border-color: #FF3B3B;
-    outline: none;
-}
-
-/* --------------------------------------------------------------------------
    6. CARRITO LATERAL (OFFCANVAS)
    -------------------------------------------------------------------------- */
 .offcanvas-minimalist {
@@ -298,6 +226,21 @@ h1, h2, h3, h4, h5, h6 {
     color: #f8fafc;
     border-left: 1px solid #1f222e !important;
     width: 400px !important;
+    max-width: 100vw;
+}
+
+@media (max-width: 575.98px) {
+    .offcanvas-minimalist {
+        width: 100vw !important;
+    }
+
+    .cart-footer-modern {
+        padding: 1.25rem 1rem;
+    }
+
+    .cart-total-amount {
+        font-size: 1.5rem;
+    }
 }
 
 #contenedor-items-carrito::-webkit-scrollbar { width: 5px; }
@@ -437,6 +380,20 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: 24px;
 }
 
+/* Tarjeta estática con brillo sutil para pantallas de estado final (éxito/confirmación) */
+.card-estado {
+    background: linear-gradient(145deg, #1a1d27 0%, #11131A 100%) !important;
+    border: 2px solid transparent !important;
+    border-radius: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.card-estado:hover {
+    transform: none !important;
+    border-color: #FF3B3B !important;
+    box-shadow: 0 0 20px rgba(255, 59, 59, 0.15) !important;
+}
+
 .success-circle {
     width: 100px;
     height: 100px;
@@ -555,27 +512,27 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: 1.5rem !important;
 }
 
+.producto-item:hover .contenedor-img img {
+    transform: scale(1.08);
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 /* --------------------------------------------------------------------------
    11. CATEGORÍAS Y BOTÓN CONÓCENOS (Página Principal)
    -------------------------------------------------------------------------- */
-/* Tarjetas de Categoría Cuadradas con Gradiente Premium y Hover Mars Red */
 .card-categoria {
-    background: linear-gradient(145deg, #2d313f 0%, #000000 100%); /* Fondo con gradiente diagonal */
-    border: 2px solid transparent;
+    border: 1px solid #1a1d28 !important;
+    border-top: 2px solid rgba(255, 59, 59, 0.45) !important;
     border-radius: 1rem;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     aspect-ratio: 1 / 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Sombra base para despegarla del fondo */
+    box-shadow: none !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-top-color 0.3s ease;
 }
 
 .card-categoria:hover {
-    transform: translateY(-8px);
-    border-color: #FF3B3B !important;
-    box-shadow: 0 10px 25px rgba(255, 59, 59, 0.15) !important;
-    background: linear-gradient(145deg, #242836 0%, #11131A 100%); /* El gradiente se aclara al hover */
+    transform: translateY(-5px) !important;
+    border-top-color: #FF3B3B !important;
+    box-shadow: 0 10px 30px rgba(255, 59, 59, 0.1) !important;
 }
 
 /* Botón Conócenos personalizado para que la letra no se ponga negra */
@@ -877,3 +834,58 @@ h1, h2, h3, h4, h5, h6 {
     animation: adminDotPulse 2.5s ease-in-out infinite;
     flex-shrink: 0;
 }
+
+/* --------------------------------------------------------------------------
+   HEADER — centrado de los links de navegación en escritorio
+   -------------------------------------------------------------------------- */
+@media (min-width: 992px) {
+    .nav-links-center {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+/* --------------------------------------------------------------------------
+   FILTROS DE CATÁLOGO
+   -------------------------------------------------------------------------- */
+.filtro-container { background-color: #11131A !important; border: 1px solid #1f222e !important; border-radius: 1rem; }
+.btn-filtro { background-color: #1a1d27; border: 1px solid #2d313f; color: #94a3b8; border-radius: 0.5rem; padding: 0.5rem 0.9rem; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+.btn-filtro:hover { border-color: #FF3B3B; color: #fff; background-color: rgba(255, 59, 59, 0.05); }
+.btn-check:checked + .btn-filtro { background-color: rgba(255, 59, 59, 0.15) !important; border-color: #FF3B3B !important; color: #fff !important; box-shadow: 0 0 15px rgba(255, 59, 59, 0.1); }
+.btn-limpiar-modern { background-color: transparent; border: 1px solid rgba(255, 255, 255, 0.1); color: #64748b; border-radius: 0.5rem; padding: 0.5rem; transition: all 0.3s ease; height: 42px; }
+.btn-limpiar-modern:hover { border-color: #FF3B3B; color: #FF3B3B; background-color: rgba(255, 59, 59, 0.05); }
+.custom-select-btn { background-color: #1a1d27 !important; border: 1px solid #2d313f !important; color: #ffffff !important; height: 42px; border-radius: 0.5rem; box-shadow: none !important; transition: all 0.3s ease; font-size: 0.9rem; }
+.custom-select-btn:focus, .custom-select-btn:hover { border-color: #FF3B3B !important; }
+.custom-dropdown-menu { background-color: #11131A; border: 1px solid #2d313f; border-radius: 0.5rem; padding: 0.5rem 0; box-shadow: 0 10px 25px rgba(0,0,0,0.8); margin-top: 5px !important; }
+.custom-dropdown-item { color: #94a3b8; padding: 0.5rem 1rem; font-size: 0.9rem; transition: all 0.2s ease; }
+.custom-dropdown-item:hover, .custom-dropdown-item:focus { background-color: rgba(255, 59, 59, 0.1); color: #ffffff; }
+.custom-dropdown-item.active { background-color: rgba(255, 59, 59, 0.15); color: #FF3B3B; font-weight: bold; }
+
+/* --------------------------------------------------------------------------
+   FOOTER
+   -------------------------------------------------------------------------- */
+.footer-modern { background-color: #11131A; border-top: 1px solid #1f222e !important; }
+.footer-link { color: #94a3b8; text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: all 0.3s ease; display: inline-block; width: fit-content; }
+.footer-link:hover { color: #FF3B3B !important; transform: translateX(5px); }
+.social-icon-wrapper { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background-color: #1a1d27; border: 1px solid #2d313f; border-radius: 50%; transition: all 0.3s ease; }
+.footer-icon { width: 18px; height: 18px; filter: invert(0.6); transition: all 0.3s ease; }
+.social-icon-wrapper:hover { background-color: rgba(255, 59, 59, 0.1); border-color: #FF3B3B; transform: translateY(-4px); box-shadow: 0 5px 15px rgba(255, 59, 59, 0.2); }
+.social-icon-wrapper:hover .footer-icon { filter: invert(1); }
+
+/* --------------------------------------------------------------------------
+   ENLACE "VOLVER AL INICIO" (compartido: contacto, términos, quiénes somos)
+   -------------------------------------------------------------------------- */
+.ip-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: #64748b;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.ip-back-link:hover { color: #FF3B3B; }
+.ip-back-link img { transition: transform 0.2s; }
+.ip-back-link:hover img { transform: translateX(-3px); }

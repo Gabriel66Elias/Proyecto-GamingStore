@@ -3,6 +3,7 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/estilos.adminpanel.css') }}">
+<link rel="stylesheet" href="{{ asset('css/estilos.pedidos-admin.css') }}">
 @endpush
 
 @section('contenido')
@@ -17,100 +18,129 @@
         <span class="dash-date">{{ now()->isoFormat('dddd, D [de] MMMM') }}</span>
     </div>
 
-    {{-- Stat cards: 2 col en móvil, 4 en desktop --}}
+    {{-- Gráficos: stock y ganancias --}}
     <div class="row g-3 g-md-4 mb-4">
 
-        <div class="col-6 col-lg-3">
-            <div class="stat-card">
-                <div class="stat-card-icon stat-icon-red">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#FF3B3B" viewBox="0 0 16 16">
-                        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-                    </svg>
-                </div>
-                <div class="stat-card-value">{{ $stats['total_productos'] }}</div>
-                <div class="stat-card-label">Productos activos</div>
-            </div>
+        <div class="col-12 col-lg-6">
+            <x-admin.donut-chart
+                eyebrow="Inventario"
+                title="Stock de productos"
+                :segments="$stockChart['segments']"
+                :centerValue="$stockChart['total']"
+                centerLabel="Productos" />
         </div>
 
-        <div class="col-6 col-lg-3">
-            <div class="stat-card">
-                <div class="stat-card-icon stat-icon-green">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#4ade80" viewBox="0 0 16 16">
-                        <path d="M0 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z"/>
-                    </svg>
+        <div class="col-12 col-lg-6">
+            <x-admin.donut-chart
+                eyebrow="Finanzas"
+                title="Ganancias reales"
+                :segments="$gananciaChart['segments']"
+                centerValue="${{ number_format($gananciaChart['ganancia'], 0, ',', '.') }}"
+                centerLabel="Ganancia neta">
+                <div class="donut-summary">
+                    <div class="donut-summary-row">
+                        <span>Ingresos totales</span>
+                        <strong>${{ number_format($gananciaChart['ingresos'], 0, ',', '.') }}</strong>
+                    </div>
+                    <div class="donut-summary-row">
+                        <span>Costo de productos</span>
+                        <strong>${{ number_format($gananciaChart['costos'], 0, ',', '.') }}</strong>
+                    </div>
                 </div>
-                <div class="stat-card-value">{{ number_format($stats['stock_total']) }}</div>
-                <div class="stat-card-label">Unidades en stock</div>
-            </div>
-        </div>
-
-        <div class="col-6 col-lg-3">
-            <div class="stat-card">
-                <div class="stat-card-icon stat-icon-blue">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#60a5fa" viewBox="0 0 16 16">
-                        <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783"/>
-                    </svg>
-                </div>
-                <div class="stat-card-value">{{ $stats['categorias'] }}</div>
-                <div class="stat-card-label">Categorías</div>
-            </div>
-        </div>
-
-        <div class="col-6 col-lg-3">
-            <div class="stat-card stat-card-alert">
-                <div class="stat-card-icon stat-icon-amber">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#fbbf24" viewBox="0 0 16 16">
-                        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-                    </svg>
-                </div>
-                <div class="stat-card-value {{ $stats['sin_stock'] > 0 ? 'text-danger-glow' : '' }}">{{ $stats['sin_stock'] }}</div>
-                <div class="stat-card-label">Sin stock</div>
-            </div>
+            </x-admin.donut-chart>
         </div>
 
     </div>
 
-    {{-- Últimos productos agregados --}}
-    <div class="admin-card" style="padding:0; overflow:hidden;">
-        <div class="dash-section-header">
-            <div>
-                <p class="dash-section-eyebrow">Recientes</p>
-                <h6 class="dash-section-title">Últimos productos agregados</h6>
+    {{-- Secciones de actividad reciente --}}
+    <div class="row g-3 g-md-4">
+
+        {{-- Pedidos recientes --}}
+        <div class="col-12 col-lg-6">
+            <div class="admin-card" style="padding:0; overflow:hidden;">
+                <div class="dash-section-header">
+                    <div>
+                        <p class="dash-section-eyebrow">Recientes</p>
+                        <h6 class="dash-section-title">Últimos pedidos</h6>
+                    </div>
+                    <a href="{{ route('admin.pedidos') }}" class="btn btn-mars btn-sm px-3" style="font-size:0.78rem; white-space:nowrap;">Ver todos</a>
+                </div>
+
+                <div class="dash-product-list">
+                    @forelse($pedidosRecientes as $pedido)
+                    <div class="dash-product-row">
+                        <div class="dash-product-info">
+                            <div class="prod-thumb-placeholder">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5 8 5.961 14.154 3.5zM15 4.239l-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.761V6.838L1 4.239v7.923zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.35a1.5 1.5 0 0 1-.857 1.355l-6.65 2.66a1.5 1.5 0 0 1-1.086 0l-6.65-2.66A1.5 1.5 0 0 1 0 11.85V3.5a.5.5 0 0 1 .314-.464z"/>
+                                </svg>
+                            </div>
+                            <div style="min-width:0;">
+                                <p class="prod-cell-name fw-semibold mb-0" style="color:#e2e8f0; font-size:0.875rem;">{{ $pedido->numero_pedido ?? '#' . $pedido->id }}</p>
+                                <span class="text-secondary" style="font-size:.78rem;">
+                                    {{ trim(($pedido->nombre_cliente ?? $pedido->usuario?->nombre ?? '—') . ' ' . ($pedido->apellido_cliente ?? '')) }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="dash-product-meta">
+                            <span class="dash-price">${{ number_format($pedido->total, 0, ',', '.') }}</span>
+                            <span class="badge-estado {{ \App\Models\VentaCabecera::estadoBadgeClass($pedido->estado) }}">
+                                {{ \App\Models\VentaCabecera::estadoLabel($pedido->estado) }}
+                            </span>
+                        </div>
+                    </div>
+                    @empty
+                    <div class="dash-empty-row">No hay pedidos registrados aún.</div>
+                    @endforelse
+                </div>
             </div>
-            <a href="{{ route('admin.productos') }}" class="btn btn-mars btn-sm px-3" style="font-size:0.78rem; white-space:nowrap;">Ver todos</a>
         </div>
 
-        <div class="dash-product-list">
-            @forelse($ultimos as $p)
-            <div class="dash-product-row">
-                <div class="dash-product-info">
-                    @if($p->imagen)
-                        <img src="{{ asset('storage/' . $p->imagen) }}" class="prod-thumb" alt="{{ $p->nombre }}">
-                    @else
-                        <div class="prod-thumb-placeholder">?</div>
-                    @endif
-                    <div style="min-width:0;">
-                        <p class="prod-cell-name fw-semibold mb-0" style="color:#e2e8f0; font-size:0.875rem;">{{ $p->nombre }}</p>
-                        @if($p->categoria)
-                            <span class="cat-badge" style="margin-top:5px; display:inline-block;">{{ $p->categoria->nombre }}</span>
-                        @endif
+        {{-- Últimos productos agregados --}}
+        <div class="col-12 col-lg-6">
+            <div class="admin-card" style="padding:0; overflow:hidden;">
+                <div class="dash-section-header">
+                    <div>
+                        <p class="dash-section-eyebrow">Recientes</p>
+                        <h6 class="dash-section-title">Últimos productos agregados</h6>
                     </div>
+                    <a href="{{ route('admin.productos') }}" class="btn btn-mars btn-sm px-3" style="font-size:0.78rem; white-space:nowrap;">Ver todos</a>
                 </div>
-                <div class="dash-product-meta">
-                    <span class="dash-price">${{ number_format($p->precio_venta, 2) }}</span>
-                    @if($p->stock == 0)
-                        <span class="stock-badge stock-empty"><span class="stock-dot"></span>Sin stock</span>
-                    @elseif($p->stock <= 5)
-                        <span class="stock-badge stock-low"><span class="stock-dot"></span>{{ $p->stock }} u.</span>
-                    @else
-                        <span class="stock-badge stock-ok"><span class="stock-dot"></span>{{ $p->stock }} u.</span>
-                    @endif
+
+                <div class="dash-product-list">
+                    @forelse($ultimos as $p)
+                    <div class="dash-product-row">
+                        <div class="dash-product-info">
+                            @if($p->imagen)
+                                <img src="{{ asset('storage/' . $p->imagen) }}" class="prod-thumb" alt="{{ $p->nombre }}">
+                            @else
+                                <div class="prod-thumb-placeholder">?</div>
+                            @endif
+                            <div style="min-width:0;">
+                                <p class="prod-cell-name fw-semibold mb-0" style="color:#e2e8f0; font-size:0.875rem;">{{ $p->nombre }}</p>
+                                @if($p->categoria)
+                                    <span class="cat-badge" style="margin-top:5px; display:inline-block;">{{ $p->categoria->nombre }}</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="dash-product-meta">
+                            <span class="dash-price">${{ number_format($p->precio_venta, 2) }}</span>
+                            @if($p->stock == 0)
+                                <span class="stock-badge stock-empty"><span class="stock-dot"></span>Sin stock</span>
+                            @elseif($p->stock <= 5)
+                                <span class="stock-badge stock-low"><span class="stock-dot"></span>{{ $p->stock }} u.</span>
+                            @else
+                                <span class="stock-badge stock-ok"><span class="stock-dot"></span>{{ $p->stock }} u.</span>
+                            @endif
+                        </div>
+                    </div>
+                    @empty
+                    <div class="dash-empty-row">No hay productos cargados aún.</div>
+                    @endforelse
                 </div>
             </div>
-            @empty
-            <div class="dash-empty-row">No hay productos cargados aún.</div>
-            @endforelse
         </div>
+
     </div>
 
 </div>

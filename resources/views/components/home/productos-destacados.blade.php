@@ -1,4 +1,4 @@
-@props(['productos'])
+@props(['productos', 'favoritoIds' => []])
 
 <section class="container py-3 mb-4">
     <div class="d-flex align-items-end justify-content-between mb-5">
@@ -12,7 +12,7 @@
 
     <div class="row g-4">
         @foreach($productos as $producto)
-            <x-producto-card :producto="$producto" :id="$producto->id" col-class="col-12 col-sm-6 col-lg-3" />
+            <x-producto-card :producto="$producto" :id="$producto->id" :favoritoIds="$favoritoIds" col-class="col-12 col-sm-6 col-lg-3" />
         @endforeach
     </div>
 </section>

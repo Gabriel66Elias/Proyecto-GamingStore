@@ -2,22 +2,6 @@
      @extends('layout.main')
      @section('titulo', 'Pedido Confirmado')
      @section('contenido')
-         <style>
-             /* Tarjeta estática con brillo sutil. No usa elevación para transmitir un estado final (UX). */
-             .card-estado {
-                 background: linear-gradient(145deg, #1a1d27 0%, #11131A 100%) !important;
-                 border: 2px solid transparent !important; 
-                 border-radius: 16px;
-                 transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
-             }
-     
-             .card-estado:hover {
-                 transform: none !important;
-                 border-color: #FF3B3B !important; 
-                 box-shadow: 0 0 20px rgba(255, 59, 59, 0.15) !important;
-             }
-         </style>
-     
          <div class="container mt-5 mb-5" style="min-height: 70vh;">
              
              <div class="mb-4">
@@ -47,9 +31,23 @@
                              
                              {{-- Contenedor vacío: El texto real será inyectado por JS dependiendo de 
                                   lo que el usuario haya seleccionado en la página anterior. --}}
-                             <p id="mensaje-envio" class="text-secondary fs-5 mb-5">
+                             <p id="numero-pedido" class="fw-bold mb-2" style="font-size:1rem; color:#FF3B3B; letter-spacing:1px;"></p>
+                             <p id="mensaje-envio" class="text-secondary fs-5 mb-4">
                                  Cargando información del envío...
                              </p>
+
+                             <div id="aviso-transferencia" class="mb-4 text-start" style="display:none;background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.2);border-radius:10px;padding:1rem 1.1rem;">
+                                 <div class="d-flex align-items-center gap-2 mb-1">
+                                     <img src="{{ asset('assets/bank.svg') }}" style="width:14px;filter:invert(.9) sepia(1) saturate(2) hue-rotate(-10deg);">
+                                     <span style="font-size:.85rem;font-weight:700;color:#fbbf24;">Falta un paso: subí tu comprobante</span>
+                                 </div>
+                                 <p style="font-size:.82rem;color:#94a3b8;margin:0 0 .85rem;">
+                                     Para confirmar tu pago por transferencia, subí el comprobante desde tu perfil.
+                                 </p>
+                                 <a href="/mi-perfil" class="btn btn-sm fw-bold px-3" style="background:#fbbf24;color:#1a1306;border-radius:7px;font-size:.8rem;">
+                                     Ir a mi perfil
+                                 </a>
+                             </div>
      
                              <div class="d-grid gap-2 col-10 mx-auto">
                                  <a href="/" class="btn btn-mars btn-lg py-3 fw-bold" style="border-radius: 0.8rem; letter-spacing: 1px;">
@@ -64,29 +62,7 @@
              </div>
          </div>
      
-         {{-- ======================================================================
-              SCRIPT DE FINALIZACIÓN Y RENDERIZADO CONDICIONAL
-              ====================================================================== --}}
-         <script>
-             document.addEventListener('DOMContentLoaded', () => {
-                 // 1. Limpieza de UI: Oculta el contador rojo de la navbar (porque el carrito ya se vació)
-                 const badge = document.getElementById('cart-count-badge');
-                 if(badge) badge.classList.add('d-none');
-     
-                 // 2. Lógica Dinámica: Recuperamos el método de envío que la página 
-                 // de checkout (comercializacion.blade.php) dejó guardado en la memoria local.
-                 const mensajeEl = document.getElementById('mensaje-envio');
-                 const metodoEnvio = localStorage.getItem('metodo_envio_final');
-     
-                 // Modificamos el DOM en base a la decisión del cliente
-                 if (metodoEnvio === 'retiro') {
-                     mensajeEl.innerHTML = 'Te avisaremos por correo cuando tu pedido esté listo para ser retirado en nuestro local.';
-                 } else {
-                     mensajeEl.innerHTML = 'Se le enviará a su correo el código de seguimiento de su pedido.';
-                 }
-     
-                 // 3. Limpieza de Memoria: Borramos la variable para no ensuciar el disco del usuario.
-                 localStorage.removeItem('metodo_envio_final');
-             });
-         </script>
+         @push('scripts')
+         <script src="{{ asset('js/confirmacionpedido.js') }}"></script>
+         @endpush
      @endsection

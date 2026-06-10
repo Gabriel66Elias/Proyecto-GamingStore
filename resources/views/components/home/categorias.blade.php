@@ -9,7 +9,7 @@
 
         <div class="col-6 col-md-3">
             <a href="/catalogo" class="text-decoration-none">
-                <div class="card card-categoria p-2 shadow-sm">
+                <div class="card card-categoria p-2">
                     <div class="card-body d-flex flex-column align-items-center justify-content-center w-100">
                         <div class="icono-categoria mb-3">
                             <img src="{{ asset('assets/playstation.svg') }}" alt="Consolas" style="width: 30px; height: 30px; filter: invert(1);">
@@ -23,7 +23,7 @@
 
         <div class="col-6 col-md-3">
             <a href="/catalogo" class="text-decoration-none">
-                <div class="card card-categoria p-2 shadow-sm">
+                <div class="card card-categoria p-2">
                     <div class="card-body d-flex flex-column align-items-center justify-content-center w-100">
                         <div class="icono-categoria mb-3">
                             <img src="{{ asset('assets/mouse3.svg') }}" alt="Periféricos" style="width: 30px; height: 30px; filter: invert(1);">
@@ -37,7 +37,7 @@
 
         <div class="col-6 col-md-3">
             <a href="/catalogo" class="text-decoration-none">
-                <div class="card card-categoria p-2 shadow-sm">
+                <div class="card card-categoria p-2">
                     <div class="card-body d-flex flex-column align-items-center justify-content-center w-100">
                         <div class="icono-categoria mb-3">
                             <img src="{{ asset('assets/tv.svg') }}" alt="Monitores" style="width: 30px; height: 30px; filter: invert(1);">
@@ -51,7 +51,7 @@
 
         <div class="col-6 col-md-3">
             <a href="/catalogo" class="text-decoration-none">
-                <div class="card card-categoria p-2 shadow-sm">
+                <div class="card card-categoria p-2">
                     <div class="card-body d-flex flex-column align-items-center justify-content-center w-100">
                         <div class="icono-categoria mb-3">
                             <img src="{{ asset('assets/cpu.svg') }}" alt="Hardware" style="width: 30px; height: 30px; filter: invert(1);">

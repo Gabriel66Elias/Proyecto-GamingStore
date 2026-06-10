@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Resena;
 use App\Models\Rol;
 use App\Models\Usuario;
+use App\Models\VentaCabecera;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\CarritoController;
 
 class AuthController extends Controller
 {
@@ -23,6 +26,21 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
+
+            // Fusionar carrito de invitado (sesión) al carrito de DB del usuario
+            CarritoController::fusionarCarritoGuest();
+
+            if (Auth::user()->rol?->nombre === 'admin') {
+                return redirect()->intended(route('admin.dashboard'));
+            }
+
+            // Si quedó guardada una URL de admin de un intento anterior (de
+            // otra cuenta), la descartamos para no enviar a un cliente ahí.
+            $intended = $request->session()->get('url.intended');
+            if ($intended && str_starts_with($intended, url('/admin'))) {
+                $request->session()->forget('url.intended');
+            }
+
             return redirect()->intended('/');
         }
 
@@ -55,6 +73,9 @@ class AuthController extends Controller
 
         Auth::login($usuario);
 
+        // Fusionar carrito de invitado al nuevo carrito del usuario registrado
+        CarritoController::fusionarCarritoGuest();
+
         return redirect('/');
     }
 
@@ -69,6 +90,19 @@ class AuthController extends Controller
     public function perfil()
     {
         $usuario = Auth::user();
-        return view('perfilusuario', compact('usuario'));
+
+        $pedidos = VentaCabecera::where('user_id', $usuario->id)
+            ->whereNotIn('estado', ['carrito'])
+            ->with('detalles.producto')
+            ->latest('fecha_venta')
+            ->get();
+
+        $favoritos = $usuario->favoritos()->with('categoria')->latest('favoritos.created_at')->get();
+
+        $resenas = Resena::where('usuario_id', $usuario->id)
+            ->get()
+            ->keyBy(fn ($r) => $r->venta_id . '-' . $r->producto_id);
+
+        return view('perfilusuario', compact('usuario', 'pedidos', 'favoritos', 'resenas'));
     }
 }

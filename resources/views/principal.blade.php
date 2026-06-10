@@ -93,7 +93,7 @@
          PRODUCTOS DESTACADOS (sólo si hay productos)
          ======================================================== --}}
     @if(isset($productosDestacados) && $productosDestacados->isNotEmpty())
-        <x-home.productos-destacados :productos="$productosDestacados" />
+        <x-home.productos-destacados :productos="$productosDestacados" :favoritoIds="$favoritoIds ?? []" />
     @endif
 
     {{-- ========================================================

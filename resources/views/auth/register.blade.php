@@ -9,12 +9,10 @@
 <div class="login-page">
     <div class="login-wrapper">
 
-        {{-- Logo --}}
         <div class="login-logo">
             <a href="/">GAMING<span class="text-mars">STATION</span></a>
         </div>
 
-        {{-- Tarjeta del formulario --}}
         <div class="login-card">
 
             <h1 class="login-card-title">Crear Cuenta</h1>

@@ -5,53 +5,70 @@ namespace App\Http\Controllers;
 use App\Models\Categoria;
 use App\Models\Consulta;
 use App\Models\Producto;
+use App\Models\Resena;
+use App\Models\VentaCabecera;
+use App\Models\VentaDetalle;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
-    private function soloAdmin()
-    {
-        if (!Auth::check() || Auth::user()->rol->nombre !== 'admin') {
-            abort(403, 'Acceso denegado.');
-        }
-    }
-
     public function dashboard()
     {
-        $this->soloAdmin();
+        $stockChart = [
+            'total' => Producto::count(),
+            'segments' => [
+                ['label' => 'Buen stock', 'value' => Producto::where('stock', '>', 5)->count(), 'color' => '#4ade80'],
+                ['label' => 'Poco stock', 'value' => Producto::whereBetween('stock', [1, 5])->count(), 'color' => '#fbbf24'],
+                ['label' => 'Sin stock',  'value' => Producto::where('stock', 0)->count(), 'color' => '#FF3B3B'],
+            ],
+        ];
 
-        $stats = [
-            'total_productos' => Producto::count(),
-            'categorias'      => Categoria::count(),
-            'stock_total'     => Producto::sum('stock'),
-            'sin_stock'       => Producto::where('stock', 0)->count(),
+        $detallesVendidos = VentaDetalle::whereHas('venta', fn ($q) => $q->whereNotIn('estado', ['carrito', 'cancelado']));
+
+        $ingresos = (clone $detallesVendidos)->sum('subtotal');
+        $costos   = (clone $detallesVendidos)
+            ->join('productos', 'ventas_detalle.producto_id', '=', 'productos.id')
+            ->sum(DB::raw('ventas_detalle.cantidad * productos.precio_compra'));
+        $ganancia = $ingresos - $costos;
+
+        $gananciaChart = [
+            'ingresos' => $ingresos,
+            'costos'   => $costos,
+            'ganancia' => $ganancia,
+            'segments' => [
+                ['label' => 'Ganancia neta',      'value' => max($ganancia, 0), 'color' => '#4ade80'],
+                ['label' => 'Costo de productos', 'value' => $costos, 'color' => '#64748b'],
+            ],
         ];
 
         $ultimos = Producto::with('categoria')->latest()->limit(5)->get();
 
-        return view('adminpanel.dashboard', compact('stats', 'ultimos'));
+        $pedidosRecientes = VentaCabecera::with('usuario')
+            ->whereNotIn('estado', ['carrito'])
+            ->latest('fecha_venta')
+            ->limit(5)
+            ->get();
+
+        return view('adminpanel.dashboard', compact('stockChart', 'gananciaChart', 'ultimos', 'pedidosRecientes'));
     }
 
     public function productos()
     {
-        $this->soloAdmin();
         $productos = Producto::with('categoria')->orderBy('nombre')->paginate(15);
         return view('adminpanel.productos', compact('productos'));
     }
 
     public function create()
     {
-        $this->soloAdmin();
         $categorias = Categoria::all();
         return view('adminpanel.productos-crear', compact('categorias'));
     }
 
     public function store(Request $request)
     {
-        $this->soloAdmin();
-
         $data = $request->validate([
             'nombre'        => 'required|string|max:100|unique:productos,nombre',
             'categoria_id'  => 'required|exists:categorias,id',
@@ -80,7 +97,6 @@ class AdminController extends Controller
 
     public function edit($id)
     {
-        $this->soloAdmin();
         $producto   = Producto::findOrFail($id);
         $categorias = Categoria::all();
         return view('adminpanel.productos-editar', compact('producto', 'categorias'));
@@ -88,8 +104,6 @@ class AdminController extends Controller
 
     public function update(Request $request, $id)
     {
-        $this->soloAdmin();
-
         $producto = Producto::findOrFail($id);
 
         $data = $request->validate([
@@ -123,8 +137,6 @@ class AdminController extends Controller
 
     public function destroy($id)
     {
-        $this->soloAdmin();
-
         $producto = Producto::findOrFail($id);
         $producto->delete();
 
@@ -133,35 +145,135 @@ class AdminController extends Controller
 
     public function stock()
     {
-        $this->soloAdmin();
         $productos = Producto::with('categoria')->orderBy('stock')->get();
         return view('adminpanel.stock', compact('productos'));
     }
 
     public function consultas()
     {
-        $this->soloAdmin();
         $consultas = Consulta::latest()->paginate(20);
-        return view('adminpanel.consultas', compact('consultas'));
+
+        $resenas = Resena::with(['usuario', 'producto'])
+            ->latest()
+            ->paginate(20, ['*'], 'resenas_page');
+
+        return view('adminpanel.consultas', compact('consultas', 'resenas'));
     }
 
     public function marcarLeida($id)
     {
-        $this->soloAdmin();
         Consulta::findOrFail($id)->update(['leida' => true]);
         return response()->json(['ok' => true]);
     }
 
     public function destroyConsulta($id)
     {
-        $this->soloAdmin();
         Consulta::findOrFail($id)->delete();
         return redirect()->route('admin.consultas')->with('success', 'Consulta eliminada correctamente.');
     }
 
+    public function destroyResena($id)
+    {
+        Resena::findOrFail($id)->delete();
+        return redirect()->route('admin.consultas')->with('success', 'Reseña eliminada correctamente.');
+    }
+
     public function pedidos()
     {
-        $this->soloAdmin();
-        return view('adminpanel.pedidos');
+        $pedidos = VentaCabecera::with(['detalles.producto', 'usuario'])
+            ->whereNotIn('estado', ['carrito'])
+            ->latest('fecha_venta')
+            ->paginate(25);
+
+        $stats = [
+            'total'      => VentaCabecera::whereNotIn('estado', ['carrito'])->count(),
+            'pendiente'  => VentaCabecera::whereIn('estado', ['pendiente', 'confirmado'])->count(),
+            'en_proceso' => VentaCabecera::where('estado', 'en_proceso')->count(),
+            'enviado'    => VentaCabecera::whereIn('estado', ['enviado', 'en_camino'])->count(),
+        ];
+
+        return view('adminpanel.pedidos', compact('pedidos', 'stats'));
+    }
+
+    public function exportarPedidosPdf(Request $request)
+    {
+        $request->validate([
+            'desde'  => 'nullable|date',
+            'hasta'  => 'nullable|date',
+            'estado' => 'nullable|string',
+        ]);
+
+        $query = VentaCabecera::with(['detalles', 'usuario'])
+            ->whereNotIn('estado', ['carrito']);
+
+        if ($request->filled('desde')) {
+            $query->whereDate('fecha_venta', '>=', $request->desde);
+        }
+        if ($request->filled('hasta')) {
+            $query->whereDate('fecha_venta', '<=', $request->hasta);
+        }
+        if ($request->filled('estado')) {
+            $query->where('estado', $request->estado);
+        }
+
+        $pedidos = $query->orderBy('fecha_venta')->get();
+        $total   = $pedidos->sum('total');
+
+        $pdf = Pdf::loadView('adminpanel.pedidos-pdf', [
+            'pedidos' => $pedidos,
+            'total'   => $total,
+            'desde'   => $request->desde,
+            'hasta'   => $request->hasta,
+            'estado'  => $request->estado,
+        ])->setPaper('a4', 'portrait');
+
+        return $pdf->download('registro-ventas-' . now()->format('Y-m-d_His') . '.pdf');
+    }
+
+    public function actualizarEstadoPedido(Request $request, $id)
+    {
+        $request->validate([
+            'estado'             => 'required|in:pendiente,en_proceso,enviado,en_camino,entregado,completado,cancelado',
+            'codigo_seguimiento' => 'nullable|string|max:60',
+        ]);
+
+        $pedido = VentaCabecera::findOrFail($id);
+
+        if ($pedido->estado === 'carrito') {
+            return response()->json(['error' => 'No se puede modificar un carrito activo'], 422);
+        }
+
+        // Si se cancela, restaurar stock
+        if ($request->estado === 'cancelado' && $pedido->estado !== 'cancelado') {
+            foreach ($pedido->detalles()->with('producto')->get() as $item) {
+                if ($item->producto) {
+                    $item->producto->increment('stock', $item->cantidad);
+                }
+            }
+        }
+
+        // Si se reactiva desde cancelado, volver a descontar stock
+        if ($pedido->estado === 'cancelado' && $request->estado !== 'cancelado') {
+            foreach ($pedido->detalles()->with('producto')->get() as $item) {
+                if ($item->producto && $item->producto->stock >= $item->cantidad) {
+                    $item->producto->decrement('stock', $item->cantidad);
+                }
+            }
+        }
+
+        $datosActualizar = ['estado' => $request->estado];
+
+        if ($request->filled('codigo_seguimiento')) {
+            $datosActualizar['codigo_seguimiento'] = $request->codigo_seguimiento;
+        }
+
+        $pedido->update($datosActualizar);
+
+        return response()->json([
+            'ok'                 => true,
+            'estado'             => $request->estado,
+            'label'              => VentaCabecera::estadoLabel($request->estado),
+            'codigo_seguimiento' => $pedido->codigo_seguimiento,
+        ]);
     }
 }

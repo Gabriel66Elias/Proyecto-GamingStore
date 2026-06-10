@@ -112,21 +112,34 @@
     border-radius: 2px;
 }
 
-/* --- CATEGORÍAS (ícono interno rediseñado) --- */
+/* --- CATEGORÍAS --- */
 .icono-categoria {
-    width: 65px;
-    height: 65px;
-    background-color: rgba(255, 59, 59, 0.1);
+    width: 68px;
+    height: 68px;
+    background-color: rgba(255, 59, 59, 0.08);
+    border: 1px solid rgba(255, 59, 59, 0.22);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 0.3s ease, transform 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card-categoria:hover .icono-categoria {
-    background-color: rgba(255, 59, 59, 0.22);
-    transform: scale(1.08);
+    background-color: rgba(255, 59, 59, 0.18);
+    transform: scale(1.07);
+    box-shadow: 0 0 20px rgba(255, 59, 59, 0.18);
+}
+
+.card-categoria h4 {
+    font-size: 1.05rem !important;
+    letter-spacing: 0.4px;
+}
+
+.card-categoria p {
+    font-size: 0.87rem !important;
+    color: #7a8599 !important;
+    line-height: 1.45;
 }
 
 /* --- PRODUCTOS DESTACADOS (link "Ver todos") --- */
@@ -243,11 +256,7 @@
 }
 
 /* --- RESPONSIVE --- */
-@media (max-width: 767.98px) {
-    .hero-principal {
-        height: 88vh;
-    }
-
+@media (max-width: 991.98px) {
     .beneficio-item {
         border-right: none;
         border-bottom: 1px solid #1f222e;
@@ -256,6 +265,24 @@
 
     .beneficio-item:last-child {
         border-bottom: none;
+    }
+}
+
+/* Layout de 2 columnas (col-sm-6): separador vertical entre columnas
+   y sin borde inferior en la última fila (items 3 y 4) */
+@media (min-width: 576px) and (max-width: 991.98px) {
+    .col-sm-6:nth-child(odd) .beneficio-item {
+        border-right: 1px solid #1f222e;
+    }
+
+    .beneficio-item:nth-last-child(-n+2) {
+        border-bottom: none;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .hero-principal {
+        height: 88vh;
     }
 }
 

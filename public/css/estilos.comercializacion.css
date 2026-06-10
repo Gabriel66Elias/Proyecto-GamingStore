@@ -1,0 +1,218 @@
+/* ── Layout ─────────────────────────────────────────── */
+.co-page { background: #0b0c10; min-height: 100vh; padding: 2.5rem 0 4rem; }
+
+/* ── Steps indicator ────────────────────────────────── */
+.co-steps { display: flex; align-items: center; justify-content: center; gap: 0; margin-bottom: 2.5rem; }
+.co-step { display: flex; flex-direction: column; align-items: center; gap: 6px; position: relative; }
+.co-step-num {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 2px solid #2a2d3e; background: #11131a;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .8rem; font-weight: 700; color: #4a5568;
+    transition: all .3s;
+}
+.co-step.active .co-step-num { border-color: #FF3B3B; background: rgba(255,59,59,.15); color: #FF3B3B; }
+.co-step.done .co-step-num { border-color: #22c55e; background: rgba(34,197,94,.15); color: #22c55e; }
+.co-step-label { font-size: .7rem; font-weight: 600; color: #4a5568; text-transform: uppercase; letter-spacing: .5px; }
+.co-step.active .co-step-label { color: #e2e8f0; }
+.co-step-line { width: 60px; height: 1px; background: #1f2235; margin: 0 4px; margin-bottom: 22px; }
+
+/* ── Cards ──────────────────────────────────────────── */
+.co-card {
+    background: #11131a; border: 1px solid #1c1f2e;
+    border-radius: 14px; margin-bottom: 1.25rem;
+    overflow: hidden; transition: border-color .3s;
+}
+.co-card:focus-within { border-color: #2a2d3e; }
+.co-card-head {
+    background: #0d0f18; border-bottom: 1px solid #1c1f2e;
+    padding: .9rem 1.4rem; display: flex; align-items: center; gap: .75rem;
+}
+.co-step-badge {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: rgba(255,59,59,.12); border: 1px solid rgba(255,59,59,.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: .75rem; font-weight: 800; color: #FF3B3B; flex-shrink: 0;
+}
+.co-card-head h5 { font-size: .95rem; font-weight: 700; color: #e2e8f0; margin: 0; }
+.co-card-body { padding: 1.4rem; }
+
+/* ── Inputs ─────────────────────────────────────────── */
+.co-label { font-size: .7rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: .6px; margin-bottom: .35rem; display: block; }
+.co-input {
+    background: #0d0f18 !important; border: 1px solid #1c1f2e !important;
+    color: #e2e8f0 !important; border-radius: 8px !important;
+    padding: .6rem .9rem !important; font-size: .9rem !important;
+    transition: border-color .25s !important;
+}
+.co-input:focus { border-color: #FF3B3B !important; box-shadow: 0 0 0 3px rgba(255,59,59,.08) !important; outline: none !important; }
+.co-input::placeholder { color: #374151 !important; }
+.co-input option { background: #11131a; }
+
+/* ── Option cards (envío / pago) ─────────────────────── */
+.co-opt-label {
+    border: 1.5px solid #1c1f2e; border-radius: 10px;
+    background: #0d0f18; cursor: pointer;
+    padding: .85rem 1rem; transition: all .25s;
+    display: flex; align-items: center; justify-content: space-between;
+}
+.co-opt-label:hover { border-color: #2a2d3e; background: #13161f; }
+.btn-check:checked + .co-opt-label {
+    border-color: #FF3B3B !important; background: rgba(255,59,59,.07) !important;
+    box-shadow: 0 0 0 3px rgba(255,59,59,.08);
+}
+.co-opt-icon {
+    width: 34px; height: 34px; border-radius: 8px;
+    background: rgba(255,255,255,.04); display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: background .25s;
+}
+.btn-check:checked + .co-opt-label .co-opt-icon { background: #FF3B3B; }
+.co-opt-icon img { width: 16px; height: 16px; filter: invert(.5); transition: filter .25s; }
+.btn-check:checked + .co-opt-label .co-opt-icon img { filter: invert(1); }
+
+/* ── Transporte cards ────────────────────────────────── */
+.co-carrier-label {
+    border: 1.5px solid #1c1f2e; border-radius: 10px; background: #0d0f18;
+    cursor: pointer; padding: .8rem 1rem; transition: all .25s;
+    display: flex; align-items: center; gap: .8rem;
+}
+.co-carrier-label:hover { border-color: #2a2d3e; }
+.btn-check:checked + .co-carrier-label { border-color: #FF3B3B; background: rgba(255,59,59,.07); }
+.co-carrier-price { font-size: .85rem; font-weight: 700; }
+
+.co-carrier-logo {
+    width: 56px; height: 56px; flex-shrink: 0;
+    background: #11131a; border: 1px solid #1c1f2e; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+}
+.co-carrier-logo img {
+    max-width: 70%; max-height: 70%;
+    object-fit: contain; border-radius: 5px;
+}
+
+/* ── CP Calculator ───────────────────────────────────── */
+.co-cp-box {
+    background: #0d0f18; border: 1px solid #1c1f2e;
+    border-radius: 10px; padding: 1rem 1.1rem; margin-bottom: 1.2rem;
+}
+.co-cp-result {
+    margin-top: .75rem; padding: .65rem .9rem;
+    border-radius: 8px; font-size: .82rem; font-weight: 600;
+    display: none;
+}
+.co-cp-result.ok { background: rgba(34,197,94,.08); border: 1px solid rgba(34,197,94,.25); color: #4ade80; }
+.co-cp-result.error { background: rgba(239,68,68,.08); border: 1px solid rgba(239,68,68,.25); color: #f87171; }
+
+/* ── Card form (tarjeta) ─────────────────────────────── */
+.co-card-form {
+    background: #0d0f18; border: 1px solid #1c1f2e; border-radius: 10px;
+    padding: 1.2rem; display: none;
+}
+.co-bank-info {
+    background: #0d0f18; border: 1px solid #1c1f2e; border-radius: 10px;
+    padding: 1.2rem; display: none;
+}
+.co-bank-logo {
+    width: 90px; height: 90px; flex-shrink: 0;
+    background: #11131a; border: 1px solid #1c1f2e; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+}
+.co-bank-logo img {
+    max-width: 70%; max-height: 70%;
+    object-fit: contain; border-radius: 6px;
+}
+
+/* ── Order summary (right) ───────────────────────────── */
+.co-summary {
+    background: #11131a; border: 1px solid #1c1f2e;
+    border-radius: 14px; position: sticky; top: 110px;
+}
+.co-summary-head {
+    background: #0d0f18; border-bottom: 1px solid #1c1f2e;
+    padding: 1rem 1.3rem; border-radius: 14px 14px 0 0;
+}
+.co-summary-body { padding: 1.3rem; }
+.co-summary-item { display: flex; align-items: center; gap: .75rem; margin-bottom: .9rem; }
+.co-summary-img {
+    width: 48px; height: 48px; border-radius: 8px; flex-shrink: 0;
+    background: rgba(255,255,255,.04); display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+}
+.co-summary-img img { width: 100%; height: 100%; object-fit: contain; }
+.co-divider { border: none; border-top: 1px solid #1c1f2e; margin: 1rem 0; }
+.co-total-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: .4rem; }
+.co-total-label { font-size: .82rem; color: #64748b; font-weight: 500; }
+.co-total-val { font-size: .85rem; color: #e2e8f0; font-weight: 600; }
+.co-grand-total { font-size: 1.4rem; font-weight: 900; color: #e2e8f0; }
+.co-grand-val { font-size: 1.4rem; font-weight: 900; color: #4ade80; }
+
+/* ── Submit button ───────────────────────────────────── */
+.co-btn-pay {
+    background: linear-gradient(135deg, #FF3B3B, #c92b2b);
+    border: none; color: white; font-weight: 800;
+    font-size: 1rem; letter-spacing: .5px; border-radius: 10px;
+    padding: .9rem; width: 100%; transition: all .25s;
+    text-transform: uppercase;
+}
+.co-btn-pay:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,59,59,.3); }
+.co-btn-pay:disabled { opacity: .6; transform: none; cursor: not-allowed; }
+
+/* ── Security badges ─────────────────────────────────── */
+.co-secure { display: flex; align-items: center; justify-content: center; gap: 1.2rem; margin-top: .9rem; }
+.co-secure-item { display: flex; align-items: center; gap: .35rem; font-size: .7rem; color: #4a5568; }
+.co-secure-item img { width: 13px; opacity: .5; filter: invert(1); }
+
+/* ── Seccion domicilio (oculta) ──────────────────────── */
+.co-domicilio { display: none; margin-top: 1.2rem; padding-top: 1.2rem; border-top: 1px solid #1c1f2e; }
+
+/* ── Provincia custom dropdown ───────────────────────── */
+.prov-dropdown-wrap .dropdown-menu { scrollbar-width: thin; scrollbar-color: #2d313f #11131a; }
+.prov-item:hover { background: rgba(255,59,59,.08) !important; color: #e2e8f0 !important; }
+
+/* ── Overlay de simulación de pago ───────────────────── */
+.pp-overlay {
+    position: fixed; inset: 0; z-index: 10000;
+    background: rgba(5,6,10,.85); backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 1rem;
+}
+.pp-box {
+    background: #11131a; border: 1px solid #1c1f2e; border-radius: 16px;
+    padding: 2.75rem 2.5rem; text-align: center;
+    width: 100%; max-width: 360px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.5);
+}
+.pp-spinner {
+    width: 64px; height: 64px; margin: 0 auto 1.5rem;
+    border: 4px solid #1c1f2e; border-top-color: #FF3B3B;
+    border-radius: 50%;
+    animation: pp-spin .8s linear infinite;
+}
+@keyframes pp-spin { to { transform: rotate(360deg); } }
+
+.pp-success {
+    width: 64px; height: 64px; margin: 0 auto 1.5rem;
+    border-radius: 50%; background: rgba(34,197,94,.12);
+    border: 2px solid #22c55e;
+    display: flex; align-items: center; justify-content: center;
+    animation: pp-pop .35s ease;
+}
+@keyframes pp-pop {
+    from { transform: scale(.6); opacity: 0; }
+    to   { transform: scale(1);  opacity: 1; }
+}
+.pp-title { font-size: 1.05rem; font-weight: 800; color: #e2e8f0; margin: 0 0 .5rem; }
+.pp-subtitle { font-size: .82rem; color: #64748b; margin: 0; line-height: 1.5; }
+
+/* ── Responsive ─────────────────────────────────────── */
+@media (max-width: 576px) {
+    .co-page { padding: 1.5rem 0 2.5rem; }
+    .co-step-line { width: 28px; }
+    .co-step-label { font-size: .58rem; }
+    .co-card-body { padding: 1rem; }
+    .co-steps { margin-bottom: 1.8rem; }
+    .co-carrier-label { flex-wrap: wrap; gap: .5rem; }
+    .co-opt-label { flex-wrap: wrap; gap: .5rem; }
+}

@@ -10,6 +10,8 @@ use App\Http\Controllers\RolController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CarritoController;
+use App\Http\Controllers\FavoritoController;
+use App\Http\Controllers\ResenaController;
 /* --------------------------------------------------------------------------
    RUTAS ESTÁTICAS (GET)
    Se usa el método GET porque el usuario solo está "pidiendo" ver una página.
@@ -19,7 +21,10 @@ use App\Http\Controllers\CarritoController;
 
 Route::get('/', function () {
     $productosDestacados = \App\Models\Producto::inRandomOrder()->limit(4)->get();
-    return view('principal', compact('productosDestacados'));
+    $favoritoIds = \Illuminate\Support\Facades\Auth::check()
+        ? \Illuminate\Support\Facades\Auth::user()->favoritos()->pluck('productos.id')->toArray()
+        : [];
+    return view('principal', compact('productosDestacados', 'favoritoIds'));
 });
 
 Route::get('/quienes-somos', function () {
@@ -27,7 +32,7 @@ Route::get('/quienes-somos', function () {
 });
 
 Route::get('/comercializacion', function () {
-    return view('comercializacion'); // Pantalla de Checkout
+    return view('comercializacion');
 });
 
 Route::get('/terminos', function () {
@@ -70,10 +75,6 @@ Route::get('/catalogo', [ProductoController::class, 'index']);
 // parámetro al método 'show' del ProductoController.
 Route::get('/consulta/{id}', [ProductoController::class, 'show']);
 
-Route::resource('usuarios', UsuarioController::class);
-
-Route::resource('roles', RolController::class);
-
 /* --------------------------------------------------------------------------
    RUTAS DE AUTENTICACIÓN
    -------------------------------------------------------------------------- */
@@ -84,24 +85,37 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/mi-perfil', [AuthController::class, 'perfil'])->middleware('auth')->name('perfil');
 
-// Carrito — datos es público (devuelve vacío para invitados), el resto requiere auth
-Route::get('/carrito/datos', [CarritoController::class, 'datos'])->name('carrito.datos');
+// Carrito — agregar/actualizar/eliminar/vaciar funcionan para invitados y usuarios
+// Solo confirmar requiere auth (para crear la venta en la DB)
+Route::get('/carrito/datos',         [CarritoController::class, 'datos'])->name('carrito.datos');
+Route::post('/carrito/agregar',      [CarritoController::class, 'agregar'])->name('carrito.agregar');
+Route::post('/carrito/vaciar',       [CarritoController::class, 'vaciar'])->name('carrito.vaciar');
+Route::patch('/carrito/{id}',        [CarritoController::class, 'actualizar'])->name('carrito.actualizar');
+Route::delete('/carrito/{id}',       [CarritoController::class, 'eliminar'])->name('carrito.eliminar');
 
 Route::middleware('auth')->group(function () {
-    Route::post('/carrito/agregar',      [CarritoController::class, 'agregar'])->name('carrito.agregar');
-    Route::post('/carrito/vaciar',       [CarritoController::class, 'vaciar'])->name('carrito.vaciar');
-    Route::post('/carrito/confirmar',    [CarritoController::class, 'confirmar'])->name('carrito.confirmar');
-    Route::patch('/carrito/{id}',        [CarritoController::class, 'actualizar'])->name('carrito.actualizar');
-    Route::delete('/carrito/{id}',       [CarritoController::class, 'eliminar'])->name('carrito.eliminar');
+    Route::post('/carrito/confirmar', [CarritoController::class, 'confirmar'])->name('carrito.confirmar');
+    Route::post('/favoritos/{producto}/toggle', [FavoritoController::class, 'toggle'])->name('favoritos.toggle');
+    Route::post('/resenas', [ResenaController::class, 'store'])->name('resenas.store');
 });
 
-Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+// Gestión de usuarios y roles (solo admin). Rutas resource limitadas a los
+// metodos realmente implementados en los controllers.
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    Route::resource('usuarios', UsuarioController::class)->only(['index', 'create', 'store', 'destroy']);
+    Route::resource('roles', RolController::class)->only(['index', 'store', 'destroy']);
+});
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard',               [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/stock',                   [AdminController::class, 'stock'])->name('stock');
     Route::get('/consultas',                    [AdminController::class, 'consultas'])->name('consultas');
     Route::patch('/consultas/{id}/leida',       [AdminController::class, 'marcarLeida'])->name('consultas.leida');
     Route::delete('/consultas/{id}',            [AdminController::class, 'destroyConsulta'])->name('consultas.destroy');
-    Route::get('/pedidos',                      [AdminController::class, 'pedidos'])->name('pedidos');
+    Route::delete('/resenas/{id}',              [AdminController::class, 'destroyResena'])->name('resenas.destroy');
+    Route::get('/pedidos',                           [AdminController::class, 'pedidos'])->name('pedidos');
+    Route::get('/pedidos/exportar-pdf',              [AdminController::class, 'exportarPedidosPdf'])->name('pedidos.exportar-pdf');
+    Route::patch('/pedidos/{id}/estado',             [AdminController::class, 'actualizarEstadoPedido'])->name('pedidos.estado');
 
     // CRUD de productos
     Route::get('/productos',               [AdminController::class, 'productos'])->name('productos');

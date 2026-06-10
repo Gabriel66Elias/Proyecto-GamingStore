@@ -12,9 +12,9 @@
      
              {{-- BOTON VOLVER--}}
              <div class="mb-4">
-                 <a href="/" class="text-decoration-none text-secondary d-inline-flex align-items-center gap-2 hover-text-mars" style="transition: color 0.3s;" onmouseover="this.style.color='#FF3B3B'" onmouseout="this.style.color='#6c757d'">
-                     <img src="{{ asset('assets/caret-left.svg') }}" alt="Volver" style="width: 18px; height: 18px; filter: invert(0.6);">
-                     <span class="fw-semibold">Volver al inicio</span>
+                 <a href="/" class="ip-back-link">
+                     <img src="{{ asset('assets/caret-left.svg') }}" alt="" style="width:16px;height:16px;filter:invert(0.6);">
+                     Volver al inicio
                  </a>
              </div>
              
@@ -50,7 +50,7 @@
                                       Le pasamos dinámicamente las variables de PHP al componente Blade 
                                       usando los dos puntos (:producto y :id) para que la tarjeta se 
                                       dibuje con los datos correctos. --}}
-                                 <x-producto-card :producto="$producto" :id="$producto->id" />
+                                 <x-producto-card :producto="$producto" :id="$producto->id" :favoritoIds="$favoritoIds" />
                              @endforeach
                          </div>
                      </div>

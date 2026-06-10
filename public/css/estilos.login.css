@@ -1,43 +1,69 @@
 /* ==========================================================================
    PROYECTO: GamingStation
    ARCHIVO: estilos.login.css
-   Estilos de las páginas de inicio de sesión y registro.
    ========================================================================== */
 
-/* ── Contenedor de página ── */
+/* Elimina el margen superior del footer en login/register */
+body:has(.login-page) footer {
+    margin-top: 0 !important;
+}
+
+/* ── Fondo de página ── */
 .login-page {
     min-height: calc(100vh - 67px);
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 2rem 1rem;
+    background: linear-gradient(160deg, #04050b 0%, #080a12 55%, #05060e 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Glow decorativo detrás de la card */
+.login-page::before {
+    content: '';
+    position: absolute;
+    width: 520px;
+    height: 520px;
+    background: radial-gradient(circle, rgba(255, 59, 59, 0.06) 0%, transparent 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
 }
 
 .login-wrapper {
     width: 100%;
     max-width: 420px;
+    position: relative;
+    z-index: 1;
 }
 
-/* ── Logo en la parte superior ── */
+/* ── Logo ── */
 .login-logo {
     text-align: center;
     margin-bottom: 2rem;
 }
 .login-logo a {
     text-decoration: none;
-    font-size: 1.4rem;
+    font-size: 1.45rem;
     font-weight: 900;
     letter-spacing: -0.5px;
     color: #ffffff;
+    text-shadow: 0 0 30px rgba(255, 59, 59, 0.25);
 }
 
-/* ── Tarjeta del formulario ── */
+/* ── Tarjeta ── */
 .login-card {
-    background-color: #11131A;
-    border: 1px solid #1f222e;
-    border-radius: 16px;
+    background: linear-gradient(145deg, #0e1018 0%, #0b0d15 100%);
+    border: 1px solid #1a1d2a;
+    border-radius: 18px;
     padding: 2.5rem 2.25rem;
-    /* Sin movimiento al hacer hover */
+    box-shadow:
+        0 0 0 1px rgba(255,255,255,0.03),
+        0 20px 60px rgba(0, 0, 0, 0.6),
+        0 0 40px rgba(255, 59, 59, 0.04);
     transform: none !important;
     transition: none !important;
 }
@@ -53,7 +79,7 @@
 }
 .login-card-subtitle {
     font-size: 0.82rem;
-    color: #64748b;
+    color: #4a5568;
     text-align: center;
     margin: 0 0 2rem;
 }
@@ -64,8 +90,8 @@
     align-items: flex-start;
     gap: 0.6rem;
     background: rgba(255, 59, 59, 0.07);
-    border: 1px solid rgba(255, 59, 59, 0.2);
-    border-radius: 8px;
+    border: 1px solid rgba(255, 59, 59, 0.18);
+    border-radius: 10px;
     padding: 0.75rem 1rem;
     color: #FF3B3B;
     font-size: 0.82rem;
@@ -74,26 +100,26 @@
 }
 .login-alert svg { flex-shrink: 0; margin-top: 1px; }
 
-/* ── Campos del formulario ── */
+/* ── Campos ── */
 .login-field {
     margin-bottom: 1.1rem;
 }
 .login-label {
     display: block;
-    font-size: 0.72rem;
+    font-size: 0.71rem;
     font-weight: 700;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.6px;
     text-transform: uppercase;
-    color: #94a3b8;
+    color: #8892a4;
     margin-bottom: 0.45rem;
 }
 .login-input {
     width: 100%;
-    background-color: #0b0c10;
-    border: 1px solid #1f222e;
-    border-radius: 8px;
+    background-color: #07080f;
+    border: 1px solid #181b27;
+    border-radius: 10px;
     color: #e2e8f0;
-    padding: 0.7rem 0.9rem;
+    padding: 0.72rem 0.95rem;
     font-size: 0.875rem;
     font-family: inherit;
     outline: none;
@@ -103,15 +129,46 @@
     border-color: #FF3B3B;
     box-shadow: 0 0 0 3px rgba(255, 59, 59, 0.1);
 }
-.login-input::placeholder { color: #3d4659; }
-.login-input.is-invalid {
-    border-color: #FF3B3B;
+.login-input::placeholder { color: #2e3346; }
+.login-input.is-invalid { border-color: #FF3B3B; }
+
+/* Shake del input cuando falta el email */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%       { transform: translateX(-6px); }
+    40%       { transform: translateX(6px); }
+    60%       { transform: translateX(-4px); }
+    80%       { transform: translateX(4px); }
 }
+.login-input.shake { animation: shake 0.45s ease; }
+
+/* ── Fila entre password y botón ── */
+.login-field-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.45rem;
+}
+.login-field-row .login-label { margin-bottom: 0; }
+
+/* ── Olvidé mi contraseña ── */
+.login-forgot-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 0.2s, opacity 0.2s;
+}
+.login-forgot-btn.enabled  { color: #FF3B3B; }
+.login-forgot-btn.disabled { color: #2e3346; cursor: default; pointer-events: none; }
 
 /* ── Divisor ── */
 .login-divider {
     border: none;
-    border-top: 1px solid #1f222e;
+    border-top: 1px solid #161921;
     margin: 1.5rem 0;
 }
 
@@ -119,6 +176,111 @@
 .login-footer-text {
     text-align: center;
     font-size: 0.82rem;
-    color: #64748b;
+    color: #4a5568;
     margin: 0;
+}
+
+/* ── Toast de recuperación ── */
+.login-toast {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 9999;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    background: #0e1018;
+    border: 1px solid #1f2535;
+    border-left: 3px solid #FF3B3B;
+    border-radius: 12px;
+    padding: 1rem 1.1rem;
+    min-width: 290px;
+    max-width: 360px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+    opacity: 0;
+    transform: translateX(120%);
+    transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+}
+.login-toast.show {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+}
+.login-toast-icon {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    background: rgba(255, 59, 59, 0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FF3B3B;
+    margin-top: 1px;
+}
+.login-toast-body {
+    flex: 1;
+    min-width: 0;
+}
+.login-toast-body strong {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #e2e8f0;
+    margin-bottom: 0.2rem;
+}
+.login-toast-body span {
+    font-size: 0.77rem;
+    color: #64748b;
+    line-height: 1.4;
+    word-break: break-word;
+}
+.login-toast-close {
+    background: none;
+    border: none;
+    color: #4a5568;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    flex-shrink: 0;
+    transition: color 0.15s;
+}
+.login-toast-close:hover { color: #e2e8f0; }
+
+/* Barra de progreso del toast */
+.login-toast-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background: #FF3B3B;
+    border-radius: 0 0 0 12px;
+    width: 100%;
+    transform-origin: left;
+    animation: toastProgress 4.5s linear forwards;
+}
+@keyframes toastProgress {
+    from { transform: scaleX(1); }
+    to   { transform: scaleX(0); }
+}
+
+/* ── Responsive ── */
+@media (max-width: 575.98px) {
+    .login-card {
+        padding: 2rem 1.5rem;
+    }
+
+    .login-toast {
+        top: 1rem;
+        left: 1rem;
+        right: 1rem;
+        min-width: 0;
+        max-width: none;
+        transform: translateY(-150%);
+    }
+    .login-toast.show {
+        transform: translateY(0);
+    }
 }

@@ -1,25 +1,5 @@
 
-{{-- ESTILOS ENCAPSULADOS PARA EL FOOTER --}}
-     <style>
-        .footer-modern { background-color: #11131A; border-top: 1px solid #1f222e !important; }
-        .footer-link { color: #94a3b8; text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: all 0.3s ease; display: inline-block; width: fit-content; }
-        
-        /* Animación UX: Al pasar el mouse, el link se pinta de rojo y avanza 5px a la derecha */
-        .footer-link:hover { color: #FF3B3B !important; transform: translateX(5px); }
-    
-        /* Contenedor redondo de la red social */
-        .social-icon-wrapper { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background-color: #1a1d27; border: 1px solid #2d313f; border-radius: 50%; transition: all 0.3s ease; }
-        
-        /* Inversión de color del SVG para que sea grisáceo */
-        .footer-icon { width: 18px; height: 18px; filter: invert(0.6); transition: all 0.3s ease; }
-    
-        /* Hover interactivo del círculo: Se eleva y genera un brillo rojo */
-        .social-icon-wrapper:hover { background-color: rgba(255, 59, 59, 0.1); border-color: #FF3B3B; transform: translateY(-4px); box-shadow: 0 5px 15px rgba(255, 59, 59, 0.2); }
-        /* El ícono SVG pasa de gris a blanco puro (invert 1) */
-        .social-icon-wrapper:hover .footer-icon { filter: invert(1); }
-    </style>
-    
-    <footer class="footer-modern py-5 mt-5">
+<footer class="footer-modern py-5 mt-5">
         <div class="container">
             
             {{-- SISTEMA DE GRILLAS DE BOOTSTRAP (Row)

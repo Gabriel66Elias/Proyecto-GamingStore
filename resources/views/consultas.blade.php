@@ -40,6 +40,17 @@
         {{-- ─── IMAGEN ─────────────────────────────────── --}}
         <div class="cp-img-sticky">
             <div class="cp-img-card">
+                @auth
+                <button type="button"
+                        class="btn-favorito {{ $esFavorito ? 'is-favorito' : '' }}"
+                        data-producto-id="{{ $producto->id }}"
+                        title="{{ $esFavorito ? 'Quitar de favoritos' : 'Agregar a favoritos' }}"
+                        aria-label="Favorito">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16">
+                        <path d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+                    </svg>
+                </button>
+                @endauth
                 <img src="{{ $imagenUrl }}" alt="{{ $producto->nombre }}">
             </div>
         </div>
@@ -163,6 +174,50 @@
             </div>
         </div>
         @endif
+
+        {{-- Reseñas de clientes --}}
+        <div class="cp-section-card">
+            <div class="cp-section-header">
+                <span class="cp-section-title">Reseñas de clientes</span>
+            </div>
+            <div class="cp-section-body">
+
+                @if($resenas->total() > 0)
+                <div class="cp-resenas-resumen">
+                    <div class="cp-resenas-promedio">{{ number_format($promedioResenas, 1) }}</div>
+                    <div>
+                        <x-estrellas :calificacion="round($promedioResenas)" :size="18" />
+                        <p class="cp-resenas-total">{{ $resenas->total() }} reseña{{ $resenas->total() === 1 ? '' : 's' }}</p>
+                    </div>
+                </div>
+                <div class="cp-sep" style="margin: 1.5rem 0;"></div>
+                @endif
+
+                <div class="cp-resenas-lista">
+                    @forelse($resenas as $r)
+                    <div class="cp-resena-item">
+                        <div class="cp-resena-header">
+                            <span class="cp-resena-nombre">{{ $r->usuario?->nombre ?? 'Usuario' }}</span>
+                            <x-estrellas :calificacion="$r->calificacion" :size="13" />
+                            <span class="cp-resena-fecha">{{ $r->created_at->format('d/m/Y') }}</span>
+                        </div>
+                        @if($r->comentario)
+                        <p class="cp-resena-comentario">{{ $r->comentario }}</p>
+                        @endif
+                    </div>
+                    @empty
+                    <p class="cp-desc-text">Todavía no hay reseñas para este producto. ¡Sé el primero en opinar después de tu compra!</p>
+                    @endforelse
+                </div>
+
+                @if($resenas->hasPages())
+                <div class="cp-pagination-wrapper">
+                    {{ $resenas->links() }}
+                </div>
+                @endif
+
+            </div>
+        </div>
 
     </div>
 

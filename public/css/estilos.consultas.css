@@ -48,6 +48,14 @@
     padding: 3.5rem;
 }
 
+/* Botón de favorito sobre la imagen del producto: separado del borde
+   redondeado de la card (la cual tiene más padding que las miniaturas) */
+.cp-img-card .btn-favorito {
+    top: 1.25rem;
+    right: 1.25rem;
+    z-index: 2;
+}
+
 /* Glow ambiental rojo detrás del producto */
 .cp-img-card::before {
     content: '';
@@ -364,7 +372,7 @@
 /* Especificaciones en grid de tarjetas */
 .cp-specs-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
     gap: 0.75rem;
     list-style: none;
     padding: 0;
@@ -442,6 +450,125 @@
 }
 .cp-preview-desc a:hover { color: #fff; }
 
+/* ── RESEÑAS DE CLIENTES ────────────────────────────────── */
+.estrellas-display {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.cp-resenas-resumen {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.cp-resenas-promedio {
+    font-size: 2.75rem;
+    font-weight: 900;
+    color: #ffffff;
+    letter-spacing: -1px;
+    line-height: 1;
+}
+
+.cp-resenas-total {
+    font-size: 0.82rem;
+    color: #64748b;
+    margin: 0.35rem 0 0;
+}
+
+.cp-resenas-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.cp-resena-item {
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid #1f222e;
+}
+.cp-resena-item:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.cp-resena-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+}
+
+.cp-resena-nombre {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #e2e8f0;
+}
+
+.cp-resena-fecha {
+    font-size: 0.75rem;
+    color: #3d4659;
+    margin-left: auto;
+}
+
+.cp-resena-comentario {
+    font-size: 0.9rem;
+    color: #9ca3af;
+    line-height: 1.7;
+    margin: 0;
+}
+
+/* ── Paginación de reseñas (Bootstrap 5, tema oscuro) ── */
+.cp-pagination-wrapper {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid #1f222e;
+}
+.cp-pagination-wrapper nav > div {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+.cp-pagination-wrapper .pagination {
+    margin: 0;
+    gap: 3px;
+    flex-wrap: wrap;
+}
+.cp-pagination-wrapper .page-link {
+    background-color: #1a1d27;
+    border: 1px solid #1f222e;
+    color: #94a3b8;
+    border-radius: 6px !important;
+    font-size: 0.875rem;
+    padding: 0.45rem 0.8rem;
+    line-height: 1.4;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.cp-pagination-wrapper .page-link:hover {
+    background-color: rgba(255, 59, 59, 0.08);
+    border-color: rgba(255, 59, 59, 0.3);
+    color: #e2e8f0;
+}
+.cp-pagination-wrapper .page-item.active .page-link {
+    background-color: #FF3B3B;
+    border-color: #FF3B3B;
+    color: #ffffff;
+    font-weight: 700;
+}
+.cp-pagination-wrapper .page-item.disabled .page-link {
+    background-color: #11131A;
+    border-color: #1f222e;
+    color: #3d4659;
+    pointer-events: none;
+}
+.cp-pagination-wrapper small,
+.cp-pagination-wrapper .text-muted {
+    font-size: 0.875rem;
+    color: #64748b !important;
+}
+
 /* ── RESPONSIVE ─────────────────────────────────────────── */
 @media (max-width: 1199.98px) {
     .cp-grid { grid-template-columns: 1fr 460px; }
@@ -461,6 +588,7 @@
     .cp-qty { width: 100%; justify-content: center; }
     .cp-btn-add { width: 100%; }
     .cp-trust-name { font-size: 0.65rem; }
-    .cp-tab-btn { padding: 1rem 0.875rem; font-size: 0.8rem; }
-    .cp-tab-pane { padding: 1.5rem; }
+    .cp-section-body { padding: 1.5rem; }
+    .cp-section-header { padding: 1rem 1.5rem; }
+    .cp-resena-fecha { margin-left: 0; }
 }

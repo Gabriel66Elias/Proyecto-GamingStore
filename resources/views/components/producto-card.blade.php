@@ -1,4 +1,8 @@
-@props(['producto', 'id', 'colClass' => 'col-12 col-sm-6 col-lg-4'])
+@props(['producto', 'id', 'colClass' => 'col-12 col-sm-6 col-lg-4', 'favoritoIds' => []])
+
+@php
+    $esFavorito = in_array($id, $favoritoIds);
+@endphp
 
 <div class="{{ $colClass }} producto-item"
      data-id="{{ $id }}"
@@ -8,6 +12,15 @@
     <a href="/consulta/{{ $id }}" class="card h-100 border-0 bg-transparent hover-elevate text-decoration-none" style="display: block; cursor: pointer;">
 
         <div class="contenedor-img rounded-4 bg-dark bg-opacity-50 mb-3" style="transition: transform 0.4s ease;">
+            <button type="button"
+                    class="btn-favorito {{ $esFavorito ? 'is-favorito' : '' }}"
+                    data-producto-id="{{ $id }}"
+                    title="{{ $esFavorito ? 'Quitar de favoritos' : 'Agregar a favoritos' }}"
+                    aria-label="Favorito">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16">
+                    <path d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+                </svg>
+            </button>
             <img src="{{ $producto->imagen ? asset('storage/' . $producto->imagen) : asset('assets/placeholder-producto.svg') }}"
                  alt="{{ $producto->nombre }}" class="p-4">
         </div>
@@ -31,10 +44,3 @@
         </div>
     </a>
 </div>
-
-<style>
-    .producto-item:hover .contenedor-img img {
-        transform: scale(1.08);
-        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-</style>

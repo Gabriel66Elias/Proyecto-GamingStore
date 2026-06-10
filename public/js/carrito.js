@@ -89,16 +89,9 @@ async function vaciarCarrito() {
     renderizarCarrito(data.items, data.total);
 }
 
-// Confirma la compra y redirige a la página de confirmación
-async function finalizarCompra() {
-    const res = await fetch('/carrito/confirmar', { method: 'POST', headers: headersJSON });
-
-    if (res.status === 401) { window.location.href = '/login'; return; }
-
-    const data = await res.json();
-    if (!res.ok) { alert(data.error ?? 'Error al confirmar la compra'); return; }
-
-    window.location.href = data.redirect;
+// Redirige al checkout — la confirmación real ocurre en /comercializacion
+function finalizarCompra() {
+    window.location.href = '/comercializacion';
 }
 
 // Dibuja el contenido del panel lateral con los datos recibidos del servidor

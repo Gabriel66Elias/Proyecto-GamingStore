@@ -1,27 +1,11 @@
 @extends('layout.main')
 @section('titulo', 'Quiénes Somos | GamingStation')
-@section('contenido')
 
-    {{-- Fotos del equipo: retrato rectangular en lugar del avatar circular global --}}
-    <style>
-        .card-equipo .contenedor-img {
-            padding: 0 !important;
-            display: block !important;
-            border-bottom: 3px solid #FF3B3B !important;
-            border-radius: 15px 15px 0 0 !important;
-            overflow: hidden !important;
-        }
-        .card-equipo .contenedor-img img {
-            border-radius: 0 !important;
-            width: 100% !important;
-            height: 280px !important;
-            object-fit: cover !important;
-            object-position: top center !important;
-            border: none !important;
-            box-shadow: none !important;
-        }
-        .card-equipo { overflow: hidden; }
-    </style>
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/estilos.quienes-somos.css') }}">
+@endpush
+
+@section('contenido')
 
     <div class="container mt-5 mb-5">
 
