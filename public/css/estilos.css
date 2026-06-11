@@ -205,6 +205,21 @@ h1, h2, h3, h4, h5, h6 {
 .btn-favorito.is-favorito { color: #FF3B3B; }
 .btn-favorito.is-favorito svg { fill: #FF3B3B; }
 
+/* Etiqueta de descuento sobre la imagen del producto */
+.badge-descuento {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: #FF3B3B;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: .5px;
+}
+
 /* Etiqueta de precio */
 .precio-catalogo {
     font-size: 1.6rem;

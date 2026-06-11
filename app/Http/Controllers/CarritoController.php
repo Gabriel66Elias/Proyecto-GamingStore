@@ -59,14 +59,14 @@ class CarritoController extends Controller
             $producto = Producto::find($productoId);
             if (!$producto) continue;
 
-            $subtotal = $producto->precio_venta * $entry['cantidad'];
+            $subtotal = $producto->precio_final * $entry['cantidad'];
             $total   += $subtotal;
 
             $items[] = [
                 'id'              => $productoId,
                 'producto_id'     => $productoId,
                 'nombre'          => $producto->nombre,
-                'precio_unitario' => (float) $producto->precio_venta,
+                'precio_unitario' => (float) $producto->precio_final,
                 'cantidad'        => $entry['cantidad'],
                 'subtotal'        => (float) $subtotal,
                 'stock'           => $entry['cantidad'] + $producto->stock,
@@ -169,8 +169,8 @@ class CarritoController extends Controller
                 $carrito->detalles()->create([
                     'producto_id'     => $producto->id,
                     'cantidad'        => $cantidad,
-                    'precio_unitario' => $producto->precio_venta,
-                    'subtotal'        => $producto->precio_venta * $cantidad,
+                    'precio_unitario' => $producto->precio_final,
+                    'subtotal'        => $producto->precio_final * $cantidad,
                 ]);
             }
 
@@ -400,8 +400,8 @@ class CarritoController extends Controller
                     $carrito->detalles()->create([
                         'producto_id'     => $productoId,
                         'cantidad'        => $cantidad,
-                        'precio_unitario' => $producto->precio_venta,
-                        'subtotal'        => $producto->precio_venta * $cantidad,
+                        'precio_unitario' => $producto->precio_final,
+                        'subtotal'        => $producto->precio_final * $cantidad,
                     ]);
                     $producto->decrement('stock', $cantidad);
                 }

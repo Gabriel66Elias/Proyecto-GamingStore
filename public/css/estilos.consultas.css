@@ -160,6 +160,27 @@
     line-height: 1;
 }
 
+.cp-precio-anterior {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #64748b;
+    text-decoration: line-through;
+    margin: 0 0 0.15rem;
+}
+
+.cp-descuento-badge {
+    display: inline-block;
+    margin-left: 0.6rem;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: #FF3B3B;
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: .5px;
+    vertical-align: middle;
+}
+
 .cp-cuotas {
     font-size: 0.85rem;
     color: #64748b;

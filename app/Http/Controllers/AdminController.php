@@ -70,19 +70,22 @@ class AdminController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'nombre'        => 'required|string|max:100|unique:productos,nombre',
-            'categoria_id'  => 'required|exists:categorias,id',
-            'descripcion'   => 'nullable|string',
-            'precio_compra' => 'required|numeric|min:0',
-            'precio_venta'  => 'required|numeric|min:0',
-            'stock'         => 'required|integer|min:0',
-            'imagen'        => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'specs'         => 'nullable|array',
-            'specs.*'       => 'nullable|string|max:200',
+            'nombre'               => 'required|string|max:100|unique:productos,nombre',
+            'categoria_id'         => 'required|exists:categorias,id',
+            'descripcion'          => 'nullable|string',
+            'precio_compra'        => 'required|numeric|min:0',
+            'precio_venta'         => 'required|numeric|min:0',
+            'descuento_porcentaje' => 'nullable|numeric|min:0|max:99',
+            'stock'                => 'required|integer|min:0',
+            'imagen'               => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'specs'                => 'nullable|array',
+            'specs.*'              => 'nullable|string|max:200',
         ]);
 
         $specs = array_values(array_filter($request->input('specs', []), fn($s) => trim($s) !== ''));
         $data['especificaciones'] = !empty($specs) ? $specs : null;
+
+        $data['descuento_porcentaje'] = $data['descuento_porcentaje'] ?? null;
 
         if ($request->hasFile('imagen')) {
             $data['imagen'] = $request->file('imagen')->store('productos', 'public');
@@ -107,19 +110,22 @@ class AdminController extends Controller
         $producto = Producto::findOrFail($id);
 
         $data = $request->validate([
-            'nombre'        => "required|string|max:100|unique:productos,nombre,{$id}",
-            'categoria_id'  => 'required|exists:categorias,id',
-            'descripcion'   => 'nullable|string',
-            'precio_compra' => 'required|numeric|min:0',
-            'precio_venta'  => 'required|numeric|min:0',
-            'stock'         => 'required|integer|min:0',
-            'imagen'        => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'specs'         => 'nullable|array',
-            'specs.*'       => 'nullable|string|max:200',
+            'nombre'               => "required|string|max:100|unique:productos,nombre,{$id}",
+            'categoria_id'         => 'required|exists:categorias,id',
+            'descripcion'          => 'nullable|string',
+            'precio_compra'        => 'required|numeric|min:0',
+            'precio_venta'         => 'required|numeric|min:0',
+            'descuento_porcentaje' => 'nullable|numeric|min:0|max:99',
+            'stock'                => 'required|integer|min:0',
+            'imagen'               => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'specs'                => 'nullable|array',
+            'specs.*'              => 'nullable|string|max:200',
         ]);
 
         $specs = array_values(array_filter($request->input('specs', []), fn($s) => trim($s) !== ''));
         $data['especificaciones'] = !empty($specs) ? $specs : null;
+
+        $data['descuento_porcentaje'] = $data['descuento_porcentaje'] ?? null;
 
         if ($request->hasFile('imagen')) {
             if ($producto->imagen) {

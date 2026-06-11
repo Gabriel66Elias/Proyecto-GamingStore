@@ -7,7 +7,7 @@
 <div class="{{ $colClass }} producto-item"
      data-id="{{ $id }}"
      data-categoria="{{ $producto->categoria?->nombre }}"
-     data-precio="{{ $producto->precio_venta }}"
+     data-precio="{{ $producto->precio_final }}"
      data-nombre="{{ Str::lower($producto->nombre) }}">
 
     <a href="/consulta/{{ $id }}" class="card h-100 border-0 bg-transparent hover-elevate text-decoration-none" style="display: block; cursor: pointer;">
@@ -22,6 +22,9 @@
                     <path d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
                 </svg>
             </button>
+            @if($producto->tieneDescuento())
+                <span class="badge-descuento">-{{ rtrim(rtrim(number_format($producto->descuento_porcentaje, 2), '0'), '.') }}%</span>
+            @endif
             <img src="{{ $producto->imagen ? asset('storage/' . $producto->imagen) : asset('assets/placeholder-producto.svg') }}"
                  alt="{{ $producto->nombre }}" class="p-4">
         </div>
@@ -35,8 +38,15 @@
             <h5 class="text-white fw-bold mb-2 fs-5 lh-sm">{{ $producto->nombre }}</h5>
 
             <div class="mt-auto d-flex align-items-center justify-content-between pt-2">
-                <span class="text-white fw-bolder fs-4">
-                    ${{ number_format($producto->precio_venta, 0, ',', '.') }}
+                <span class="d-flex flex-column">
+                    @if($producto->tieneDescuento())
+                        <span class="text-secondary text-decoration-line-through" style="font-size: 0.85rem;">
+                            ${{ number_format($producto->precio_venta, 0, ',', '.') }}
+                        </span>
+                    @endif
+                    <span class="text-white fw-bolder fs-4">
+                        ${{ number_format($producto->precio_final, 0, ',', '.') }}
+                    </span>
                 </span>
                 <span class="btn btn-mars btn-sm px-3 fw-bold rounded-3">
                     Detalles

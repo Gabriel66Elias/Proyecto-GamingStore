@@ -138,6 +138,15 @@
                     @error('precio_venta')<p class="admin-field-error">{{ $message }}</p>@enderror
                 </div>
 
+                <div class="mb-3">
+                    <label class="admin-form-label">Descuento (%)</label>
+                    <input type="number" name="descuento_porcentaje" value="{{ old('descuento_porcentaje', $producto?->descuento_porcentaje) }}"
+                           class="admin-form-input {{ $errors->has('descuento_porcentaje') ? 'is-invalid' : '' }}"
+                           step="0.01" min="0" max="99" placeholder="Ej: 15">
+                    <p style="font-size:0.72rem; color:#64748b; margin:6px 0 0;">Dejá el campo vacío o en 0 para no aplicar descuento.</p>
+                    @error('descuento_porcentaje')<p class="admin-field-error">{{ $message }}</p>@enderror
+                </div>
+
                 <div>
                     <label class="admin-form-label">{{ $producto ? 'Stock *' : 'Stock inicial *' }}</label>
                     <input type="number" name="stock" value="{{ old('stock', $producto?->stock ?? 0) }}"

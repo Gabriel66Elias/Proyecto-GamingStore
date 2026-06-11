@@ -219,7 +219,7 @@
                                         <div class="text-white fw-semibold text-truncate" style="font-size:.83rem;">{{ $producto->nombre }}</div>
                                         <div class="text-secondary" style="font-size:.72rem;">{{ $producto->categoria?->nombre ?? 'Sin categoría' }}</div>
                                     </div>
-                                    <span class="fw-bold" style="font-size:.82rem;color:#4ade80;white-space:nowrap;">${{ number_format($producto->precio_venta, 0, ',', '.') }}</span>
+                                    <span class="fw-bold" style="font-size:.82rem;color:#4ade80;white-space:nowrap;">${{ number_format($producto->precio_final, 0, ',', '.') }}</span>
                                 </a>
                                 <button type="button" class="btn-favorito is-favorito btn-favorito-quitar" data-producto-id="{{ $producto->id }}" title="Quitar de favoritos" aria-label="Quitar de favoritos">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 16 16">

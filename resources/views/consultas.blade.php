@@ -69,10 +69,16 @@
 
                 {{-- Precio --}}
                 <div class="cp-precio-wrap">
-                    <div class="cp-precio">${{ number_format($producto->precio_venta, 0, ',', '.') }}</div>
+                    @if($producto->tieneDescuento())
+                        <p class="cp-precio-anterior">
+                            ${{ number_format($producto->precio_venta, 0, ',', '.') }}
+                            <span class="cp-descuento-badge">-{{ rtrim(rtrim(number_format($producto->descuento_porcentaje, 2), '0'), '.') }}%</span>
+                        </p>
+                    @endif
+                    <div class="cp-precio">${{ number_format($producto->precio_final, 0, ',', '.') }}</div>
                     <p class="cp-cuotas">
                         o <strong class="text-mars">12 cuotas sin interés</strong> de
-                        <strong class="text-white">${{ number_format($producto->precio_venta / 12, 0, ',', '.') }}</strong>
+                        <strong class="text-white">${{ number_format($producto->precio_final / 12, 0, ',', '.') }}</strong>
                     </p>
                 </div>
 

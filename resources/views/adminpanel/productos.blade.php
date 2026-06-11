@@ -63,9 +63,14 @@
                             <p class="prod-card-name">{{ $p->nombre }}</p>
                             <span class="prod-card-id">ID #{{ $p->id }}</span>
                         </div>
-                        @if($p->categoria)
-                            <span class="cat-badge flex-shrink-0">{{ $p->categoria->nombre }}</span>
-                        @endif
+                        <div class="d-flex flex-column align-items-end gap-1 flex-shrink-0">
+                            @if($p->categoria)
+                                <span class="cat-badge">{{ $p->categoria->nombre }}</span>
+                            @endif
+                            @if($p->tieneDescuento())
+                                <span class="cat-badge" style="background:#FF3B3B; color:#fff;">-{{ rtrim(rtrim(number_format($p->descuento_porcentaje, 2), '0'), '.') }}%</span>
+                            @endif
+                        </div>
                     </div>
 
                     <div class="prod-card-prices">
@@ -75,7 +80,12 @@
                         </div>
                         <div>
                             <span class="price-label">Venta</span>
-                            <span class="price-val price-sale">${{ number_format($p->precio_venta, 2) }}</span>
+                            @if($p->tieneDescuento())
+                                <span class="price-val" style="text-decoration:line-through; color:#64748b; font-size:0.8em;">${{ number_format($p->precio_venta, 2) }}</span>
+                                <span class="price-val price-sale">${{ number_format($p->precio_final, 2) }}</span>
+                            @else
+                                <span class="price-val price-sale">${{ number_format($p->precio_venta, 2) }}</span>
+                            @endif
                         </div>
                     </div>
                 </div>
