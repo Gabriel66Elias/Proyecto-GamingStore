@@ -77,6 +77,15 @@
     color: #60a5fa; font-size: .9rem;
 }
 
+/* ── Descargar factura ───────────────────────────────── */
+.btn-descargar-factura {
+    display: flex; align-items: center; justify-content: center; gap: .5rem;
+    width: 100%; background: #1a1d27; border: 1px solid #1f222e; color: #e2e8f0;
+    border-radius: 8px; padding: .55rem 1rem; font-size: .8rem; font-weight: 700;
+    text-decoration: none; transition: all .2s ease;
+}
+.btn-descargar-factura:hover { border-color: #FF3B3B; color: #FF3B3B; }
+
 /* ── Flash de éxito ──────────────────────────────────── */
 .perfil-flash-success {
     display: flex; align-items: center; gap: .6rem;
@@ -377,6 +386,15 @@
                                         <span style="font-size:.85rem;font-weight:700;color:#e2e8f0;">Total</span>
                                         <span style="font-size:.95rem;font-weight:800;color:#4ade80;">${{ number_format($pedido->total, 0, ',', '.') }}</span>
                                     </div>
+
+                                    {{-- Descargar factura en PDF --}}
+                                    <a href="{{ route('pedidos.factura', $pedido->id) }}" class="btn-descargar-factura mt-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" viewBox="0 0 16 16">
+                                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+                                            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/>
+                                        </svg>
+                                        Descargar factura (PDF)
+                                    </a>
                                 </div>
 
                                 {{-- Aviso de comprobante si el pago es por transferencia --}}

@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputOrdenOculto = document.getElementById('orden-precio'); // Aquí se guarda el valor real
     const btnTextoOrden = document.getElementById('texto-orden'); // Texto visible para el usuario
     const itemsDesplegable = document.querySelectorAll('.custom-dropdown-item'); // Las opciones del menú
+    const inputBusqueda = document.getElementById('buscador-productos'); // Caja de texto del buscador
+    const mensajeSinResultados = document.getElementById('catalogo-sin-resultados'); // Aviso de "sin resultados"
 
     /**
      * FUNCIÓN: procesarCatalogo
@@ -18,7 +20,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function procesarCatalogo() {
         // Averigua que categoria esta seleccionada actualmente y que orden se pidio
         const catElegida = document.querySelector('input[name="filtro_categoria"]:checked').value;
-        const ordenElegido = inputOrdenOculto.value; 
+        const ordenElegido = inputOrdenOculto.value;
+        // Texto del buscador, normalizado a minúsculas y sin espacios sobrantes
+        const textoBusqueda = inputBusqueda ? inputBusqueda.value.trim().toLowerCase() : '';
+
+        let productosVisiblesTotal = 0; // Contador global para el aviso de "sin resultados"
 
         // Recorre bloque por bloque (Categoría entera)
         bloquesCategoria.forEach(bloque => {
@@ -31,13 +37,18 @@ document.addEventListener('DOMContentLoaded', () => {
             // --- FASE 1: FILTRAR VISIBILIDAD ---
             productos.forEach(p => {
                 const pCat = p.getAttribute('data-categoria'); // Lee la categoría inyectada en el HTML
-                
+                const pNombre = p.getAttribute('data-nombre') || ''; // Nombre del producto en minúsculas
+
                 // booleano: Pidió "todas" o pidio una categoría exacta
-                const coincide = (catElegida === 'todas' || catElegida === pCat);
-                
+                const coincideCategoria = (catElegida === 'todas' || catElegida === pCat);
+                // booleano: el nombre del producto contiene el texto buscado
+                const coincideBusqueda = (textoBusqueda === '' || pNombre.includes(textoBusqueda));
+
+                const coincide = coincideCategoria && coincideBusqueda;
+
                 // Modifica CSS: Si coincide la muestra (block), si no, la desaparece de pantalla (none)
                 p.style.display = coincide ? 'block' : 'none';
-                
+
                 if (coincide) productosVisiblesEnBloque++; // Suma 1 a las tarjetas que quedaron visibles
             });
 
@@ -64,7 +75,15 @@ document.addEventListener('DOMContentLoaded', () => {
             // Si el usuario eligió "Hardware" y este bloque era de "Consolas", habrán quedado 0 productos.
             // Entonces, ocultamos todo el bloque (para no dejar el título "CONSOLAS" flotando solo).
             bloque.style.display = productosVisiblesEnBloque === 0 ? 'none' : 'block';
+
+            productosVisiblesTotal += productosVisiblesEnBloque;
         });
+
+        // --- FASE 4: AVISO DE "SIN RESULTADOS" ---
+        // Si la búsqueda/filtro no encontró ningún producto en ningún bloque, mostramos el mensaje.
+        if (mensajeSinResultados) {
+            mensajeSinResultados.classList.toggle('visible', productosVisiblesTotal === 0);
+        }
     }
 
     // --- 2. ASIGNACIÓN DE EVENTOS (LISTENERS) ---
@@ -92,19 +111,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // Si cambia cualquiera de los botones de Categoría (Radio buttons), ejecuta el cálculo
     radiosCategoria.forEach(r => r.addEventListener('change', procesarCatalogo));
 
+    // Si el usuario escribe en el buscador, recalcula en tiempo real
+    if (inputBusqueda) {
+        inputBusqueda.addEventListener('input', procesarCatalogo);
+    }
+
     // Botón de la "X" (Limpiar Filtros)
     btnLimpiar.addEventListener('click', () => {
         // Resetea forzosamente la Categoría
         document.getElementById('cat-todas').checked = true;
-        
+
         // Resetea el ordenamiento (Input y visual)
         inputOrdenOculto.value = 'predeterminado';
         btnTextoOrden.innerText = 'Predeterminado';
-        
+
         // Regresa la clase 'active' al valor predeterminado del desplegable
         itemsDesplegable.forEach(i => i.classList.remove('active'));
         document.querySelector('.custom-dropdown-item[data-value="predeterminado"]').classList.add('active');
-        
+
+        // Limpia el texto del buscador
+        if (inputBusqueda) inputBusqueda.value = '';
+
         // Vuelve a calcular todo (básicamente restaura el estado original)
         procesarCatalogo();
     });

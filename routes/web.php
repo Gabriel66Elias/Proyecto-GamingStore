@@ -84,6 +84,7 @@ Route::get('/register', [AuthController::class, 'showRegister'])->name('register
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/mi-perfil', [AuthController::class, 'perfil'])->middleware('auth')->name('perfil');
+Route::get('/mi-perfil/pedidos/{id}/factura', [AuthController::class, 'descargarFactura'])->middleware('auth')->name('pedidos.factura');
 
 // Carrito — agregar/actualizar/eliminar/vaciar funcionan para invitados y usuarios
 // Solo confirmar requiere auth (para crear la venta en la DB)

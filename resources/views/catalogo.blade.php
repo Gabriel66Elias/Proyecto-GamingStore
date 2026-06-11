@@ -30,7 +30,15 @@
                       Al usar la etiqueta <x-... /> le decimos a Laravel que importe 
                       el archivo 'resources/views/components/filtro-catalogo.blade.php'. --}}
                  <x-filtro-catalogo :categorias="$categorias" />
-     
+
+                 {{-- AVISO DE "SIN RESULTADOS": oculto por defecto, lo activa filtros.js
+                      cuando ningún producto coincide con la búsqueda/filtros aplicados. --}}
+                 <div id="catalogo-sin-resultados" class="catalogo-sin-resultados">
+                     <img src="{{ asset('assets/search.svg') }}" alt="" style="width:32px;filter:invert(0.4);opacity:.5;" class="mb-3">
+                     <p class="text-white fw-semibold mb-1">No se encontraron productos</p>
+                     <p class="text-secondary small mb-0">Probá con otro nombre o cambiá los filtros aplicados.</p>
+                 </div>
+
                  {{-- MOTOR DE RENDERIZADO BUCLE PRINCIPAL --}}
                  {{-- 1. Itera sobre cada grupo de categorías (ej: "Consolas", luego "Hardware") --}}
                  @foreach ($productosAgrupados as $categoria => $productos)

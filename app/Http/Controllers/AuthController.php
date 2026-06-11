@@ -6,6 +6,7 @@ use App\Models\Resena;
 use App\Models\Rol;
 use App\Models\Usuario;
 use App\Models\VentaCabecera;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\CarritoController;
@@ -104,5 +105,17 @@ class AuthController extends Controller
             ->keyBy(fn ($r) => $r->venta_id . '-' . $r->producto_id);
 
         return view('perfilusuario', compact('usuario', 'pedidos', 'favoritos', 'resenas'));
+    }
+
+    public function descargarFactura($id)
+    {
+        $pedido = VentaCabecera::where('user_id', Auth::id())
+            ->whereNotIn('estado', ['carrito'])
+            ->with('detalles.producto')
+            ->findOrFail($id);
+
+        $pdf = Pdf::loadView('factura-pdf', compact('pedido'))->setPaper('a4', 'portrait');
+
+        return $pdf->download('Factura-' . ($pedido->numero_pedido ?? $pedido->id) . '.pdf');
     }
 }

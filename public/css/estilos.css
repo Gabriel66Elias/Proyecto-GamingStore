@@ -862,6 +862,19 @@ h1, h2, h3, h4, h5, h6 {
 .custom-dropdown-item:hover, .custom-dropdown-item:focus { background-color: rgba(255, 59, 59, 0.1); color: #ffffff; }
 .custom-dropdown-item.active { background-color: rgba(255, 59, 59, 0.15); color: #FF3B3B; font-weight: bold; }
 
+/* --- Buscador de productos del catálogo --- */
+.search-box-wrapper { position: relative; display: flex; align-items: center; }
+.search-box-icon { position: absolute; left: 14px; pointer-events: none; }
+.search-box-input {
+    width: 100%; height: 46px; background-color: #1a1d27; border: 1px solid #2d313f;
+    border-radius: 0.5rem; color: #ffffff; font-size: 0.9rem;
+    padding: 0 0.9rem 0 2.6rem; transition: all 0.3s ease;
+}
+.search-box-input::placeholder { color: #64748b; }
+.search-box-input:focus { outline: none; border-color: #FF3B3B; box-shadow: 0 0 15px rgba(255, 59, 59, 0.1); }
+.catalogo-sin-resultados { display: none; text-align: center; padding: 3rem 1rem; color: #64748b; }
+.catalogo-sin-resultados.visible { display: block; }
+
 /* --------------------------------------------------------------------------
    FOOTER
    -------------------------------------------------------------------------- */

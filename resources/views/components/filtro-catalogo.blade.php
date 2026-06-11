@@ -2,8 +2,20 @@
 
     {{-- CAJA CONTENEDORA GLOBAL --}}
     <div class="filtro-container p-4 mb-5 shadow-lg">
+
+        {{-- BUSCADOR DE PRODUCTOS POR NOMBRE --}}
+        <div class="row g-3 mb-3">
+            <div class="col-12">
+                <label class="text-secondary small fw-bold mb-2 d-block text-uppercase" style="letter-spacing: 1px;">Buscar producto</label>
+                <div class="search-box-wrapper">
+                    <img src="{{ asset('assets/search.svg') }}" class="search-box-icon" alt="" style="width:16px;filter:invert(0.5);">
+                    <input type="text" id="buscador-productos" class="search-box-input" placeholder="Escribí el nombre de un producto..." autocomplete="off">
+                </div>
+            </div>
+        </div>
+
         <div class="row g-3 align-items-end">
-            
+
             {{-- SECCIÓN 1: FILTRO POR CATEGORÍA (Ocupa 8 de las 12 columnas disponibles en PC) --}}
             <div class="col-xl-8 col-lg-12">
                 <label class="text-secondary small fw-bold mb-2 d-block text-uppercase" style="letter-spacing: 1px;">Filtrar por Categoría</label>

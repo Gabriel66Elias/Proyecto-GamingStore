@@ -7,7 +7,8 @@
 <div class="{{ $colClass }} producto-item"
      data-id="{{ $id }}"
      data-categoria="{{ $producto->categoria?->nombre }}"
-     data-precio="{{ $producto->precio_venta }}">
+     data-precio="{{ $producto->precio_venta }}"
+     data-nombre="{{ Str::lower($producto->nombre) }}">
 
     <a href="/consulta/{{ $id }}" class="card h-100 border-0 bg-transparent hover-elevate text-decoration-none" style="display: block; cursor: pointer;">
 
