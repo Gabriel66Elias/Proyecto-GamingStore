@@ -266,6 +266,51 @@ class PedidosSeeder extends Seeder
             [$prods['ASUS ROG Strix B550-F Gaming'] ?? null, 1],
             [$prods['Samsung 980 Pro 2TB NVMe']    ?? null, 1],
         ]);
+        // ── MÁS HISTORIAL PARA LUCAS ────────────────────────────────────────────
+        // PED-SEED-011 · transferencia · retiro · cancelado
+        $this->pedido([
+            'user_id'          => $lucas->id,
+            'numero_pedido'    => 'PED-SEED-011',
+            'nombre_cliente'   => 'Lucas',
+            'apellido_cliente' => 'García',
+            'email_cliente'    => $lucas->email,
+            'telefono_cliente' => '+54 11 4521-3300',
+            'tipo_envio'       => 'retiro',
+            'transporte'       => null,
+            'provincia'        => null,
+            'localidad'        => null,
+            'calle'            => null,
+            'codigo_postal'    => null,
+            'costo_envio'      => 0,
+            'metodo_pago'      => 'transferencia',
+            'estado'           => 'cancelado',
+            'fecha_venta'      => Carbon::now()->subDays(60),
+        ], [
+            [$prods['AMD RX 6600 XT'] ?? null, 1],
+        ]);
+
+        // ── MÁS HISTORIAL PARA MATEO ────────────────────────────────────────────
+        // PED-SEED-012 · tarjeta · domicilio · pendiente
+        $this->pedido([
+            'user_id'          => $mateo->id,
+            'numero_pedido'    => 'PED-SEED-012',
+            'nombre_cliente'   => 'Mateo',
+            'apellido_cliente' => 'Fernández',
+            'email_cliente'    => $mateo->email,
+            'telefono_cliente' => '+54 341 522-6600',
+            'tipo_envio'       => 'domicilio',
+            'transporte'       => 'Andreani',
+            'provincia'        => 'Santa Fe',
+            'localidad'        => 'Rosario',
+            'calle'            => 'Av. Pellegrini 1800',
+            'codigo_postal'    => '2000',
+            'costo_envio'      => 12500,
+            'metodo_pago'      => 'tarjeta',
+            'estado'           => 'pendiente',
+            'fecha_venta'      => Carbon::now()->subHours(5),
+        ], [
+            [$prods['Intel Core i9-14900K'] ?? null, 1],
+        ]);
     }
 
     private function pedido(array $data, array $items): void

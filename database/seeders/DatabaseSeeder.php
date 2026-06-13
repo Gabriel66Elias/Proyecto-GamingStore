@@ -16,6 +16,8 @@ class DatabaseSeeder extends Seeder
             ProductosSeeder::class,
             ConsultasSeeder::class,
             PedidosSeeder::class,
+            FavoritosSeeder::class,
+            ResenasSeeder::class,
         ]);
     }
 }
