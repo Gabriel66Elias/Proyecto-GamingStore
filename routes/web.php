@@ -12,6 +12,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\FavoritoController;
 use App\Http\Controllers\ResenaController;
+
 /* --------------------------------------------------------------------------
    RUTAS ESTÁTICAS (GET)
    Se usa el método GET porque el usuario solo está "pidiendo" ver una página.
@@ -24,27 +25,27 @@ Route::get('/', function () {
     $favoritoIds = \Illuminate\Support\Facades\Auth::check()
         ? \Illuminate\Support\Facades\Auth::user()->favoritos()->pluck('productos.id')->toArray()
         : [];
-    return view('principal', compact('productosDestacados', 'favoritoIds'));
+    return view('paginas.principal', compact('productosDestacados', 'favoritoIds'));
 });
 
 Route::get('/quienes-somos', function () {
-    return view('quienes-somos');
+    return view('paginas.quienes-somos');
 });
 
 Route::get('/comercializacion', function () {
-    return view('comercializacion');
+    return view('tienda.comercializacion');
 });
 
 Route::get('/terminos', function () {
-    return view('terminos');
+    return view('paginas.terminos');
 });
 
 Route::get('/contacto', function () {
-    return view('contacto'); // Pantalla con el formulario vacío
+    return view('paginas.contacto'); // Pantalla con el formulario vacío
 });
 
 Route::get('/confirmacion-pedido', function () {
-    return view('confirmacionpedido');
+    return view('tienda.confirmacionpedido');
 })->name('compra.confirmada');
 
 
@@ -73,6 +74,7 @@ Route::get('/catalogo', [ProductoController::class, 'index']);
 // El {id} es una variable comodín en la URL (ej: /consulta/5 o /consulta/10).
 // Laravel captura automáticamente ese número y se lo inyecta como 
 // parámetro al método 'show' del ProductoController.
+// NOTA: Se mantiene la vista original en la raíz según requerimiento.
 Route::get('/consulta/{id}', [ProductoController::class, 'show']);
 
 /* --------------------------------------------------------------------------

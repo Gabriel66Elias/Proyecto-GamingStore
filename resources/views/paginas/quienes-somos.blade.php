@@ -3,8 +3,15 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/estilos.quienes-somos.css') }}">
+<style>
+    @media (max-width: 767.98px) {
+        .ip-text, .ip-muted, .rol-destacado {
+            font-size: 1.15rem !important;
+            line-height: 1.6;
+        }
+    }
+</style>
 @endpush
-
 @section('contenido')
 
     <div class="container mt-5 mb-5">

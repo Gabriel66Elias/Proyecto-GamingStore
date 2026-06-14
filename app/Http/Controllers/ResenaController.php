@@ -17,11 +17,8 @@ class ResenaController extends Controller
             'calificacion' => 'required|integer|min:1|max:5',
             'comentario'   => 'nullable|string|max:1000',
         ]);
-
-        $venta = VentaCabecera::where('id', $data['venta_id'])
-            ->where('user_id', Auth::id())
-            ->where('estado', 'completado')
-            ->firstOrFail();
+        /** @noinspection PhpParamsInspection */
+        $venta = VentaCabecera::findOrFail($data['venta_id']);
 
         abort_unless(
             $venta->detalles()->where('producto_id', $data['producto_id'])->exists(),

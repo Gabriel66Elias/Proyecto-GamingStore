@@ -14,7 +14,9 @@ class RolController extends Controller
     {
         // SoftDelete filtra deleted_at automáticamente
         $roles = Rol::withCount('usuarios')->orderBy('nombre')->get();
-        return view('roles.index', compact('roles'));
+        
+        // ACTUALIZADO: Apunta a la carpeta adminpanel/roles/
+        return view('adminpanel.roles.index', compact('roles'));
     }
 
     /**
@@ -35,8 +37,11 @@ class RolController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Rol $rol)
+    public function destroy($id)
     {
+        // Buscamos el rol real en la base de datos usando el ID numérico
+        $rol = Rol::findOrFail($id);
+
         if ($rol->usuarios()->exists()) {
             return redirect()->route('roles.index')->with('error', 'No se puede eliminar: hay usuarios con este rol.');
         }

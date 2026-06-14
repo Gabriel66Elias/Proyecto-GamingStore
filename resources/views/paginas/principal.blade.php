@@ -3,6 +3,35 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/estilos.principal.css') }}">
+<style>
+    /* ─── MEJORAS RESPONSIVE (MÓVILES) ─── */
+    @media (max-width: 767.98px) {
+    
+        .hero-subtitulo {
+            font-size: 1.15rem !important;
+        }
+        .seccion-subtitulo,
+        .beneficio-desc,
+        .banner-promo .text-secondary,
+        .seccion-newsletter .text-secondary {
+            font-size: 1.05rem !important;
+            line-height: 1.5 !important;
+        }
+
+        /* 2. Solución al corte de texto en "Categorías" */
+        .card-categoria {
+            height: auto !important; /* Anula el alto fijo para que la tarjeta se adapte al contenido */
+            min-height: 205px; /* Mantiene un tamaño base uniforme */
+            padding-bottom: 10px !important; /* Le da aire en la parte inferior */
+        }
+        .card-categoria .text-secondary {
+            font-size: 1rem !important; /* Agranda el texto (originalmente estaba en 0.78rem) */
+            line-height: 1.4 !important;
+            white-space: normal !important; /* Fuerza a que el texto baje de línea en lugar de cortarse */
+            overflow: visible !important;
+        }
+    }
+</style>
 @endpush
 
 @section('contenido')
@@ -13,9 +42,6 @@
         <div class="mascara-difuminada"></div>
     </div>
 
-    {{-- ========================================================
-         HERO: Carrusel de fondo + texto superpuesto centrado
-         ======================================================== --}}
     <header class="hero-principal position-relative" style="overflow: hidden;">
 
         <div id="heroCarousel" class="carousel slide carousel-fade h-100" data-bs-ride="carousel" data-bs-interval="5000">

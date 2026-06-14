@@ -19,7 +19,8 @@ class ContactoController extends Controller
 
         Consulta::create($data);
 
-        return view('exito', [
+        // ACTUALIZADO: Apunta a la carpeta paginas/
+        return view('paginas.exito', [
             'nombre' => $data['nombre'],
             'email'  => $data['email'],
         ]);

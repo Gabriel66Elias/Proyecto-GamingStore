@@ -104,7 +104,8 @@ class AuthController extends Controller
             ->get()
             ->keyBy(fn ($r) => $r->venta_id . '-' . $r->producto_id);
 
-        return view('perfilusuario', compact('usuario', 'pedidos', 'favoritos', 'resenas'));
+        // ACTUALIZADO: Apunta a la carpeta cuenta/
+        return view('cuenta.perfilusuario', compact('usuario', 'pedidos', 'favoritos', 'resenas'));
     }
 
     public function descargarFactura($id)
@@ -114,7 +115,8 @@ class AuthController extends Controller
             ->with('detalles.producto')
             ->findOrFail($id);
 
-        $pdf = Pdf::loadView('factura-pdf', compact('pedido'))->setPaper('a4', 'portrait');
+        // ACTUALIZADO: Apunta a la carpeta cuenta/
+        $pdf = Pdf::loadView('cuenta.factura-pdf', compact('pedido'))->setPaper('a4', 'portrait');
 
         return $pdf->download('Factura-' . ($pedido->numero_pedido ?? $pedido->id) . '.pdf');
     }

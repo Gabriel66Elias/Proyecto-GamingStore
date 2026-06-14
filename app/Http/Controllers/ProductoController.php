@@ -14,6 +14,7 @@ class ProductoController extends Controller
         $categorias = Categoria::all();
 
         $productosAgrupados = Producto::with('categoria')
+            ->where('stock', '>', 0) 
             ->get()
             ->groupBy(fn($p) => $p->categoria?->nombre ?? 'Sin categoría');
 
@@ -21,13 +22,14 @@ class ProductoController extends Controller
             ? Auth::user()->favoritos()->pluck('productos.id')->toArray()
             : [];
 
-        return view('catalogo', compact('productosAgrupados', 'categorias', 'favoritoIds'));
+        // ACTUALIZADO: Apunta a la carpeta tienda/
+        return view('tienda.catalogo', compact('productosAgrupados', 'categorias', 'favoritoIds'));
     }
-
-    public function show($id)
+    
+    public function show(int $id)
     {
         $producto = Producto::with('categoria')->findOrFail($id);
-
+    
         $esFavorito = Auth::check()
             ? Auth::user()->favoritos()->where('productos.id', $producto->id)->exists()
             : false;
@@ -36,9 +38,10 @@ class ProductoController extends Controller
             ->where('producto_id', $producto->id)
             ->latest()
             ->paginate(5, ['*'], 'resenas_page');
-
+        /** @noinspection PhpParamsInspection */    
         $promedioResenas = round($resenas->total() ? Resena::where('producto_id', $producto->id)->avg('calificacion') : 0, 1);
 
-        return view('consultas', compact('producto', 'esFavorito', 'resenas', 'promedioResenas'));
+        // INTACTO: Se mantiene en la raíz según rúbrica
+        return view('paginas.consultas', compact('producto', 'esFavorito', 'resenas', 'promedioResenas'));
     }
 }

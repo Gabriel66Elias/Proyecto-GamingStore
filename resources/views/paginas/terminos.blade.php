@@ -1,5 +1,22 @@
 @extends('layout.main')
 @section('titulo', 'Términos y Usos | GamingStation')
+
+@push('styles')
+<style>
+    /* Aumenta el tamaño del texto solo en celulares (Bootstrap sm y xs) */
+    @media (max-width: 767.98px) {
+        .termino-text, .ip-muted {
+            font-size: 1.15rem !important;
+            line-height: 1.6;
+        }
+        /* Opcional: Reduce un poco el tamaño de los números para que no queden gigantes en el celu */
+        .termino-numero {
+            transform: scale(0.9);
+        }
+    }
+</style>
+@endpush
+
 @section('contenido')
 <div class="container mt-5 mb-5">
 

@@ -17,11 +17,15 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
+        
         $stockChart = [
             'total' => Producto::count(),
             'segments' => [
+
                 ['label' => 'Buen stock', 'value' => Producto::where('stock', '>', 5)->count(), 'color' => '#4ade80'],
+    
                 ['label' => 'Poco stock', 'value' => Producto::whereBetween('stock', [1, 5])->count(), 'color' => '#fbbf24'],
+ 
                 ['label' => 'Sin stock',  'value' => Producto::where('stock', 0)->count(), 'color' => '#FF3B3B'],
             ],
         ];
