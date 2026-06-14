@@ -52,3 +52,34 @@
 </div>
 
 ---
+
+## <img src="https://img.icons8.com/ios-glyphs/60/ffffff/key.png" width="35" align="top"/> Credenciales de Acceso
+
+| Tipo de Cuenta | Email | Password |
+| :--- | :--- | :--- |
+| **Administrador** | admin@gamingstation.com | 12345678 |
+| **Cliente de prueba** | lucas.garcia@test.com | 12345678 |
+| **Cliente de prueba** | valentina.lopez@test.com | 12345678 |
+| **Cliente de prueba** | mateo.fernandez@test.com | 12345678 |
+
+---
+
+## <img src="https://img.icons8.com/ios-glyphs/60/ffffff/rocket.png" width="35" align="top"/> Prueba de Implementación
+
+Antes de iniciar con cualquiera de las dos opciones, asegúrate de configurar el archivo `.env` y definir el nombre de la base de datos como **`gamingstore_grupo25`**.
+
+### Opción 1: Implementación con Volcado MySQL (Dump)
+Utiliza esta opción para cargar la base de datos exactamente con los registros e historial pre-cargados.
+
+1. Ejecutar `composer install`
+2. Ejecutar `php artisan key:generate`
+3. Importar en tu gestor SQL el archivo ubicado en `database/gamingstore_grupo25.sql`
+4. Ejecutar `php artisan storage:link`
+
+### Opción 2: Implementación con Migraciones y Seeders
+Utiliza esta opción para que Laravel construya las tablas y las pueble automáticamente mediante código.
+
+1. Ejecutar `composer install`
+2. Ejecutar `php artisan key:generate`
+3. Ejecutar `php artisan migrate:fresh --seed`
+4. Ejecutar `php artisan storage:link`
