@@ -54,6 +54,105 @@
         </div>
     </div>
 
+    {{-- Filtros de vista ────────────────────────────────────────────────── --}}
+    <div class="admin-card mb-4" style="padding: 1.5rem;">
+        <form action="{{ route('admin.pedidos') }}" method="GET" class="row g-3 align-items-end">
+            
+            <div class="col-12 col-md-6 col-xl-3">
+                <label class="form-label text-secondary small mb-1">Estado del Pedido</label>
+                <div class="dropdown w-100">
+                    <button class="btn admin-cat-btn w-100 d-flex justify-content-between align-items-center {{ request('estado') ? '' : 'placeholder-active' }}" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="dropdown-text">
+                            @php
+                                $estados = [
+                                    '' => 'Todos los estados',
+                                    'pendiente' => 'Pendiente',
+                                    'en_proceso' => 'En Proceso',
+                                    'enviado' => 'Enviado',
+                                    'en_camino' => 'En Camino',
+                                    'entregado' => 'Entregado',
+                                    'completado' => 'Completado',
+                                    'cancelado' => 'Cancelado'
+                                ];
+                            @endphp
+                            {{ $estados[request('estado') ?? ''] }}
+                        </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+                    </button>
+                    <ul class="dropdown-menu admin-cat-menu w-100">
+                        @foreach($estados as $val => $label)
+                            <li><a class="dropdown-item admin-cat-item custom-filter-item {{ request('estado') == $val ? 'active' : '' }}" href="#" data-value="{{ $val }}">{{ $label }}</a></li>
+                        @endforeach
+                    </ul>
+                    <input type="hidden" name="estado" value="{{ request('estado') }}">
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-xl-3">
+                <label class="form-label text-secondary small mb-1">Tipo de Envío</label>
+                <div class="dropdown w-100">
+                    <button class="btn admin-cat-btn w-100 d-flex justify-content-between align-items-center {{ request('tipo_envio') ? '' : 'placeholder-active' }}" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="dropdown-text">
+                            @php
+                                $envios = [
+                                    '' => 'Todos los envíos',
+                                    'domicilio' => 'Envío a Domicilio',
+                                    'retiro' => 'Retiro en Local'
+                                ];
+                            @endphp
+                            {{ $envios[request('tipo_envio') ?? ''] }}
+                        </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+                    </button>
+                    <ul class="dropdown-menu admin-cat-menu w-100">
+                        @foreach($envios as $val => $label)
+                            <li><a class="dropdown-item admin-cat-item custom-filter-item {{ request('tipo_envio') == $val ? 'active' : '' }}" href="#" data-value="{{ $val }}">{{ $label }}</a></li>
+                        @endforeach
+                    </ul>
+                    <input type="hidden" name="tipo_envio" value="{{ request('tipo_envio') }}">
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-xl-3">
+                <label class="form-label text-secondary small mb-1">Método de Pago</label>
+                <div class="dropdown w-100">
+                    <button class="btn admin-cat-btn w-100 d-flex justify-content-between align-items-center {{ request('metodo_pago') ? '' : 'placeholder-active' }}" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="dropdown-text">
+                            @php
+                                $pagos = [
+                                    '' => 'Todos los pagos',
+                                    'tarjeta' => 'Tarjeta',
+                                    'transferencia' => 'Transferencia'
+                                ];
+                            @endphp
+                            {{ $pagos[request('metodo_pago') ?? ''] }}
+                        </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+                    </button>
+                    <ul class="dropdown-menu admin-cat-menu w-100">
+                        @foreach($pagos as $val => $label)
+                            <li><a class="dropdown-item admin-cat-item custom-filter-item {{ request('metodo_pago') == $val ? 'active' : '' }}" href="#" data-value="{{ $val }}">{{ $label }}</a></li>
+                        @endforeach
+                    </ul>
+                    <input type="hidden" name="metodo_pago" value="{{ request('metodo_pago') }}">
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-xl-3 d-flex gap-2">
+                <button type="submit" class="btn btn-sm fw-bold w-100" style="background:#FF3B3B; color:#ffffff; border:none; border-radius:7px; height: 42px; font-size: 0.925rem;">
+                    Buscar
+                </button>
+                
+                @if(request()->anyFilled(['estado', 'tipo_envio', 'metodo_pago']))
+                    <a href="{{ route('admin.pedidos') }}" class="btn btn-sm btn-secondary w-100 d-flex align-items-center justify-content-center" style="border-radius:7px; height: 42px; font-size: 0.925rem;">
+                        Limpiar
+                    </a>
+                @endif
+            </div>
+            
+        </form>
+    </div>
+
     {{-- Stats ──────────────────────────────────────────────────────────── --}}
     <div class="pedido-stats">
         <div class="pedido-stat-card">
@@ -247,6 +346,29 @@ foreach ($pedidos as $_p) {
 @push('scripts')
 <script>
 const PEDIDOS_DATA = {!! json_encode($_pd, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) !!};
+
+// Lógica para los menús desplegables personalizados
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.custom-filter-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            const dropdown = e.target.closest('.dropdown');
+            const btn = dropdown.querySelector('.admin-cat-btn');
+            const value = e.target.getAttribute('data-value');
+            
+            // Actualizar input oculto y texto del botón
+            dropdown.querySelector('input[type="hidden"]').value = value;
+            dropdown.querySelector('.dropdown-text').innerText = e.target.innerText;
+            
+            // Manejar clases activas y estado "placeholder" (gris)
+            dropdown.querySelectorAll('.custom-filter-item').forEach(i => i.classList.remove('active'));
+            e.target.classList.add('active');
+            
+            if (value === '') btn.classList.add('placeholder-active');
+            else btn.classList.remove('placeholder-active');
+        });
+    });
+});
 </script>
 <script src="{{ asset('js/pedidos-admin.js') }}"></script>
 @endpush

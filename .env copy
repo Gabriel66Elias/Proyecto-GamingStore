@@ -1,6 +1,6 @@
 APP_NAME=Laravel
 APP_ENV=local
-APP_KEY=base64:gD3Hkuf+zeK7iJ7Tsdi3AVLH8GV6x837bqs4OhLVIS0=
+APP_KEY=base64:tqr7pCCKHmmjvhhJmy5MfQw5euJPzf6zCW+fxC9EREA=
 APP_DEBUG=true
 APP_URL=http://proyecto-gamingstore.test
 
@@ -25,7 +25,7 @@ DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=gamingstore_grupo25
 DB_USERNAME=root
-DB_PASSWORD=
+DB_PASSWORD=1234
 
 SESSION_DRIVER=database
 SESSION_LIFETIME=120

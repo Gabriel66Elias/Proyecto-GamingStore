@@ -188,12 +188,29 @@ class AdminController extends Controller
         return redirect()->route('admin.consultas')->with('success', 'Reseña eliminada correctamente.');
     }
 
-    public function pedidos()
+    public function pedidos(Request $request)
     {
-        $pedidos = VentaCabecera::with(['detalles.producto', 'usuario'])
-            ->whereNotIn('estado', ['carrito'])
-            ->latest('fecha_venta')
-            ->paginate(25);
+        // Iniciamos la consulta base excluyendo los carritos
+        $query = VentaCabecera::with(['detalles.producto', 'usuario'])
+            ->whereNotIn('estado', ['carrito']);
+
+        // Filtro por Estado del pedido
+        if ($request->filled('estado')) {
+            $query->where('estado', $request->estado);
+        }
+
+        // Filtro por Tipo de Envío
+        if ($request->filled('tipo_envio')) {
+            $query->where('tipo_envio', $request->tipo_envio);
+        }
+
+        // Filtro por Método de Pago
+        if ($request->filled('metodo_pago')) {
+            $query->where('metodo_pago', $request->metodo_pago);
+        }
+
+        // Ejecutamos la consulta con paginación
+        $pedidos = $query->latest('fecha_venta')->paginate(25)->withQueryString();
 
         $stats = [
             'total'      => VentaCabecera::whereNotIn('estado', ['carrito'])->count(),
